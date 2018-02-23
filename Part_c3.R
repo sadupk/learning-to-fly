@@ -1,9 +1,5 @@
-# sample R + Shiny example for CS 424 Spring 2018 UIC - Andy Johnson
+# Learn to Fly project for CS424 - Group 6
 # www.evl.uic.edu/aej/424
-
-# This is a sample dashboard making use of the evl room temperature data and displaying
-# it in a variery of ways to show off some of the different capabilities of R and Shiny
-# and the Shiny Dashboard.
 
 #libraries to include
 
@@ -20,22 +16,44 @@ library(reshape)
 library(plyr)
 
 ##  "13930","Chicago, IL: Chicago O'Hare International"   
-### "13232","Chicago, IL: Chicago Midway International"  
-portdir=read.csv("L_AIRPORT_ID.csv")
-Jan=read.csv("Jan.csv")
-Feb=read.csv("Feb.csv")
-Mar=read.csv("Mar.csv")
-Apr=read.csv("Apr.csv")
-May=read.csv("May.csv")
-June=read.csv("June.csv")
-July=read.csv("July.csv")
-Aug=read.csv("Aug.csv")
-Sept=read.csv("Sept.csv")
-Oct=read.csv("Oct.csv")
-Nov=read.csv("Nov.csv")
-Dec=read.csv("Dec.csv")
+### "13232","Chicago, IL: Chicago Midway International"
+
+#Keep all data files in the 'Data' folder!!
+
+#Load Lookup Tables
+print("Reading lookup tables")
+carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
+colnames(carrier_lookup) = c("Code", "carrier_name")
+airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
+colnames(airport_lookup) = c("Code", "airport_name")
+
+#Load Flight data
+print("Reading data tables")
+portdir = read.csv("Data/L_AIRPORT_ID.csv")
+Jan=read.csv("Data/Jan.csv")
+Feb=read.csv("Data/Feb.csv")
+Mar=read.csv("Data/Mar.csv")
+Apr=read.csv("Data/Apr.csv")
+May=read.csv("Data/May.csv")
+June=read.csv("Data/June.csv")
+July=read.csv("Data/July.csv")
+Aug=read.csv("Data/Aug.csv")
+Sept=read.csv("Data/Sept.csv")
+Oct=read.csv("Data/Oct.csv")
+Nov=read.csv("Data/Nov.csv")
+Dec=read.csv("Data/Dec.csv")
+
+#Merge flight data
 Month=list(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
+
+#Add lookup fields
+Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
+colnames(airport_lookup) = c("Code", "origin_airport")
+Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+colnames(airport_lookup) = c("Code", "dest_airport")
+Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+
 
 #days=c("mon","tues","wed","thur","fri","sat","sun")
 #Jan$day=c(rep(days,length(Jan[[1]])/7),days[c(1:(length(Jan[[1]])%%7))])
