@@ -1,13 +1,8 @@
-# sample R + Shiny example for CS 424 Spring 2018 UIC - Andy Johnson
+# Learn to Fly - Group 6 - CS424 Spring 2017
+# Inspired by the sample R + Shiny example for CS 424 Spring 2018 UIC - Andy Johnson
 # www.evl.uic.edu/aej/424
 
-# This is a sample dashboard making use of the evl room temperature data and displaying
-# it in a variery of ways to show off some of the different capabilities of R and Shiny
-# and the Shiny Dashboard.
-
-#libraries to include
-
-
+# Libraries to include
 
 library(shiny)
 library(shinydashboard)
@@ -20,6 +15,7 @@ library(leaflet)
 library(plotly)
 library(reshape)
 library(plyr)
+library(data.table)
 
 ##  "13930","Chicago, IL: Chicago O'Hare International"   
 ### "13232","Chicago, IL: Chicago Midway International"
@@ -51,6 +47,8 @@ Dec=read.csv("Data/Dec.csv")
 
 #Merge flight data
 Month=list(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
+#Add Month dataframe with data for the whole year
+Month_df = rbindlist(Month)
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
 
 #Add lookup fields
@@ -108,6 +106,12 @@ ui <- dashboardPage(
     ),
     fluidRow(
       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) )
+    ),
+    fluidRow(
+      tabPanel("Top 15 Destinations",box( title = "Top 15 Destinations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
+    ),
+    fluidRow(
+      tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) )
     )
     
     
@@ -690,6 +694,27 @@ server <- function(input, output) {
     
   })
   
+  output$top_15_dest_Plot <- renderPlot({
+    dest_count = data.frame(table(Month_df$DEST_CITY_NAME))
+    top_15_dest = dest_count[order(-dest_count$Freq),][1:15,]$Var1 %>% factor()
+    Month_top_15 = Month_df[Month_df$ORIGIN_CITY_NAME %in% top_15_dest]
+    Month_top_15$ORIGIN_CITY_NAME = factor(Month_top_15$ORIGIN_CITY_NAME, levels = top_15_dest)
+    Month_top_15$FL_DATE = as.Date(Month_top_15$FL_DATE)
+    Month_top_15$month = format(Month_top_15$FL_DATE, '%b')
+    ggplot(Month_top_15, aes(factor(month, levels = month.abb))) + geom_bar(aes(fill = factor(ORIGIN_CITY_NAME)))
+  })
+  
+  output$delay_Plot <- renderPlot({
+    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+    Month_df$month = format(Month_df$FL_DATE, '%b')
+    Month_delay = Month_df[,c("month", "CARRIER_DELAY", "WEATHER_DELAY", "NAS_DELAY", "SECURITY_DELAY", "LATE_AIRCRAFT_DELAY")] %>%
+      melt(id = "month") %>% na.omit()
+    Month_delay = Month_delay[Month_delay$value>0]
+    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value)) + 
+      facet_wrap(~variable, scales = "free_y") +
+      geom_col(aes(fill = variable))
+  })
+
 }
 
 shinyApp(ui = ui, server = server)
