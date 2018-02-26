@@ -77,39 +77,46 @@ ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Spring 2018 Example Dashboard"),
   dashboardSidebar(disable = TRUE),
   dashboardBody(
-    
+   
+   #Ask the user to give inputs about the Airport, Month, and timeframe
     fluidRow(
       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
       selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
       selectInput("timeframe", "timeframe", c("1-24","AM-PM"))
     ),
-    
+     
     fluidRow(
+      #Part 2-a 
       tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("AirlineFlightPlot",width="450px",height="450px")) ),
       tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("AirlineFlightTable"))  ),
+      #Part 2-b 
       tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 8, plotOutput("HourlyFlights"))  ),
       tabPanel("HourlyTable", box(title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("HourlyTable"))  )
       
     ),
     
+     #Part 2-e
     fluidRow(
       tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalFlightsPlot",width="450px",height="450px")) ),
       tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("ArrivalFlightsTable"))  )
       
     ),
     
-    
+     #Part 2-e
     fluidRow(
       tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartFlightsPlot",width="450px",height="450px")) ),
       tabPanel("Depart Flights Table", box(title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("DepartFlightsTable"))  )
       
     ),
+     #Part 2-c
     fluidRow(
       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) )
     ),
       fluidRow(
         tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("WeeklyFlightsTable",width="750px",height="750px")) )
       ),
+    
+      #Part 2-d
       fluidRow(
         tabPanel("Arrival_Delays",box( title = "Arrival_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",width="750px",height="750px")) ),
         tabPanel("Depart_Delays",box( title = "Depart_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
@@ -117,6 +124,8 @@ ui <- dashboardPage(
         tabPanel("ArrivalDelayTable",box( title = "ArrivalDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) )
         
       ),
+    
+    #################################PART B BEGINS HERE
     fluidRow(
       tabPanel("Top 15 Destinations",box( title = "Top 15 Destinations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
     ),
@@ -131,7 +140,9 @@ ui <- dashboardPage(
 server <- function(input, output) {
   
   theme_set(theme_grey(base_size = 17)) 
-  ######Helper functions delcared here
+  
+  #Helper functions delcared here
+  
   getarrivals<- function(Airline)
   {
     
@@ -219,7 +230,9 @@ server <- function(input, output) {
   }
   
   
-  output$AirlineFlightPlot <- renderPlot({   ###  Need to remove VX--columbian airlines, which shares a name with other airlines.
+  
+  ############################################Part 2-a
+  output$AirlineFlightPlot <- renderPlot({   ###  VX airlines went out of business in 2003  :)  
     
     
     if(input$Airport=="Both")
@@ -263,6 +276,7 @@ server <- function(input, output) {
     }
   })
   
+############################################Part 2-a
   output$AirlineFlightTable <- DT::renderDataTable(
     
     
@@ -313,6 +327,9 @@ server <- function(input, output) {
     )
   )
   
+  
+  
+  ############################################Part 2-b
   output$HourlyTable <- DT::renderDataTable(
     
     
@@ -321,11 +338,8 @@ server <- function(input, output) {
       
       
       Month=Month[Monthnames ==input$month]
-      # Month=read.csv("Jan.csv")
       Month=Month[[1]]
-      #  Airline=Month[Month$ORIGIN_AIRPORT_ID=="13930",] 
-      # Airline=Month[Month$ORIGIN_AIRPORT_ID==input$Airport,]
-      
+
       
       if (input$Airport=="Both")
       {
@@ -363,18 +377,16 @@ server <- function(input, output) {
   )
   
   
-  
+ ############################################Part 2-b
   output$HourlyFlights<- 
     
     renderPlot({
       
       
       Month=Month[Monthnames ==input$month]
-      # Month=read.csv("Jan.csv")
+
       Month=Month[[1]]
-      #  Airline=Month[Month$ORIGIN_AIRPORT_ID=="13930",] 
-      # Airline=Month[Month$ORIGIN_AIRPORT_ID==input$Airport,]
-      
+
       
       if (input$Airport=="Both")
       {
@@ -424,7 +436,6 @@ server <- function(input, output) {
       }  
       else
       {
-        # Airline=Month[Month$ORIGIN_AIRPORT_ID==input$Airport,] ##### PROBLEM
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
         Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         departures=getdeps(Airline)
@@ -462,6 +473,7 @@ server <- function(input, output) {
   
   
   
+  ###########################################Part 2-e
   output$ArrivalFlightsPlot <- renderPlot({
     if(input$Airport=="Both")
     {
@@ -503,6 +515,7 @@ server <- function(input, output) {
     }
   })
   
+    ###########################################Part 2-e
   output$ArrivalFlightsTable <- DT::renderDataTable(
     
     
@@ -555,7 +568,7 @@ server <- function(input, output) {
   
   
   
-  
+    ###########################################Part 2-e
   output$DepartFlightsPlot <- renderPlot({
     
     if(input$Airport=="Both")
@@ -604,6 +617,7 @@ server <- function(input, output) {
     
   })
   
+    ###########################################Part 2-e
   output$DepartFlightsTable <- DT::renderDataTable(
     
     
@@ -656,8 +670,9 @@ server <- function(input, output) {
     )
   )
   
+    ###########################################Part 2-c
   output$WeeklyFlightsPlot <- renderPlot({
-    
+   c
     if (input$Airport=="Both")
     {
       ports=c("13232", "13930")
@@ -704,7 +719,7 @@ server <- function(input, output) {
     
   })
   
-  
+    ###########################################Part 2-c
 output$WeeklyFlightsTable <- DT::renderDataTable(
   
   
@@ -740,7 +755,7 @@ output$WeeklyFlightsTable <- DT::renderDataTable(
       Month=Month[[1]]
       arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,]   ####
       departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]  ###
-      
+     e
       arr_day1=data.frame(table(arrivals$DAY_OF_WEEK))
       dep_day1=data.frame(table(departures$DAY_OF_WEEK))
       daily_data=data.frame(ID=arr_day1[[1]],arr1=arr_day1[[2]],dep1=dep_day1[[2]])
@@ -757,11 +772,10 @@ output$WeeklyFlightsTable <- DT::renderDataTable(
 
 
 
-
+  ###########################################Part 2-d
 output$ArrivalDelays <- renderPlot({
-  Month=Month[Monthnames ==input$month]   ####CHANGE THIS
-  #Month=read.csv("Feb.csv")
-     Month=Month[[1]]                     ###CHANGE THIS
+  Month=Month[Monthnames ==input$month]   
+     Month=Month[[1]]                     
   
   
   
@@ -815,10 +829,11 @@ output$ArrivalDelays <- renderPlot({
 })
   
   
+    ###########################################Part 2-d
   output$DepartDelays <- renderPlot({
-     Month=Month[Monthnames ==input$month]   ####CHANGE THIS
+     Month=Month[Monthnames ==input$month]   
     #Month=read.csv("Feb.csv")
-       Month=Month[[1]]                     ###CHANGE THIS
+       Month=Month[[1]]                    
     
     
     if (input$Airport=="Both")
@@ -870,13 +885,15 @@ output$ArrivalDelays <- renderPlot({
     
   })
   
+  
+    ###########################################Part 2-d
   output$DepartDelayTable <- DT::renderDataTable(
     
     
     DT::datatable({ 
-       Month=Month[Monthnames ==input$month]   ####CHANGE THIS
+       Month=Month[Monthnames ==input$month]   
       #Month=read.csv("Feb.csv")
-       Month=Month[[1]]                     ###CHANGE THIS
+       Month=Month[[1]]                     
       
       
       if (input$Airport=="Both")
@@ -927,14 +944,14 @@ output$ArrivalDelays <- renderPlot({
 
 
 
-
+  ###########################################Part 2-d
   output$ArrivalDelayTable <- DT::renderDataTable(
     
     
     DT::datatable({ 
-       Month=Month[Monthnames ==input$month]   ####CHANGE THIS
+       Month=Month[Monthnames ==input$month]   
       #Month=read.csv("Feb.csv")
-       Month=Month[[1]]                     ###CHANGE THIS
+       Month=Month[[1]]                   
       
       
       if (input$Airport=="Both")
