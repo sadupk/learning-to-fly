@@ -107,6 +107,16 @@ ui <- dashboardPage(
     fluidRow(
       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) )
     ),
+      fluidRow(
+        tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("WeeklyFlightsTable",width="750px",height="750px")) )
+      ),
+      fluidRow(
+        tabPanel("Arrival_Delays",box( title = "Arrival_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",width="750px",height="750px")) ),
+        tabPanel("Depart_Delays",box( title = "Depart_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
+        tabPanel("DepartDelayTable",box( title = "DepartDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
+        tabPanel("ArrivalDelayTable",box( title = "ArrivalDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) )
+        
+      ),
     fluidRow(
       tabPanel("Top 15 Destinations",box( title = "Top 15 Destinations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
     ),
@@ -693,6 +703,283 @@ server <- function(input, output) {
     }  
     
   })
+  
+  
+output$WeeklyFlightsTable <- DT::renderDataTable(
+  
+  
+  DT::datatable({ 
+    if (input$Airport=="Both")
+    {
+      ports=c("13232", "13930")
+      Month=Month[Monthnames ==input$month]
+      Month=Month[[1]]
+      arrivals=Month[Month$DEST_AIRPORT_ID==ports[1],]
+      departures=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
+      
+      arr_day1=data.frame(table(arrivals$DAY_OF_WEEK))
+      dep_day1=data.frame(table(departures$DAY_OF_WEEK))
+      
+      
+      arrivals2=Month[Month$DEST_AIRPORT_ID==ports[2],]
+      departures2=Month[Month$ORIGIN_AIRPORT_ID==ports[2],]
+      
+      arr_day2=data.frame(table(arrivals2$DAY_OF_WEEK))
+      dep_day2=data.frame(table(departures2$DAY_OF_WEEK))
+      
+      daily_data=data.frame(ID=arr_day1[[1]],arr1=arr_day1[[2]],arr2=arr_day2[[2]],dep1=dep_day1[[2]],dep2=arr_day2[[2]])
+      
+    }
+    
+    
+    else
+    {
+      
+      Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
+      Month=Month[Monthnames ==input$month]
+      Month=Month[[1]]
+      arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,]   ####
+      departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]  ###
+      
+      arr_day1=data.frame(table(arrivals$DAY_OF_WEEK))
+      dep_day1=data.frame(table(departures$DAY_OF_WEEK))
+      daily_data=data.frame(ID=arr_day1[[1]],arr1=arr_day1[[2]],dep1=dep_day1[[2]])
+ 
+      
+    }  
+    
+    daily_data
+    
+    
+  } ,  options = list(searching = FALSE, pageLength = 15, lengthChange = FALSE) 
+  )
+)
+
+
+
+
+output$ArrivalDelays <- renderPlot({
+  Month=Month[Monthnames ==input$month]   ####CHANGE THIS
+  #Month=read.csv("Feb.csv")
+     Month=Month[[1]]                     ###CHANGE THIS
+  
+  
+  
+  
+  if (input$Airport=="Both")
+  {
+    ports=c("13232", "13930")
+    delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,] 
+    Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
+    delays=getarrivals(delaysdata)
+    arrivals=getarrivals(Airline)
+    flights=c(delays,(arrivals-delays))
+    
+    delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,] 
+    Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
+    delays=getarrivals(delaysdata)
+    arrivals=getarrivals(Airline)
+    flights2=c(delays,(arrivals-delays))
+    
+    
+    ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
+    times=rep(c(1:24),2)
+    t=rep("delays",24)
+    d=rep("totals",24)
+    coloring=c(d,t)
+    TravelTimes=data.frame(Times=times,Num1=flights,Num2=flights2)
+    melted=melt(TravelTimes, id="Times")
+    melted$Coloring=coloring
+    ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+ 
+      facet_grid(~ variable)
+    
+  }
+  
+  else 
+  {
+    Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
+    delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,] 
+    Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,] 
+    delays=getarrivals(delaysdata)
+    arrivals=getarrivals(Airline)
+    times=rep(c(1:24),2)
+    t=rep("delays",24)
+    d=rep("totals",24)
+    coloring=c(d,t)
+    flights=c(delays,(arrivals-delays))
+    
+    TravelTimes=data.frame(Times=times,Flights=flights,Coloring=coloring)
+    ggplot(TravelTimes, aes(x=Times, y=Flights)) + geom_bar(stat="identity",   
+                                                            colour="white",aes(fill=Coloring))
+  }
+})
+  
+  
+  output$DepartDelays <- renderPlot({
+     Month=Month[Monthnames ==input$month]   ####CHANGE THIS
+    #Month=read.csv("Feb.csv")
+       Month=Month[[1]]                     ###CHANGE THIS
+    
+    
+    if (input$Airport=="Both")
+    {
+      ports=c("13232", "13930")
+      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$DEP_DEL15==1 ,] 
+      Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
+      delays=getdeps(delaysdata)
+      departs=getdeps(Airline)
+      flights=c(delays,(departs-delays))
+      
+      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$DEP_DEL15==1 ,] 
+      Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
+      delays=getdeps(delaysdata)
+      departs=getdeps(Airline)
+      flights2=c(delays,(departs-delays))
+      
+      
+      ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
+      times=rep(c(1:24),2)
+      t=rep("delays",24)
+      d=rep("totals",24)
+      coloring=c(d,t)
+      TravelTimes=data.frame(Times=times,Num1=flights,Num2=flights2)
+      melted=melt(TravelTimes, id="Times")
+      melted$Coloring=coloring
+      ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+ 
+        facet_grid(~ variable)
+      
+    }
+    
+    else 
+    {
+      Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
+      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$DEP_DEL15==1 ,] 
+      Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,] 
+      delays=getdeps(delaysdata)
+      departs=getdeps(Airline)
+      times=rep(c(1:24),2)
+      t=rep("delays",24)
+      d=rep("totals",24)
+      coloring=c(d,t)
+      flights=c(delays,(departs-delays))
+      
+      TravelTimes=data.frame(Times=times,Flights=flights,Coloring=coloring)
+      ggplot(TravelTimes, aes(x=Times, y=Flights)) + geom_bar(stat="identity",   
+                                                              colour="white",aes(fill=Coloring))
+    }
+    
+  })
+  
+  output$DepartDelayTable <- DT::renderDataTable(
+    
+    
+    DT::datatable({ 
+       Month=Month[Monthnames ==input$month]   ####CHANGE THIS
+      #Month=read.csv("Feb.csv")
+       Month=Month[[1]]                     ###CHANGE THIS
+      
+      
+      if (input$Airport=="Both")
+      {
+        ports=c("13232", "13930")
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$DEP_DEL15==1 ,] 
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
+        delays1=getdeps(delaysdata)
+        departs1=getdeps(Airline)
+     
+        
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$DEP_DEL15==1 ,] 
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
+        delays2=getdeps(delaysdata)
+        departs2=getdeps(Airline)
+
+        
+        ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
+        times=rep(c(1:24),2)
+        t=rep("delays",24)
+        d=rep("totals",24)
+        coloring=c(d,t)
+        TravelTimes=data.frame(Times=times,Delays1=delays1,Proportion1=100*delays1/departs1,Delays2=delays2,Proportion2=100*delays2/departs2)
+        
+        
+      }
+      
+      else 
+      {
+        Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$DEP_DEL15==1 ,] 
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,] 
+        delays=getdeps(delaysdata)
+        departs=getdeps(Airline)
+        times=rep(c(1:24),2)
+        flights=c(delays, delays/departs)
+        
+        TravelTimes=data.frame(Times=times,Delays=delays,Proportion=100*(delays/departs))
+        
+      }
+      
+      TravelTimes
+      
+      
+    } ,  options = list(searching = FALSE, pageLength = 15, lengthChange = FALSE) 
+    )
+  )
+
+
+
+
+  output$ArrivalDelayTable <- DT::renderDataTable(
+    
+    
+    DT::datatable({ 
+       Month=Month[Monthnames ==input$month]   ####CHANGE THIS
+      #Month=read.csv("Feb.csv")
+       Month=Month[[1]]                     ###CHANGE THIS
+      
+      
+      if (input$Airport=="Both")
+      {
+        ports=c("13232", "13930")
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,] 
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
+        delays1=getarrivals(delaysdata)
+        arrivals1=getarrivals(Airline)
+
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,] 
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
+        delays2=getarrivals(delaysdata)
+        arrivals2=getarrivals(Airline)
+
+        
+        ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
+        times=rep(c(1:24),2)
+        TravelTimes=data.frame(Times=times,Delays1=delays1,Proportion1=100*delays1/arrivals1,Delays2=delays2,Proportion2=100*delays2/arrivals2)
+        
+        
+      }
+      
+      else 
+      {
+        Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,] 
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,] 
+        delays=getarrivals(delaysdata)
+        arrivals=getarrivals(Airline)
+        times=rep(c(1:24),2)
+
+        flights=c(delays,(delays/arrivals))
+        
+        TravelTimes=data.frame(Times=times,Delays=delays,Proportion=100*(delays/arrivals))
+
+      }
+      TravelTimes
+      
+      
+    } ,  options = list(searching = FALSE, pageLength = 15, lengthChange = FALSE) 
+    )
+  )  
+
+###################PART B BEGINS HERE  
   
   output$top_15_dest_Plot <- renderPlot({
     dest_count = data.frame(table(Month_df$DEST_CITY_NAME))
