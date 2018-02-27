@@ -16,6 +16,7 @@ library(plotly)
 library(reshape)
 library(plyr)
 library(data.table)
+library(scales)
 
 ##  "13930","Chicago, IL: Chicago O'Hare International"   
 ### "13232","Chicago, IL: Chicago Midway International"
@@ -126,6 +127,9 @@ ui <- dashboardPage(
       ),
     
     #################################PART B BEGINS HERE
+    fluidRow(
+      tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_2017",width="750px",height="750px")) )
+    ),
     fluidRow(
       tabPanel("Top 15 Destinations",box( title = "Top 15 Destinations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
     ),
@@ -997,12 +1001,19 @@ output$ArrivalDelays <- renderPlot({
   )  
 
 ###################PART B BEGINS HERE  
-  
+
+  output$arrival_departure_2017 <- renderPlot({
+    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+    Month_df$month = format(Month_df$FL_DATE, '%b')
+    ggplot(Month_df, aes(x = factor(month, levels = month.abb))) +
+      geom_bar()
+  })
+    
   output$top_15_dest_Plot <- renderPlot({
     dest_count = data.frame(table(Month_df$DEST_CITY_NAME))
     top_15_dest = dest_count[order(-dest_count$Freq),][1:15,]$Var1 %>% factor()
     Month_top_15 = Month_df[Month_df$ORIGIN_CITY_NAME %in% top_15_dest]
-    Month_top_15$ORIGIN_CITY_NAME = factor(Month_top_15$ORIGIN_CITY_NAME, levels = top_15_dest)
+    Month_top_15$ORIGIN_CITY_NAME = factor(Month_top_15$ORIGIN_CITY_NAME, levels = rev(top_15_dest))
     Month_top_15$FL_DATE = as.Date(Month_top_15$FL_DATE)
     Month_top_15$month = format(Month_top_15$FL_DATE, '%b')
     ggplot(Month_top_15, aes(factor(month, levels = month.abb))) + geom_bar(aes(fill = factor(ORIGIN_CITY_NAME)))
@@ -1011,12 +1022,16 @@ output$ArrivalDelays <- renderPlot({
   output$delay_Plot <- renderPlot({
     Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
-    Month_delay = Month_df[,c("month", "CARRIER_DELAY", "WEATHER_DELAY", "NAS_DELAY", "SECURITY_DELAY", "LATE_AIRCRAFT_DELAY")] %>%
+    Month_delay = Month_df[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY")] %>%
       melt(id = "month") %>% na.omit()
     Month_delay = Month_delay[Month_delay$value>0]
-    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value)) + 
-      facet_wrap(~variable, scales = "free_y") +
-      geom_col(aes(fill = variable))
+    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value, group =variable)) +
+      aes(colour = variable) +
+      stat_summary(fun.y = "sum", geom = "line") + 
+      coord_trans(y = "log10") + 
+      scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
+                          labels = trans_format('log10', math_format(10^.x))) +
+      labs(x="2017 Months", y="Number of Delays")
   })
 
 }
