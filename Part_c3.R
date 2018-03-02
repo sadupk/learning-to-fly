@@ -128,6 +128,12 @@ ui <- dashboardPage(
     
     #################################PART B BEGINS HERE
     fluidRow(
+      tabPanel("2017 Overall Arrival Departure by hour",
+               box( title = "2017 Overall Arrival Departure by hour", 
+                    solidHeader = TRUE, status = "primary", width = 10, 
+                    plotOutput("arrival_departure_times",width="750px",height="750px")) )
+    ),
+    fluidRow(
       tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_2017",width="750px",height="750px")) )
     ),
     fluidRow(
@@ -136,7 +142,6 @@ ui <- dashboardPage(
     fluidRow(
       tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) )
     )
-    
     
   )
 )
@@ -617,7 +622,7 @@ server <- function(input, output) {
       ggplot(data=come_top, aes(x=Var1, y=Freq)) + geom_bar(stat = "identity",position = "dodge")
       
     }
-    
+      
     
   })
   
@@ -1002,11 +1007,33 @@ output$ArrivalDelays <- renderPlot({
 
 ###################PART B BEGINS HERE  
 
+  output$arrival_departure_times <- renderPlot({
+    times=c(1:24)
+    travel_times = data.frame(times=times, 
+                              arrivals = getarrivals(Month_df),  
+                              departures = getdeps(Month_df)) %>%
+      melt(., id = "times")
+    
+    ggplot(travel_times, aes(x=times, y = value, colour = variable)) +
+      geom_line() +
+      scale_x_continuous(limits=c(0,24),
+                         breaks=0:12*2,
+                         labels=c(paste(0:5*2,"am"),
+                                  "12 pm",
+                                  paste(7:11*2-12,"pm"), 
+                                  "0 am")) 
+  })
+  
   output$arrival_departure_2017 <- renderPlot({
     Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
-    ggplot(Month_df, aes(x = factor(month, levels = month.abb))) +
-      geom_bar()
+    Month_freq = data.frame(table(Month_df$month))
+    arrival_departure = data.frame(month = factor(Month_freq$Var1, levels = month.abb), 
+                                   arrivals = Month_freq$Freq, 
+                                   departures = Month_freq$Freq) %>%
+      melt(.,id="month")
+    ggplot(arrival_departure, aes(x = factor(month, levels = month.abb), y = value)) +
+      geom_bar(stat = "identity",aes(fill=variable), position = "dodge")
   })
     
   output$top_15_dest_Plot <- renderPlot({
