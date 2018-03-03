@@ -59,6 +59,45 @@ Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup,
 colnames(airport_lookup) = c("Code", "dest_airport")
 Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
 
+#-----------------------
+# Grade A last two points
+#
+
+data = copy(Month_df)
+setnames(data, tolower(names(data)))
+
+data[,":="(
+  fl_date = as.Date(fl_date, "%Y-%m-%d"),
+  dummy = 1)]
+
+data[,":="(
+  month_name = month(fl_date))]
+
+busy_days = data[,.(daily_flight_count = length(month_name)), by = "fl_date"][order(-daily_flight_count)]
+
+
+extra_cancellations = data[,.(
+  cancellations = sum(cancelled, na.rm = T),
+  flight_count = length(cancelled)),
+  by = c("fl_date","origin_city_name")]
+
+extra_cancellations[,":="(
+  perc_cancellations = cancellations/ flight_count)
+  ]
+
+heavyCancellations = extra_cancellations[cancellations>0 & perc_cancellations>0.3][order(-cancellations)][]
+
+data[, ":="(origin_state= substr(origin_city_name, nchar(as.character(origin_city_name))-1,100),
+            dest_state = substr(dest_city_name, nchar(as.character(dest_city_name))-1,100))]
+
+
+depCount = data[,.(departure_count = sum(dummy)), by = "origin_state"]
+depCount[,perc_departures := departure_count/sum(departure_count)]
+arrivalCount = data[,.(arrival_count = sum(dummy)), by = "dest_state"]
+arrivalCount[,perc_arrivals := arrival_count/ sum(arrival_count)]
+
+allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_departures = paste(perc_departures*100,"%", sep = ""))], arrivalCount[,.(state = dest_state, arrival_count, perc_arrivals = paste(perc_arrivals*100, "%", sep = ""))], by = "state", all = T)
+
 
 #days=c("mon","tues","wed","thur","fri","sat","sun")
 #Jan$day=c(rep(days,length(Jan[[1]])/7),days[c(1:(length(Jan[[1]])%%7))])
