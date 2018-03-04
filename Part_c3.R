@@ -185,12 +185,23 @@ ui <- dashboardPage(
     fluidRow(
       tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) )
     ),
+    #################################PART A BEGINS HERE
     fluidRow(
-      selectInput("State", "State", allTakeOffs$state)),
+      selectInput("State", "State", allTakeOffs$state)
+    ),
     fluidRow(
       #Part 2-a 
       tabPanel("State Info",box( title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",width="750px",height="75px"))
       )
+    ),
+    #################################PART GRAD BEGINS HERE
+    fluidRow(
+      sliderInput("range", "Range:",
+                  min = 0, max = max(Month_df$DISTANCE),
+                  value = c(200,500))
+    ),
+    fluidRow(
+      tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px")))
     )
   )
 )
@@ -1107,11 +1118,31 @@ output$ArrivalDelays <- renderPlot({
                           labels = trans_format('log10', math_format(10^.x))) +
       labs(x="2017 Months", y="Number of Delays")
   })
-  
+  ###################PART A BEGINS HERE  
   output$takeOffs <-renderDataTable(
     allTakeOffs[state == input$State,], options = list(pageLength= 5)
   )
-
+  ###################PART GRAD BEGINS HERE
+  sliderValues <- reactive({
+    input$range
+  })
+  
+  output$distance_range_plot <- renderPlot({
+    
+    dist_min = sliderValues()[1]
+    dist_max = sliderValues()[2]
+    
+    dist_values = Month_df[(Month_df$DISTANCE >= dist_min) & (Month_df$DISTANCE <= dist_max)]$DISTANCE
+    dist_count = data.frame(label = "number of flights", dist_count = dist_values)
+    
+    ggplot(dist_count, aes(x = label)) + 
+      ylab("Number of Flights") +
+      theme(axis.title.x=element_blank(),
+            axis.title.y=element_blank()) +
+      geom_bar() + 
+      coord_flip() +
+      ylim(0, dim(Month_df)[1])
+  })
 }
 
 shinyApp(ui = ui, server = server)
