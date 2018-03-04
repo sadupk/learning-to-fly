@@ -174,7 +174,7 @@ ui <- dashboardPage(
       tabPanel("2017 Overall Arrival Departure by hour",
                box( title = "2017 Overall Arrival Departure by hour", 
                     solidHeader = TRUE, status = "primary", width = 10, 
-                    plotOutput("arrival_departure_times",width="750px",height="75px")) )
+                    plotOutput("arrival_departure_times",width="750px",height="750px")) )
     ),
     fluidRow(
       tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_2017",width="750px",height="750px")) )
@@ -813,7 +813,6 @@ output$WeeklyFlightsTable <- DT::renderDataTable(
       Month=Month[[1]]
       arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,]   ####
       departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]  ###
-     e
       arr_day1=data.frame(table(arrivals$DAY_OF_WEEK))
       dep_day1=data.frame(table(departures$DAY_OF_WEEK))
       daily_data=data.frame(ID=arr_day1[[1]],arr1=arr_day1[[2]],dep1=dep_day1[[2]])
@@ -974,9 +973,8 @@ output$ArrivalDelays <- renderPlot({
         t=rep("delays",24)
         d=rep("totals",24)
         coloring=c(d,t)
-        TravelTimes=data.frame(Times=times,Delays1=delays1,Proportion1=100*delays1/departs1,Delays2=delays2,Proportion2=100*delays2/departs2)
-        
-        
+        TravelTimes=data.frame(Times=times,Delays1=delays1,Proportion1=100*delays1/departs1,
+                               Delays2=delays2,Proportion2=100*delays2/departs2)
       }
       
       else 
@@ -1028,9 +1026,8 @@ output$ArrivalDelays <- renderPlot({
         
         ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
         times=rep(c(1:24),2)
-        TravelTimes=data.frame(Times=times,Delays1=delays1,Proportion1=100*delays1/arrivals1,Delays2=delays2,Proportion2=100*delays2/arrivals2)
-        
-        
+        TravelTimes=data.frame(Times=times,Delays1=delays1,Proportion1=100*delays1/arrivals1,
+                               Delays2=delays2,Proportion2=100*delays2/arrivals2)
       }
       
       else 
@@ -1109,10 +1106,11 @@ output$ArrivalDelays <- renderPlot({
       scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
                           labels = trans_format('log10', math_format(10^.x))) +
       labs(x="2017 Months", y="Number of Delays")
-                         
-  output$takeOffs <-renderDataTable(
-      allTakeOffs[state == input$State,], options = list(pageLength= 5))
   })
+  
+  output$takeOffs <-renderDataTable(
+    allTakeOffs[state == input$State,], options = list(pageLength= 5)
+  )
 
 }
 
