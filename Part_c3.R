@@ -1092,7 +1092,8 @@ output$ArrivalDelays <- renderPlot({
     Month_top_15$ORIGIN_CITY_NAME = factor(Month_top_15$ORIGIN_CITY_NAME, levels = rev(top_15_dest))
     Month_top_15$FL_DATE = as.Date(Month_top_15$FL_DATE)
     Month_top_15$month = format(Month_top_15$FL_DATE, '%b')
-    ggplot(Month_top_15, aes(factor(month, levels = month.abb))) + geom_bar(aes(fill = factor(ORIGIN_CITY_NAME)))
+    ggplot(Month_top_15, aes(factor(month, levels = month.abb))) + 
+      geom_bar(aes(fill = factor(ORIGIN_CITY_NAME)))
   })
   
   output$delay_Plot <- renderPlot({
