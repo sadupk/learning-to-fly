@@ -25,6 +25,10 @@ library(scales)
 
 #Load Lookup Tables
 print("Reading lookup tables")
+holidays = fread("Data/holidays.csv", header = T)[,.(V2,V3)]
+setnames(holidays,c("holidays","date"))
+holidays = data.frame(holidays)[2:11,]
+holidays$date = as.Date(holidays$date, "%m-%d-%y")
 carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
 colnames(carrier_lookup) = c("Code", "carrier_name")
 airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
@@ -170,7 +174,7 @@ ui <- dashboardPage(
       tabPanel("2017 Overall Arrival Departure by hour",
                box( title = "2017 Overall Arrival Departure by hour", 
                     solidHeader = TRUE, status = "primary", width = 10, 
-                    plotOutput("arrival_departure_times",width="750px",height="750px")) )
+                    plotOutput("arrival_departure_times",width="750px",height="75px")) )
     ),
     fluidRow(
       tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_2017",width="750px",height="750px")) )
@@ -180,8 +184,14 @@ ui <- dashboardPage(
     ),
     fluidRow(
       tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) )
+    ),
+    fluidRow(
+      selectInput("State", "State", allTakeOffs$state)),
+    fluidRow(
+      #Part 2-a 
+      tabPanel("State Info",box( title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",width="750px",height="75px"))
+      )
     )
-    
   )
 )
 
@@ -1098,6 +1108,9 @@ output$ArrivalDelays <- renderPlot({
       scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
                           labels = trans_format('log10', math_format(10^.x))) +
       labs(x="2017 Months", y="Number of Delays")
+                         
+  output$takeOffs <-renderDataTable(
+      allTakeOffs[state == input$State,], options = list(pageLength= 5))
   })
 
 }
