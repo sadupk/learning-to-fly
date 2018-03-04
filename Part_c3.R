@@ -25,10 +25,10 @@ library(scales)
 
 #Load Lookup Tables
 print("Reading lookup tables")
-holidays = fread("Data/holidays.csv", header = T)[,.(V2,V3)]
-setnames(holidays,c("holidays","date"))
-holidays = data.frame(holidays)[2:11,]
-holidays$date = as.Date(holidays$date, "%m-%d-%y")
+#holidays = fread("Data/holidays.csv", header = T)[,.(V2,V3)]
+#setnames(holidays,c("holidays","date"))
+#holidays = data.frame(holidays)[2:11,]
+#holidays$date = as.Date(holidays$date, "%m-%d-%y")
 carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
 colnames(carrier_lookup) = c("Code", "carrier_name")
 airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
