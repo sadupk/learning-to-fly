@@ -79,7 +79,7 @@ data[,":="(
 
 busy_days = data[,.(daily_flight_count = length(month_name)), by = "fl_date"][order(-daily_flight_count)]
 
-
+holidays= head(busy_days[,.(holidays = as.character(daily_flight_count), date = fl_date)],10)
 extra_cancellations = data[,.(
   cancellations = sum(cancelled, na.rm = T),
   flight_count = length(cancelled)),
@@ -91,6 +91,7 @@ extra_cancellations[,":="(
 
 heavyCancellations = extra_cancellations[cancellations>0 & perc_cancellations>0.3][order(-cancellations)][]
 
+specialDays = list("Heavy Cancellations"=heavyCancellations, "Holidays"=holidays, "Busy Days"=busy_days)
 data[, ":="(origin_state= substr(origin_city_name, nchar(as.character(origin_city_name))-1,100),
             dest_state = substr(dest_city_name, nchar(as.character(dest_city_name))-1,100))]
 
@@ -193,6 +194,9 @@ ui <- dashboardPage(
       #Part 2-a 
       tabPanel("State Info",box( title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",width="750px",height="75px"))
       )
+    ),
+    fluidRow(
+      selectInput("special_day", "Which dates would you like to see?", names(specialDays))
     ),
     #################################PART GRAD BEGINS HERE
     fluidRow(
@@ -1121,6 +1125,10 @@ output$ArrivalDelays <- renderPlot({
   ###################PART A BEGINS HERE  
   output$takeOffs <-renderDataTable(
     allTakeOffs[state == input$State,], options = list(pageLength= 5)
+  )
+        
+  output$special_days <-renderDataTable(
+    specialDays[input$dateType], options = list(pageLength= 5)
   )
   ###################PART GRAD BEGINS HERE
   sliderValues <- reactive({
