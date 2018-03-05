@@ -3,7 +3,7 @@
 # www.evl.uic.edu/aej/424
 #test
 # Libraries to include
-
+require(car)
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
@@ -17,7 +17,7 @@ library(reshape)
 library(plyr)
 library(data.table)
 library(scales)
-
+library(gridExtra)
 ##  "13930","Chicago, IL: Chicago O'Hare International"   
 ### "13232","Chicago, IL: Chicago Midway International"
 
@@ -197,6 +197,24 @@ ui <- dashboardPage(
     ),
     fluidRow(
       selectInput("special_day", "Which dates would you like to see?", names(specialDays))
+    ),
+    #################################C begins here
+    
+    fluidRow(
+      tabPanel("Lauderdale_airport",box( title = "Lauderdale_airport", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) )
+    ),
+    
+    fluidRow(
+      tabPanel("Monday",box( title = "Monday", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) )
+    ),
+    fluidRow(
+      tabPanel("Weather Delay Causes",box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+    ),
+    fluidRow(
+      tabPanel("Flight No:200",box( title = "Flight No:200", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) )
+    ),
+    fluidRow(
+      tabPanel("One day",box( title = "One day", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
     ),
     #################################PART GRAD BEGINS HERE
     fluidRow(
@@ -1130,6 +1148,552 @@ output$ArrivalDelays <- renderPlot({
   output$special_days <-renderDataTable(
     specialDays[input$dateType], options = list(pageLength= 5)
   )
+  
+  
+  ####################C Part Begins here
+  
+  
+  output$Lauderdale_airport<-renderPlot({
+    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+    Month_df$month = format(Month_df$FL_DATE, '%b')
+    
+    display_data = Month_df[,c("month","DEP_TIME","ARR_TIME","ORIGIN_CITY_NAME","DEST_CITY_NAME")]  
+    display_data_dest=display_data[DEST_CITY_NAME=='Fort Lauderdale, FL']
+    display_data_dest=subset(display_data_dest,select =c(month,ARR_TIME))
+    
+    display_data_org=display_data[ORIGIN_CITY_NAME=='Fort Lauderdale, FL']
+    display_data_org=subset(display_data_org,select =c(month,DEP_TIME))
+    
+    
+    display_data_org=melt(display_data_org,id="month")
+    display_data_org=na.omit(display_data_org)
+    
+    display_data_dest=melt(display_data_dest,id="month")
+    display_data_dest=na.omit(display_data_dest)
+    binded_data=rbind(display_data_dest,display_data_org)
+    
+    
+    ##################
+    #Jan
+    Jan__melted=binded_data[binded_data$month=='Jan']
+    Jan_gg<-ggplot(Jan__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Jan")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Feb
+    Feb__melted=binded_data[binded_data$month=='Feb']
+    Feb_gg<-ggplot(Feb__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Feb")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Mar
+    Mar__melted=binded_data[binded_data$month=='Mar']
+    Mar_gg<-ggplot(Mar__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Mar")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Apr
+    Apr__melted=binded_data[binded_data$month=='Apr']
+    Apr_gg<-ggplot(Apr__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Apr")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #May
+    May__melted=binded_data[binded_data$month=='May']
+    May_gg<-ggplot(May__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="May")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Jun
+    Jun__melted=binded_data[binded_data$month=='Jun']
+    Jun_gg<-ggplot(Jun__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Jun")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Jul
+    Jul__melted=binded_data[binded_data$month=='Jul']
+    Jul_gg<-ggplot(Jul__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Jul")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Aug
+    Aug__melted=binded_data[binded_data$month=='Aug']
+    Aug_gg<-ggplot(Aug__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Aug")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Sept
+    Sep__melted=binded_data[binded_data$month=='Sep']
+    Sep_gg<-ggplot(Sep__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Sept")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Oct
+    Oct__melted=binded_data[binded_data$month=='Oct']
+    Oct_gg<-ggplot(Oct__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Oct")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Nov
+    Nov__melted=binded_data[binded_data$month=='Nov']
+    Nov_gg<-ggplot(Nov__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Nov")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    ##################
+    #Dec
+    Dec__melted=binded_data[binded_data$month=='Dec']
+    Dec_gg<-ggplot(Dec__melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Dec")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    
+    
+    
+    grid.arrange(Jan_gg,Feb_gg,Mar_gg,Apr_gg,May_gg,Jun_gg,Jul_gg,Aug_gg,Sep_gg,Oct_gg,Nov_gg,Dec_gg,ncol=6)
+    
+  })
+  
+  output$one_day_of_week<-renderPlot({
+    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+    Month_df$month = format(Month_df$FL_DATE, '%b')
+    monday = Month_df[,c("DAY_OF_WEEK","month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")] 
+    
+    monday=monday[DAY_OF_WEEK<2]  
+    
+    
+    monday=na.omit(monday)
+    monday$total_delay=monday$SECURITY_DELAY+monday$WEATHER_DELAY+monday$NAS_DELAY+monday$CARRIER_DELAY+monday$LATE_AIRCRAFT_DELAY
+    monday_melted = monday[,c("month", "DEP_TIME", "ARR_TIME")]
+    monday_melted=melt(monday_melted,id='month')
+    monday_delay=monday[,c("month", "DEP_TIME", "total_delay")]
+    ##################
+    #############################JAN
+    Jan_monday_melted=monday_melted[monday_melted$month=='Jan']
+    Jan_monday_delay=monday_delay[monday_delay$month=='Jan']
+    Jan_gg1<-ggplot(Jan_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      
+      labs(x="", y="Hour") + theme(legend.position="none")
+    Jan_gg2<-ggplot(Jan_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Jan_gg<-grid.arrange(Jan_gg1,Jan_gg2,ncol=2,top="JAN",widths=c(2,1))
+    ##################################
+    ################################Feb
+    Feb_monday_melted=monday_melted[monday_melted$month=='Feb']
+    Feb_monday_delay=monday_delay[monday_delay$month=='Feb']
+    Feb_gg1<-ggplot(Feb_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Feb_gg2<-ggplot(Feb_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Feb_gg<-grid.arrange(Feb_gg1,Feb_gg2,ncol=2,top="Feb",widths=c(2,1))
+    ###################################
+    ################################ MAR
+    Mar_monday_melted=monday_melted[monday_melted$month=='Mar']
+    Mar_monday_delay=monday_delay[monday_delay$month=='Mar']
+    Mar_gg1<-ggplot(Mar_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Mar_gg2<-ggplot(Mar_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Mar_gg<-grid.arrange(Mar_gg1,Mar_gg2,ncol=2,top="MAR",widths=c(2,1))
+    ########################################
+    #####################################Apr
+    Apr_monday_melted=monday_melted[monday_melted$month=='Apr']
+    Apr_monday_delay=monday_delay[monday_delay$month=='Apr']
+    Apr_gg1<-ggplot(Apr_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Apr_gg2<-ggplot(Apr_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Apr_gg<-grid.arrange(Apr_gg1,Apr_gg2,ncol=2,top="Apr",widths=c(2,1))
+    #######################################
+    ####################################May
+    May_monday_melted=monday_melted[monday_melted$month=='May']
+    May_monday_delay=monday_delay[monday_delay$month=='May']
+    May_gg1<-ggplot(May_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    May_gg2<-ggplot(May_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    May_gg<-grid.arrange(May_gg1,May_gg2,ncol=2,top="May",widths=c(2,1))
+    #######################################
+    #####################################June
+    June_monday_melted=monday_melted[monday_melted$month=='Jun']
+    June_monday_delay=monday_delay[monday_delay$month=='Jun']
+    June_gg1<-ggplot(June_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    June_gg2<-ggplot(June_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    June_gg<-grid.arrange(June_gg1,June_gg2,ncol=2,top="June",widths=c(2,1))
+    ################################################
+    #########################################July
+    Jul_monday_melted=monday_melted[monday_melted$month=='Jul']
+    Jul_monday_delay=monday_delay[monday_delay$month=='Jul']
+    Jul_gg1<-ggplot(Jul_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="Hour") + theme(legend.position="none")
+    Jul_gg2<-ggplot(Jul_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Jul_gg<-grid.arrange(Jul_gg1,Jul_gg2,ncol=2,top="July",widths=c(2,1))
+    #################################################
+    #############################################Aug
+    Aug_monday_melted=monday_melted[monday_melted$month=='Aug']
+    Aug_monday_delay=monday_delay[monday_delay$month=='Aug']
+    Aug_gg1<-ggplot(Aug_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Aug_gg2<-ggplot(Aug_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Aug_gg<-grid.arrange(Aug_gg1,Aug_gg2,ncol=2,top="Aug",widths=c(2,1))
+    ########################################
+    #############################################Sept
+    Sep_monday_melted=monday_melted[monday_melted$month=='Sep']
+    Sep_monday_delay=monday_delay[monday_delay$month=='Sep']
+    Sep_gg1<-ggplot(Sep_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Sep_gg2<-ggplot(Sep_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Sep_gg<-grid.arrange(Sep_gg1,Sep_gg2,ncol=2,top="Sep",widths=c(2,1))
+    #######################################
+    #####################################Oct
+    Oct_monday_melted=monday_melted[monday_melted$month=='Oct']
+    Oct_monday_delay=monday_delay[monday_delay$month=='Oct']
+    Oct_gg1<-ggplot(Oct_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Oct_gg2<-ggplot(Oct_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Oct_gg<-grid.arrange(Oct_gg1,Oct_gg2,ncol=2,top="Oct",widths=c(2,1))
+    ####################################
+    ################################Nov
+    Nov_monday_melted=monday_melted[monday_melted$month=='Nov']
+    Nov_monday_delay=monday_delay[monday_delay$month=='Nov']
+    Nov_gg1<-ggplot(Nov_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Nov_gg2<-ggplot(Nov_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Nov_gg<-grid.arrange(Nov_gg1,Nov_gg2,ncol=2,top="Nov",widths=c(2,1))
+    ##################################
+    ######################################Dec
+    Dec_monday_melted=monday_melted[monday_melted$month=='Dec']
+    Dec_monday_delay=monday_delay[monday_delay$month=='Dec']
+    Dec_gg1<-ggplot(Dec_monday_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="", y="") + theme(legend.position="none")
+    Dec_gg2<-ggplot(Dec_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      #ylim(0,25)+
+      #stat_bin2d(bins = 25, colour = "white")+
+      #stat_summary(fun.y = "sum", geom = "line") + 
+      #coord_trans(y = "log10") + 
+      #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    Dec_gg<-grid.arrange(Dec_gg1,Dec_gg2,ncol=2,top="Dec",widths=c(2,1))
+    ########################################
+    grid.arrange(Jan_gg,Feb_gg,Mar_gg,Apr_gg,May_gg,June_gg,Jul_gg,Aug_gg,Sep_gg,Oct_gg,Nov_gg,Dec_gg,ncol=6)
+  })
+  
+  output$nas_delay_Plot <- renderPlot({
+    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+    Month_df$month = format(Month_df$FL_DATE, '%b')
+    Month_delay = Month_df[,c("month", "WEATHER_DELAY","DEP_TIME")] %>%
+      na.omit()
+    Month_delay=Month_delay[WEATHER_DELAY>0]
+    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
+      geom_point(aes(colour = WEATHER_DELAY,size=WEATHER_DELAY/10+20),shape=1,stroke=3)+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      
+      scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+      labs(x="2017 Months", y="Hour")
+    
+  })
+  
+  output$one_day <- renderPlot({
+    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+    Month_df$month = format(Month_df$FL_DATE, '%b')
+    day=Month_df[Month_df$FL_DATE=='2017-10-11']
+    day = day[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")] 
+    day=na.omit(day)
+    day$total_delay=day$SECURITY_DELAY+day$WEATHER_DELAY+day$NAS_DELAY+day$CARRIER_DELAY+day$LATE_AIRCRAFT_DELAY
+    day_melted = day[,c("month", "DEP_TIME", "ARR_TIME")]
+    day_melted=melt(day_melted,id='month')
+    day_delay=day[,c("month", "DEP_TIME", "total_delay")]
+    
+    gg1<-ggplot(day_melted, aes(x = variable, y = value/100)) +
+      geom_point(aes(colour = variable), size = 3, shape=1,stroke=3)+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      
+      labs(x="", y="Hour") + theme(legend.position="none")
+    gg2<-ggplot(day_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
+      geom_point(aes(size=total_delay),  shape=1,stroke=3)+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      
+      labs(y="",x="") + theme(legend.position="none")+
+      theme(axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.y=element_blank())
+    grid.arrange(gg1,gg2,ncol=2,top="2017-10-11",widths=c(2,1))
+    
+  })
+  output$airline_200 <- renderPlot({
+    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+    Month_df$month = format(Month_df$FL_DATE, '%b')
+    
+    Month_delay = Month_df[,c("month","FL_NUM", "ARR_TIME","DEP_TIME")] 
+    Month_delay=Month_delay[Month_delay$FL_NUM=='200']
+    Month_delay = Month_delay[,c("month", "ARR_TIME","DEP_TIME")]
+    Month_delay=melt(Month_delay,id='month')
+    Month_delay=na.omit(Month_delay)
+    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
+      geom_point(aes(colour = variable,size=1),fill = "white", size = 3, shape=1,stroke=3)+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      
+      labs(x="2017 Months", y="Hour")
+    
+  })
   ###################PART GRAD BEGINS HERE
   sliderValues <- reactive({
     input$range
