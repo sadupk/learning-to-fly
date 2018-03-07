@@ -79,7 +79,7 @@ data[,":="(
 
 busy_days = data[,.(daily_flight_count = length(month_name)), by = "fl_date"][order(-daily_flight_count)]
 
-holidays= head(busy_days[,.(holidays = as.character(daily_flight_count), date = fl_date)],10)
+#holidays= head(busy_days[,.(holidays = as.character(daily_flight_count), date = fl_date)],10)
 extra_cancellations = data[,.(
   cancellations = sum(cancelled, na.rm = T),
   flight_count = length(cancelled)),
@@ -91,7 +91,11 @@ extra_cancellations[,":="(
 
 heavyCancellations = extra_cancellations[cancellations>0 & perc_cancellations>0.3][order(-cancellations)][]
 
-specialDays = list("Heavy Cancellations"=heavyCancellations, "Holidays"=holidays, "Busy Days"=busy_days)
+specialDays = list(
+  "Heavy Cancellations" = heavyCancellations[, .(fl_date, flight_count, cancellations, perc_cancellations)],
+  "Holidays" = data.table(holidays)[, .(date, holidays)],
+  "Busy Days" = busy_days
+)
 data[, ":="(origin_state= substr(origin_city_name, nchar(as.character(origin_city_name))-1,100),
             dest_state = substr(dest_city_name, nchar(as.character(dest_city_name))-1,100))]
 
@@ -196,7 +200,12 @@ ui <- dashboardPage(
       )
     ),
     fluidRow(
-      selectInput("special_day", "Which dates would you like to see?", names(specialDays))
+      selectInput("dateType", "Which dates would you like to see?", names(specialDays))
+    ),
+    fluidRow(
+      #Part 2-a 
+      tabPanel("Special Dates",box( title = "Special Dates", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",width="750px",height="75px"))
+      )
     ),
     #################################C begins here
     
@@ -1142,14 +1151,23 @@ output$ArrivalDelays <- renderPlot({
   })
   ###################PART A BEGINS HERE
   output$takeOffs <-renderDataTable(
-    allTakeOffs[state == input$State,], options = list(pageLength= 5)
+    allTakeOffs[,.(State = state, `Departure Count` = departure_count, `% Departures` = perc_departures, `Arrival Count` = arrival_count, "% Arrivals" = perc_arrivals)], options = list(pageLength= 5)
   )
-
-  output$special_days <-renderDataTable(
-    specialDays[input$dateType], options = list(pageLength= 5)
-  )
-
-
+  
+  output$special_days <-DT::renderDataTable(
+    
+    DT::datatable({
+    
+    dataSpecial = as.data.table(specialDays[input$dateType])
+    
+    if(input$dateType == "Heavy Cancellations"){
+      setnames(dataSpecial, c("Date", "Flights","Cancellations", "Percentage Cancellations"))}
+    else if (input$dateType == "Holidays"){
+      setnames(dataSpecial, c("Date", "Holiday Name"))}
+    else  {setnames(dataSpecial, c("Date", "No. of Flights"))}
+    
+    data.frame(dataSpecial)[1:10,]}, options = list(pageLength= 10)
+  ))
   ####################C Part Begins here
 
 
@@ -1706,12 +1724,13 @@ output$ArrivalDelays <- renderPlot({
 
     dist_values = Month_df[(Month_df$DISTANCE >= dist_min) & (Month_df$DISTANCE <= dist_max)]$DISTANCE
     dist_count = data.frame(label = "number of flights", dist_count = dist_values)
-
+    options(scipen = 999)
     ggplot(dist_count, aes(x = label)) +
       ylab("Number of Flights") +
       theme(axis.title.x=element_blank(),
             axis.title.y=element_blank()) +
       geom_bar() +
+      scale_y_continuous(labels = function(x){paste0(x/1000, ' K',sep = "")})+
       coord_flip() +
       ylim(0, dim(Month_df)[1])
   })
