@@ -121,6 +121,11 @@ allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_depa
 
 # assume all of the tsv files in this directory are data of the same kind that I want to visualize
 
+choices_airport=unique(Month_df$ORIGIN_CITY_NAME)
+choices_day=unique(May$DAY_OF_WEEK)
+choices_delay=c("NAS_Delay","WEATHER_DELAY","CARRIER_DELAY","SECURITY_DELAY","LATE_AIRCRAFT_DELAY")
+choices_fl_num=unique(Month_df$FL_NUM)
+
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Spring 2018 Example Dashboard"),
@@ -207,17 +212,35 @@ ui <- dashboardPage(
       tabPanel("Special Dates",box( title = "Special Dates", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",width="750px",height="75px"))
       )
     ),
-    #################################C begins here
-    
+    #################################A begins here
+    fluidRow(
+      
+      selectInput("Select_Airport", "Select_Airport", choices_airport)
+      
+    ),
     fluidRow(
       tabPanel("Lauderdale_airport",box( title = "Lauderdale_airport", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) )
     ),
-    
+    fluidRow(
+      
+      selectInput("Select_Day_of_the_Week", "Select_Day_of_the_Week", choices_day)
+      
+    ),
     fluidRow(
       tabPanel("Monday",box( title = "Monday", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) )
     ),
     fluidRow(
+      
+      selectInput("Delay_Causes", "Delay_Causes", choices_delay)
+      
+    ),
+    fluidRow(
       tabPanel("Weather Delay Causes",box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+    ),
+    fluidRow(
+      
+      selectInput("Flight_No", "Flight_No", choices_fl_num)
+      
     ),
     fluidRow(
       tabPanel("Flight No:200",box( title = "Flight No:200", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) )
@@ -1176,7 +1199,7 @@ output$ArrivalDelays <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
 
     display_data = Month_df[,c("month","DEP_TIME","ARR_TIME","ORIGIN_CITY_NAME","DEST_CITY_NAME")]
-    display_data_dest=display_data[DEST_CITY_NAME=='Fort Lauderdale, FL']
+    display_data_dest=display_data[DEST_CITY_NAME==input$Select_Airport]
     display_data_dest=subset(display_data_dest,select =c(month,ARR_TIME))
 
     display_data_org=display_data[ORIGIN_CITY_NAME=='Fort Lauderdale, FL']
@@ -1311,7 +1334,7 @@ output$ArrivalDelays <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     monday = Month_df[,c("DAY_OF_WEEK","month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
 
-    monday=monday[DAY_OF_WEEK<2]
+    monday=monday[DAY_OF_WEEK==input$Select_Day_of_the_Week]
 
 
     monday=na.omit(monday)
@@ -1700,7 +1723,7 @@ output$ArrivalDelays <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
 
     Month_delay = Month_df[,c("month","FL_NUM", "ARR_TIME","DEP_TIME")]
-    Month_delay=Month_delay[Month_delay$FL_NUM=='200']
+    Month_delay=Month_delay[Month_delay$FL_NUM==input$Flight_No]
     Month_delay = Month_delay[,c("month", "ARR_TIME","DEP_TIME")]
     Month_delay=melt(Month_delay,id='month')
     Month_delay=na.omit(Month_delay)
