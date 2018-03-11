@@ -107,8 +107,9 @@ arrivalCount[,perc_arrivals := arrival_count/ sum(arrival_count)]
 
 allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_departures = paste(perc_departures*100,"%", sep = ""))], arrivalCount[,.(state = dest_state, arrival_count, perc_arrivals = paste(perc_arrivals*100, "%", sep = ""))], by = "state", all = T)
 
+days=c(1,2,3,4,5,6,7)
+names(days)=c("Mon","Tues","Wed","Thur","Fri","Sat","Sun")
 
-#days=c("mon","tues","wed","thur","fri","sat","sun")
 #Jan$day=c(rep(days,length(Jan[[1]])/7),days[c(1:(length(Jan[[1]])%%7))])
 
 
@@ -122,10 +123,11 @@ allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_depa
 # assume all of the tsv files in this directory are data of the same kind that I want to visualize
 
 choices_airport=unique(Month_df$ORIGIN_CITY_NAME)
-choices_day=unique(May$DAY_OF_WEEK)
+choices_airport=choices_airport[order(choices_airport)]
+choices_day=names(days)
 choices_delay=c("NAS_Delay","WEATHER_DELAY","CARRIER_DELAY","SECURITY_DELAY","LATE_AIRCRAFT_DELAY")
 choices_fl_num=unique(Month_df$FL_NUM)
-
+choices_fl_num=choices_fl_num[order(choices_fl_num)]
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Spring 2018 Example Dashboard"),
@@ -215,38 +217,40 @@ ui <- dashboardPage(
     #################################A begins here
     fluidRow(
       
-      selectInput("Select_Airport", "Select_Airport", choices_airport)
+      selectInput("Select_Airport", "Select Airport", choices_airport)
       
     ),
     fluidRow(
-      tabPanel("Lauderdale_airport",box( title = "Lauderdale_airport", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) )
+      tabPanel("Lauderdale_airport",box( title = "Airport Information", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) )
     ),
     fluidRow(
       
-      selectInput("Select_Day_of_the_Week", "Select_Day_of_the_Week", choices_day)
+      selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day)
       
     ),
     fluidRow(
-      tabPanel("Monday",box( title = "Monday", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) )
+      tabPanel("Monday",box( title = "A day of the Week", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) )
     ),
     fluidRow(
       
-      selectInput("Delay_Causes", "Delay_Causes", choices_delay)
+      selectInput("Delay_Causes", "Select Delay", choices_delay)
       
     ),
     fluidRow(
-      tabPanel("Weather Delay Causes",box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+      tabPanel("Weather Delay Causes",box( title = "Delay statistics", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
     ),
     fluidRow(
       
-      selectInput("Flight_No", "Flight_No", choices_fl_num)
+      selectInput("Flight_No", "Select Flight No", choices_fl_num)
       
     ),
     fluidRow(
-      tabPanel("Flight No:200",box( title = "Flight No:200", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) )
+      tabPanel("Flight No:200",box( title = "Flight Information", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) )
     ),
+    dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),
+    
     fluidRow(
-      tabPanel("One day",box( title = "One day", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
+      tabPanel("One day",box( title = "Date Information", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
     ),
     #################################PART GRAD BEGINS HERE
     fluidRow(
@@ -1334,7 +1338,7 @@ output$ArrivalDelays <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     monday = Month_df[,c("DAY_OF_WEEK","month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
 
-    monday=monday[DAY_OF_WEEK==input$Select_Day_of_the_Week]
+    monday=monday[DAY_OF_WEEK==days[[input$Select_Day_of_the_Week]]]
 
 
     monday=na.omit(monday)
@@ -1353,7 +1357,7 @@ output$ArrivalDelays <- renderPlot({
 
       labs(x="", y="Hour") + theme(legend.position="none")
     Jan_gg2<-ggplot(Jan_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
 
@@ -1377,7 +1381,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Feb_gg2<-ggplot(Feb_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1405,7 +1409,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Mar_gg2<-ggplot(Mar_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1433,7 +1437,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Apr_gg2<-ggplot(Apr_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1461,7 +1465,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     May_gg2<-ggplot(May_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1489,7 +1493,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     June_gg2<-ggplot(June_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1517,7 +1521,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="Hour") + theme(legend.position="none")
     Jul_gg2<-ggplot(Jul_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1545,7 +1549,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Aug_gg2<-ggplot(Aug_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1573,7 +1577,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Sep_gg2<-ggplot(Sep_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1601,7 +1605,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Oct_gg2<-ggplot(Oct_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1629,7 +1633,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Nov_gg2<-ggplot(Nov_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1657,7 +1661,7 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Dec_gg2<-ggplot(Dec_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay))+
+      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
@@ -1692,7 +1696,7 @@ output$ArrivalDelays <- renderPlot({
   output$one_day <- renderPlot({
     Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
-    day=Month_df[Month_df$FL_DATE=='2017-10-11']
+    day=Month_df[Month_df$FL_DATE==input$date]
     day = day[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
     day=na.omit(day)
     day$total_delay=day$SECURITY_DELAY+day$WEATHER_DELAY+day$NAS_DELAY+day$CARRIER_DELAY+day$LATE_AIRCRAFT_DELAY
@@ -1715,7 +1719,7 @@ output$ArrivalDelays <- renderPlot({
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
-    grid.arrange(gg1,gg2,ncol=2,top="2017-10-11",widths=c(2,1))
+    grid.arrange(gg1,gg2,ncol=2,top=input$date,widths=c(2,1))
 
   })
   output$airline_200 <- renderPlot({
