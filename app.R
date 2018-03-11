@@ -24,15 +24,15 @@ library(gridExtra)
 #Keep all data files in the 'Data' folder!!
 
 #Load Lookup Tables
-print("Reading lookup tables")
+print("Reading holiday tables")
 holidays = fread("Data/holidays.csv", header = T)[,.(V2,V3)]
 setnames(holidays,c("holidays","date"))
 holidays = data.frame(holidays)[2:11,]
 holidays$date = as.Date(holidays$date, "%m-%d-%y")
-carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
-colnames(carrier_lookup) = c("Code", "carrier_name")
-airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
-colnames(airport_lookup) = c("Code", "airport_name")
+# carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
+# colnames(carrier_lookup) = c("Code", "carrier_name")
+# airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
+# colnames(airport_lookup) = c("Code", "airport_name")
 
 #Load Flight data
 print("Reading data tables")
@@ -52,16 +52,17 @@ Dec=read.csv("Data/Dec.csv")
 
 #Merge flight data
 Month=list(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
+rm(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 #Add Month dataframe with data for the whole year
 Month_df = rbindlist(Month)
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
 
-#Add lookup fields
-Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
-colnames(airport_lookup) = c("Code", "origin_airport")
-Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
-colnames(airport_lookup) = c("Code", "dest_airport")
-Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+# Add lookup fields
+# Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
+# colnames(airport_lookup) = c("Code", "origin_airport")
+# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+# colnames(airport_lookup) = c("Code", "dest_airport")
+# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
 
 #-----------------------
 # Grade A last two points
@@ -122,7 +123,7 @@ allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_depa
 # assume all of the tsv files in this directory are data of the same kind that I want to visualize
 
 choices_airport=unique(Month_df$ORIGIN_CITY_NAME)
-choices_day=unique(May$DAY_OF_WEEK)
+choices_day=unique(Month[[1]]$DAY_OF_WEEK)
 choices_delay=c("NAS_Delay","WEATHER_DELAY","CARRIER_DELAY","SECURITY_DELAY","LATE_AIRCRAFT_DELAY")
 choices_fl_num=unique(Month_df$FL_NUM)
 
@@ -250,12 +251,21 @@ ui <- dashboardPage(
     ),
     #################################PART GRAD BEGINS HERE
     fluidRow(
-      sliderInput("range", "Range:",
-                  min = 0, max = max(Month_df$DISTANCE),
+      selectInput("units", "Units", c("miles","kilometers")),
+      sliderInput("range", "Flight Distance:",
+                  min = 0, max = 7000,
                   value = c(200,500))
     ),
     fluidRow(
       tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px")))
+    ),
+    fluidRow(
+      sliderInput("time_range", "Flight Time (minutes):",
+                  min = 0, max = 600,
+                  value = c(200,300))
+    ),
+    fluidRow(
+      tabPanel("Number of Flights by Air Time",box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, plotOutput("time_range_plot",width="750px",height="75px")))
     )
   )
 )
@@ -277,9 +287,6 @@ server <- function(input, output) {
     arr=arrtimes[nchar(arrtimes)<3 & !is.na(arrtimes)]
     arrivals[1]=length(arr)
     
-    
-    
-    
     for (hour in 1:9)
     {
       h=toString(hour)
@@ -289,14 +296,12 @@ server <- function(input, output) {
       
     }
     
-    
     for (hour in 10:24)
     {
       h=toString(hour)
       
       arr=arrtimes[startsWith(arrtimes,h) & nchar(arrtimes)==4 & !is.na(arrtimes)]
       arrivals[hour+1]=length(arr)
-      
       
     }
     
@@ -318,28 +323,20 @@ server <- function(input, output) {
     deptimes <- as.character(unlist(Airline$DEP_TIME))
     departures=list()
     
-    
-    
     dep=deptimes[nchar(deptimes)<3 & !is.na(deptimes)]
     departures[1]=length(dep)
-    
-    
-    
     
     for (hour in 1:9)
     {
       h=toString(hour)
       
-      
       dep=deptimes[startsWith(deptimes,h) & nchar(deptimes)==3 & !is.na(deptimes)]
       departures[hour+1]=length(dep)
     }
     
-    
     for (hour in 10:24)
     {
       h=toString(hour)
-      
       
       dep=deptimes[startsWith(deptimes,h) & nchar(deptimes)==4 & !is.na(deptimes)]
       departures[hour+1]=length(dep)
@@ -1736,19 +1733,51 @@ output$ArrivalDelays <- renderPlot({
 
   })
   ###################PART GRAD BEGINS HERE
+  unitChoice <- reactive({
+    input$units
+  })
+  
   sliderValues <- reactive({
     input$range
   })
 
   output$distance_range_plot <- renderPlot({
-
+    print(unitChoice())
+    
+    if (unitChoice() == "miles") {
     dist_min = sliderValues()[1]
     dist_max = sliderValues()[2]
+    }
+    else {
+    dist_min = sliderValues()[1] / 1.609
+    dist_max = sliderValues()[2] / 1.609
+    }
 
     dist_values = Month_df[(Month_df$DISTANCE >= dist_min) & (Month_df$DISTANCE <= dist_max)]$DISTANCE
     dist_count = data.frame(label = "number of flights", dist_count = dist_values)
     options(scipen = 999)
     ggplot(dist_count, aes(x = label)) +
+      ylab("Number of Flights") +
+      theme(axis.title.x=element_blank(),
+            axis.title.y=element_blank()) +
+      geom_bar() +
+      ylim(0, dim(Month_df)[1]) +
+      coord_flip()
+  })
+  
+  sliderValues2 <- reactive({
+    input$time_range
+  })
+  
+  output$time_range_plot <- renderPlot({
+    
+    time_min = sliderValues2()[1]
+    time_max = sliderValues2()[2]
+    
+    time_values = Month_df[(Month_df$AIR_TIME >= time_min) & (Month_df$AIR_TIME <= time_max)]$AIR_TIME
+    time_count = data.frame(label = "Number of flights", time_count = time_values)
+    options(scipen = 999)
+    ggplot(time_count, aes(x = label)) +
       ylab("Number of Flights") +
       theme(axis.title.x=element_blank(),
             axis.title.y=element_blank()) +
