@@ -29,10 +29,10 @@ holidays = fread("Data/holidays.csv", header = T)[,.(V2,V3)]
 setnames(holidays,c("holidays","date"))
 holidays = data.frame(holidays)[2:11,]
 holidays$date = as.Date(holidays$date, "%m-%d-%y")
-# carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
-# colnames(carrier_lookup) = c("Code", "carrier_name")
-# airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
-# colnames(airport_lookup) = c("Code", "airport_name")
+carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
+colnames(carrier_lookup) = c("Code", "carrier_name")
+airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
+colnames(airport_lookup) = c("Code", "airport_name")
 
 #Load Flight data
 print("Reading data tables")
@@ -58,11 +58,11 @@ Month_df = rbindlist(Month)
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
 
 # Add lookup fields
-# Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
-# colnames(airport_lookup) = c("Code", "origin_airport")
-# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
-# colnames(airport_lookup) = c("Code", "dest_airport")
-# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
+colnames(airport_lookup) = c("Code", "origin_airport")
+Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+colnames(airport_lookup) = c("Code", "dest_airport")
+Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
 
 #-----------------------
 # Grade A last two points
