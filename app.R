@@ -1214,114 +1214,115 @@ output$ArrivalDelays <- renderPlot({
     display_data_dest=na.omit(display_data_dest)
     binded_data=rbind(display_data_dest,display_data_org)
 
+    pos_jt = position_jitter(width = .15)
 
     ##################
     #Jan
     Jan__melted=binded_data[binded_data$month=='Jan']
     Jan_gg<-ggplot(Jan__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Jan")+
+      geom_point(aes(colour = variable), position = post_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Jan") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Feb
     Feb__melted=binded_data[binded_data$month=='Feb']
     Feb_gg<-ggplot(Feb__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Feb")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Feb") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Mar
     Mar__melted=binded_data[binded_data$month=='Mar']
     Mar_gg<-ggplot(Mar__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Mar")+
+      geom_point(aes(colour = variable),position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Mar") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Apr
     Apr__melted=binded_data[binded_data$month=='Apr']
     Apr_gg<-ggplot(Apr__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Apr")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Apr") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #May
     May__melted=binded_data[binded_data$month=='May']
     May_gg<-ggplot(May__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="May")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="May") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Jun
     Jun__melted=binded_data[binded_data$month=='Jun']
     Jun_gg<-ggplot(Jun__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Jun")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Jun") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Jul
     Jul__melted=binded_data[binded_data$month=='Jul']
     Jul_gg<-ggplot(Jul__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Jul")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Jul") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Aug
     Aug__melted=binded_data[binded_data$month=='Aug']
     Aug_gg<-ggplot(Aug__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Aug")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Aug") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Sept
     Sep__melted=binded_data[binded_data$month=='Sep']
     Sep_gg<-ggplot(Sep__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Sept")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Sept") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Oct
     Oct__melted=binded_data[binded_data$month=='Oct']
     Oct_gg<-ggplot(Oct__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Oct")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Oct") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Nov
     Nov__melted=binded_data[binded_data$month=='Nov']
     Nov_gg<-ggplot(Nov__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Nov")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Nov") +
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Dec
     Dec__melted=binded_data[binded_data$month=='Dec']
     Dec_gg<-ggplot(Dec__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
-      labs(title="Dec")+
+      geom_point(aes(colour = variable), position = pos_jt) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
+      labs(title="Dec") +
       labs(x="", y="Hour") + theme(legend.position="none")
 
 
@@ -1702,17 +1703,17 @@ output$ArrivalDelays <- renderPlot({
     day_delay=day[,c("month", "DEP_TIME", "total_delay")]
 
     gg1<-ggplot(day_melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), size = 3, shape=1,stroke=3)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      geom_point(aes(colour = variable), size = 3, shape=1,stroke=3) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
 
       labs(x="", y="Hour") + theme(legend.position="none")
     gg2<-ggplot(day_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),  shape=1,stroke=3)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      geom_point(aes(size=total_delay),  shape=1,stroke=3) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
 
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") + theme(legend.position="none") +
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -1730,8 +1731,8 @@ output$ArrivalDelays <- renderPlot({
     Month_delay=na.omit(Month_delay)
     ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
       geom_point(aes(colour = variable,size=1),fill = "white", size = 3, shape=1,stroke=3)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
+      expand_limits( y=c(0, 24)) +
 
       labs(x="2017 Months", y="Hour")
 
