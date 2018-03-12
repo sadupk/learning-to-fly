@@ -132,127 +132,176 @@ choices_fl_num=choices_fl_num[order(choices_fl_num)]
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Spring 2018 Example Dashboard"),
-  dashboardSidebar(disable = TRUE),
-  dashboardBody(
-   
-   #Ask the user to give inputs about the Airport, Month, and timeframe
-    fluidRow(
-      selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
-      selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
-      selectInput("timeframe", "timeframe", c("1-24","AM-PM"))
-    ),
-     
-    fluidRow(
-      #Part 2-a 
-      tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("AirlineFlightPlot",width="450px",height="450px")) ),
-      tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("AirlineFlightTable"))  ),
-      #Part 2-b 
-      tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 8, plotOutput("HourlyFlights"))  ),
-      tabPanel("HourlyTable", box(title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("HourlyTable"))  )
-      
-    ),
-    
-     #Part 2-e
-    fluidRow(
-      tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalFlightsPlot",width="450px",height="450px")) ),
-      tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("ArrivalFlightsTable"))  )
-      
-    ),
-    
-     #Part 2-e
-    fluidRow(
-      tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartFlightsPlot",width="450px",height="450px")) ),
-      tabPanel("Depart Flights Table", box(title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 8, dataTableOutput("DepartFlightsTable"))  )
-      
-    ),
-     #Part 2-c
-    fluidRow(
-      tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) )
-    ),
-      fluidRow(
-        tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("WeeklyFlightsTable",width="750px",height="750px")) )
+  dashboardSidebar(
+    sidebarMenu(
+    menuItem("Inputs", tabName = "item1"),
+    menuItem("Overall Flights", tabName = "item2"),
+    menuItem("Arrivals/Departures",tabName = "item3"),
+    menuSubItem("Arrivals",tabName = "item3a"),
+    menuSubItem("Departures",tabName = "item3b"),
+    menuSubItem("Weekly",tabName = "item3c"),
+    menuSubItem("Delays",tabName = "item3d"),
+    menuItem("Top 15 Destinations", tabName = "item4"),
+    menuItem("Landing/TakeOffs",tabName = "item5"),
+    menuItem("Special Dates",tabName = "item6"),
+    menuItem("Flights by distance",tabName = "item7"),
+    menuItem("Outliers",tabName = "item8")
+  )
+ ),
+ dashboardBody(
+    tabItems(
+      tabItem(tabName = "item1",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset1", 
+                       tabPanel("Inputs", 
+                                selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
+                                selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
+                                selectInput("timeframe", "timeframe", c("1-24","AM-PM")))
+                )
+              )
       ),
-    
-      #Part 2-d
-      fluidRow(
-        tabPanel("Arrival_Delays",box( title = "Arrival_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",width="750px",height="750px")) ),
-        tabPanel("Depart_Delays",box( title = "Depart_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
-        tabPanel("DepartDelayTable",box( title = "DepartDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
-        tabPanel("ArrivalDelayTable",box( title = "ArrivalDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) )
-        
+      tabItem(tabName = "item2",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset2", 
+                       tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("AirlineFlightPlot",width="450px",height="450px")) ),
+                       tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("AirlineFlightTable"))  ),
+                       #Part 2-b 
+                       tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("HourlyFlights"))  ),
+                       tabPanel("HourlyTable", box(title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("HourlyTable"))  )
+                )
+              )
       ),
-    
-    #################################PART B BEGINS HERE
-    fluidRow(
-      tabPanel("2017 Overall Arrival Departure by hour",
-               box( title = "2017 Overall Arrival Departure by hour", 
-                    solidHeader = TRUE, status = "primary", width = 10, 
-                    plotOutput("arrival_departure_times",width="750px",height="750px")) )
-    ),
-    fluidRow(
-      tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_2017",width="750px",height="750px")) )
-    ),
-    fluidRow(
-      tabPanel("Top 15 Destinations",box( title = "Top 15 Destinations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
-    ),
-    fluidRow(
-      tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) )
-    ),
-    #################################PART A BEGINS HERE
-    fluidRow(
-      selectInput("State", "State", allTakeOffs$state)
-    ),
-    fluidRow(
-      #Part 2-a 
-      tabPanel("State Info",box( title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",width="750px",height="75px"))
+      tabItem(tabName = "item3",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset3", 
+                       tabPanel("2017 Overall",box( title = "2017 Overall Arrival Departure by hour", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_times",width="750px",height="750px")) ),
+                       tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_2017",width="750px",height="750px")) )
+                )
+              )
+      ),
+      tabItem(tabName = "item3a",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset3a", 
+                       tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("ArrivalFlightsPlot",width="450px",height="450px")) ),
+                       tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("ArrivalFlightsTable"))  )
+                       
+                )
+              )
+      ),
+      tabItem(tabName = "item3b",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset3b", 
+                       tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("DepartFlightsPlot",width="450px",height="450px")) ),
+                       tabPanel("Depart Flights Table", box(title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("DepartFlightsTable"))  )
+                       
+                )
+              )
+      ),
+      tabItem(tabName = "item3c",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset3c", 
+                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) ),
+                       tabPanel("Weekly Flights Table",box( title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("WeeklyFlightsTable",width="750px",height="750px")) )
+                       
+                )
+              )
+      ),
+      tabItem(tabName = "item3d",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset3d", 
+                       tabPanel("Arrival Delays",box( title = "Arrival Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",width="750px",height="750px")) ),
+                       tabPanel("Arrival Delay Table",box( title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) ),
+                       tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
+                       tabPanel("Depart Delay Table",box( title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
+                       tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) ),
+                       tabPanel("Weather Delay Causes",box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+                )
+              )
+      ),
+      tabItem(tabName = "item4",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset4", 
+                       tabPanel("Top 15 Destinations",box( title = "", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
+                )
+              )
+      ),
+      tabItem(tabName = "item5",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset5", 
+                       tabPanel("State Info",
+                                selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
+                                box(title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",width="750px",height="75px")))
+                )
+              )
+      ),
+      tabItem(tabName = "item6",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset6", 
+                       tabPanel("Special Dates",
+                                selectInput("dateType", "Which dates would you like to see?", names(specialDays)),
+                                box( title = "", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",width="750px",height="75px"))
+                       )
+                )
+              )
+      ),
+      tabItem(tabName = "item7",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset7", 
+                       tabPanel("Flights by distance",
+                                sliderInput("range", "Range:",min = 0, max = max(Month_df$DISTANCE),value = c(200,500)),
+                                tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px")))
+                       )
+                )
+              )
+      ),
+      tabItem(tabName = "item8",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset8", 
+                       tabPanel("Lauderdale airport",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
+                       tabPanel("Monday",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
+                       tabPanel("Flight No:200",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
+                       tabPanel("One day",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
+                )
+              )
       )
-    ),
-    fluidRow(
-      selectInput("dateType", "Which dates would you like to see?", names(specialDays))
-    ),
-    fluidRow(
-      #Part 2-a 
-      tabPanel("Special Dates",box( title = "Special Dates", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",width="750px",height="75px"))
-      )
-    ),
-    #################################A begins here
-    fluidRow(
-      
-      selectInput("Select_Airport", "Select Airport", choices_airport)
-      
-    ),
-    fluidRow(
-      tabPanel("Lauderdale_airport",box( title = "Airport Information", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) )
-    ),
-    fluidRow(
-      
-      selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day)
-      
-    ),
-    fluidRow(
-      tabPanel("Monday",box( title = "A day of the Week", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) )
-    ),
-    fluidRow(
-      
-      selectInput("Delay_Causes", "Select Delay", choices_delay)
-      
-    ),
-    fluidRow(
-      tabPanel("Weather Delay Causes",box( title = "Delay statistics", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
-    ),
-    fluidRow(
-      
-      selectInput("Flight_No", "Select Flight No", choices_fl_num)
-      
-    ),
-    fluidRow(
-      tabPanel("Flight No:200",box( title = "Flight Information", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) )
-    ),
-    dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),
-    
-    fluidRow(
-      tabPanel("One day",box( title = "Date Information", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
-    ),
+    )
+ )
     #################################PART GRAD BEGINS HERE
     fluidRow(
       selectInput("units", "Units", c("miles","kilometers")),
