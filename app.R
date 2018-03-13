@@ -29,10 +29,10 @@ holidays = fread("Data/holidays.csv", header = T)[,.(V2,V3)]
 setnames(holidays,c("holidays","date"))
 holidays = data.frame(holidays)[2:11,]
 holidays$date = as.Date(holidays$date, "%m-%d-%y")
-carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
-colnames(carrier_lookup) = c("Code", "carrier_name")
-airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
-colnames(airport_lookup) = c("Code", "airport_name")
+# carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
+# colnames(carrier_lookup) = c("Code", "carrier_name")
+# airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
+# colnames(airport_lookup) = c("Code", "airport_name")
 
 #Load Flight data
 print("Reading data tables")
@@ -58,11 +58,11 @@ Month_df = rbindlist(Month)
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
 
 # Add lookup fields
-Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
-colnames(airport_lookup) = c("Code", "origin_airport")
-Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
-colnames(airport_lookup) = c("Code", "dest_airport")
-Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+# Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
+# colnames(airport_lookup) = c("Code", "origin_airport")
+# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+# colnames(airport_lookup) = c("Code", "dest_airport")
+# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
 
 #-----------------------
 # Grade A last two points
@@ -145,7 +145,8 @@ ui <- dashboardPage(
     menuItem("Landing/TakeOffs",tabName = "item5"),
     menuItem("Special Dates",tabName = "item6"),
     menuItem("Flights by distance",tabName = "item7"),
-    menuItem("Outliers",tabName = "item8")
+    menuItem("Outliers",tabName = "item8"),
+    menuItem("Other",tabName = "item9")
   )
  ),
  dashboardBody(
@@ -299,28 +300,29 @@ ui <- dashboardPage(
                        tabPanel("One day",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
                 )
               )
+      ),
+      tabItem(tabName = "item9",
+              #################################PART GRAD BEGINS HERE
+              fluidRow(
+                selectInput("units", "Units", c("miles","kilometers")),
+                sliderInput("range", "Flight Distance:",
+                            min = 0, max = 7000,
+                            value = c(200,500))
+              ),
+              fluidRow(
+                tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px")))
+              ),
+              fluidRow(
+                sliderInput("time_range", "Flight Time (minutes):",
+                            min = 0, max = 600,
+                            value = c(200,300))
+              ),
+              fluidRow(
+                tabPanel("Number of Flights by Air Time",box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, plotOutput("time_range_plot",width="750px",height="75px")))
+              )
       )
     )
  )
-    #################################PART GRAD BEGINS HERE
-    fluidRow(
-      selectInput("units", "Units", c("miles","kilometers")),
-      sliderInput("range", "Flight Distance:",
-                  min = 0, max = 7000,
-                  value = c(200,500))
-    ),
-    fluidRow(
-      tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px")))
-    ),
-    fluidRow(
-      sliderInput("time_range", "Flight Time (minutes):",
-                  min = 0, max = 600,
-                  value = c(200,300))
-    ),
-    fluidRow(
-      tabPanel("Number of Flights by Air Time",box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, plotOutput("time_range_plot",width="750px",height="75px")))
-    )
-  )
 )
 
 server <- function(input, output) {
