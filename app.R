@@ -1139,13 +1139,16 @@ output$ArrivalDelays <- renderPlot({
   output$arrival_departure_2017 <- renderPlot({
     Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
-    Month_freq = data.frame(table(Month_df$month))
-    arrival_departure = data.frame(month = factor(Month_freq$Var1, levels = month.abb),
-                                   arrivals = Month_freq$Freq,
-                                   departures = Month_freq$Freq) %>%
-      melt(.,id="month")
-    ggplot(arrival_departure, aes(x = factor(month, levels = month.abb), y = value)) +
-      geom_bar(stat = "identity",aes(fill=variable), position = "dodge")
+    Month_freq = select(Month_df, month, CARRIER) %>%
+      table() %>%
+      data.frame()
+    ggplot(Month_freq, aes(x = factor(month, levels = month.abb), y = Freq, group = CARRIER)) +
+      aes(colour = CARRIER) +
+      stat_summary(fun.y = "sum", geom = "line") +
+      coord_trans(y = "log10") +
+      scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
+                          labels = trans_format('log10', math_format(10^.x))) +
+      labs(x="2017 Months", y="Number of Flights")
   })
 
   output$top_15_dest_Plot <- renderPlot({
