@@ -127,10 +127,9 @@ names(days)=c("Mon","Tues","Wed","Thur","Fri","Sat","Sun")
 choices_airport=unique(Month_df$ORIGIN_CITY_NAME)
 choices_airport=choices_airport[order(choices_airport)]
 choices_day=names(days)
-choices_delay=c("NAS_Delay","WEATHER_DELAY","CARRIER_DELAY","SECURITY_DELAY","LATE_AIRCRAFT_DELAY")
+choices_delay=c("NAS DELAY","WEATHER DELAY","CARRIER DELAY","SECURITY DELAY","LATE AIRCRAFT DELAY")
 choices_fl_num=unique(Month_df$FL_NUM)
 choices_fl_num=choices_fl_num[order(choices_fl_num)]
-
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Spring 2018 Example Dashboard"),
   dashboardSidebar(
@@ -237,7 +236,7 @@ ui <- dashboardPage(
                        tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
                        tabPanel("Depart Delay Table",box( title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
                        tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) ),
-                       tabPanel("Weather Delay Causes",box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+                       tabPanel("Weather Delay Causes",selectInput("delay", "Select Delay", choices_delay),box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
                 )
               )
       ),
@@ -295,10 +294,10 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset8", 
-                       tabPanel("Lauderdale airport",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
-                       tabPanel("Monday",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
-                       tabPanel("Flight No:200",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
-                       tabPanel("One day",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
+                       tabPanel("Lauderdale airport",selectInput("Select_Airport", "Select Airport", choices_airport),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
+                       tabPanel("Monday",selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
+                       tabPanel("Flight No:200", selectInput("Flight_No", "Select Flight No", choices_fl_num),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
+                       tabPanel("One day",dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
                 )
               )
       ),
@@ -331,7 +330,162 @@ server <- function(input, output) {
   theme_set(theme_grey(base_size = 17)) 
   
   #Helper functions delcared here
-  
+  getValue<-function(timeValue){
+    
+    if(timeValue<100 & timeValue>=0){
+      new_min =  0
+      new_max =  99
+      old_min =  0
+      old_max =  59
+    }
+    else if(timeValue<200 & timeValue>=100){
+      new_min = 100
+      new_max = 199
+      old_min =100
+      old_max =  159
+    }
+    else if(timeValue<300 & timeValue>=200){
+      new_min = 200
+      new_max = 299
+      old_min =200
+      old_max =  259
+    }
+    else if(timeValue<400 & timeValue>=300){
+      new_min = 300
+      new_max = 399
+      old_min =300
+      old_max =  359
+    }
+    else if(timeValue<500 & timeValue>=400){
+      new_min = 400
+      new_max = 499
+      old_min =400
+      old_max =  459
+    }
+    else if(timeValue<600 & timeValue>=500){
+      new_min = 500
+      new_max = 599
+      old_min =500
+      old_max =  559
+    }
+    else if(timeValue<700 & timeValue>=600){
+      new_min = 600
+      new_max = 699
+      old_min = 600
+      old_max = 659
+    }
+    else if(timeValue<800 & timeValue>=700){
+      new_min = 700
+      new_max = 799
+      old_min = 700
+      old_max = 759
+    }
+    else if(timeValue<900 & timeValue>=800){
+      new_min = 800
+      new_max = 899
+      old_min = 800
+      old_max = 859
+    }
+    else if(timeValue<1000 & timeValue>=900){
+      new_min = 900
+      new_max = 999
+      old_min = 900
+      old_max = 959
+    }
+    else if(timeValue<1100 & timeValue>=1000){
+      new_min = 1000
+      new_max = 1099
+      old_min = 1000
+      old_max = 1059
+    }
+    else if(timeValue<1200 & timeValue>=1100){
+      new_min = 1100
+      new_max = 1199
+      old_min = 1100
+      old_max = 1159
+    }
+    else if(timeValue<1300 & timeValue>=1200){
+      new_min = 1200
+      new_max = 1299
+      old_min = 1200
+      old_max = 1259
+    }
+    else if(timeValue<1400 & timeValue>=1300){
+      new_min = 1300
+      new_max = 1399
+      old_min = 1300
+      old_max = 1359
+    }
+    else if(timeValue<1500 & timeValue>=1400){
+      new_min = 1400
+      new_max = 1499
+      old_min = 1400
+      old_max = 1459
+    }
+    else if(timeValue<1600 & timeValue>=1500){
+      new_min = 1500
+      new_max = 1599
+      old_min = 1500
+      old_max = 1559
+    }
+    else if(timeValue<1700 & timeValue>=1600){
+      new_min = 1600
+      new_max = 1699
+      old_min = 1600
+      old_max = 1659
+    }
+    else if(timeValue<1800 & timeValue>=1700){
+      new_min = 1700
+      new_max = 1799
+      old_min = 1700
+      old_max = 1759
+    }
+    else if(timeValue<1900 & timeValue>=1800){
+      new_min = 1800
+      new_max = 1899
+      old_min = 1800
+      old_max = 1859
+    }
+    else if(timeValue<2000 & timeValue>=1900){
+      new_min = 1900
+      new_max = 1999
+      old_min = 1900
+      old_max = 1959
+    }
+    else if(timeValue<2100 & timeValue>=2000){
+      new_min = 2000
+      new_max = 2099
+      old_min = 2000
+      old_max = 2059
+    }
+    else if(timeValue<2200 & timeValue>=2100){
+      new_min = 2100
+      new_max = 2199
+      old_min = 2100
+      old_max = 2159
+    }
+    else if(timeValue<2300 & timeValue>=2200){
+      new_min = 2200
+      new_max = 2299
+      old_min = 2200
+      old_max = 2259
+    }
+    else if(timeValue<2300 & timeValue>=2200){
+      new_min = 2200
+      new_max = 2299
+      old_min = 2200
+      old_max = 2259
+    }
+    else if(timeValue<2400 & timeValue>=2300){
+      new_min = 2300
+      new_max = 2399
+      old_min = 2300
+      old_max = 2359
+    }
+    
+    
+    return ((new_max - new_min) / (old_max - old_min) * (timeValue - old_min) + new_min)
+  }
   getarrivals<- function(Airline)
   {
     
@@ -1250,151 +1404,169 @@ output$ArrivalDelays <- renderPlot({
 
   output$Lauderdale_airport<-renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
-
+    
     display_data = Month_df[,c("month","DEP_TIME","ARR_TIME","ORIGIN_CITY_NAME","DEST_CITY_NAME")]
-    display_data_dest=display_data[DEST_CITY_NAME==input$Select_Airport]
+    display_data_dest=display_data[DEST_CITY_NAME==input$Select_Airport]#
     display_data_dest=subset(display_data_dest,select =c(month,ARR_TIME))
-
-    display_data_org=display_data[ORIGIN_CITY_NAME=='Fort Lauderdale, FL']
+    
+    display_data_org=display_data[ORIGIN_CITY_NAME==input$Select_Airport]#
     display_data_org=subset(display_data_org,select =c(month,DEP_TIME))
-
-
+    
+    
     display_data_org=melt(display_data_org,id="month")
     display_data_org=na.omit(display_data_org)
-
+    display_data_org$value<-apply(display_data_org[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
     display_data_dest=melt(display_data_dest,id="month")
     display_data_dest=na.omit(display_data_dest)
+    display_data_dest$value<-apply(display_data_dest[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
     binded_data=rbind(display_data_dest,display_data_org)
-
-    pos_jt = position_jitter(width = .15)
-
+    
+    
     ##################
     #Jan
     Jan__melted=binded_data[binded_data$month=='Jan']
     Jan_gg<-ggplot(Jan__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = post_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Jan") +
+      geom_point(aes(colour = variable))+
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Jan")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Feb
     Feb__melted=binded_data[binded_data$month=='Feb']
     Feb_gg<-ggplot(Feb__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Feb") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Feb")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Mar
     Mar__melted=binded_data[binded_data$month=='Mar']
     Mar_gg<-ggplot(Mar__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable),position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Mar") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Mar")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Apr
     Apr__melted=binded_data[binded_data$month=='Apr']
     Apr_gg<-ggplot(Apr__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Apr") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Apr")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #May
     May__melted=binded_data[binded_data$month=='May']
     May_gg<-ggplot(May__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="May") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="May")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Jun
     Jun__melted=binded_data[binded_data$month=='Jun']
     Jun_gg<-ggplot(Jun__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Jun") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Jun")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Jul
     Jul__melted=binded_data[binded_data$month=='Jul']
     Jul_gg<-ggplot(Jul__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Jul") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Jul")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Aug
     Aug__melted=binded_data[binded_data$month=='Aug']
     Aug_gg<-ggplot(Aug__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Aug") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Aug")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Sept
     Sep__melted=binded_data[binded_data$month=='Sep']
     Sep_gg<-ggplot(Sep__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Sept") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Sept")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Oct
     Oct__melted=binded_data[binded_data$month=='Oct']
     Oct_gg<-ggplot(Oct__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Oct") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Oct")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Nov
     Nov__melted=binded_data[binded_data$month=='Nov']
     Nov_gg<-ggplot(Nov__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Nov") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Nov")+
       labs(x="", y="Hour") + theme(legend.position="none")
     ##################
     #Dec
     Dec__melted=binded_data[binded_data$month=='Dec']
     Dec_gg<-ggplot(Dec__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), position = pos_jt) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-      labs(title="Dec") +
+      scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
+      geom_point(aes(colour = variable))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title="Dec")+
       labs(x="", y="Hour") + theme(legend.position="none")
-
-
-
+    
+    
+    
     grid.arrange(Jan_gg,Feb_gg,Mar_gg,Apr_gg,May_gg,Jun_gg,Jul_gg,Aug_gg,Sep_gg,Oct_gg,Nov_gg,Dec_gg,ncol=6)
-
+    
   })
-
+  
   output$one_day_of_week<-renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     monday = Month_df[,c("DAY_OF_WEEK","month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
-
-    monday=monday[DAY_OF_WEEK==days[[input$Select_Day_of_the_Week]]]
-
-
+    
+    monday=monday[DAY_OF_WEEK==days[[input$Select_Day_of_the_Week]]]#
+    
+    
     monday=na.omit(monday)
     monday$total_delay=monday$SECURITY_DELAY+monday$WEATHER_DELAY+monday$NAS_DELAY+monday$CARRIER_DELAY+monday$LATE_AIRCRAFT_DELAY
     monday_melted = monday[,c("month", "DEP_TIME", "ARR_TIME")]
     monday_melted=melt(monday_melted,id='month')
+    monday_melted$value<-apply(monday_melted[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
     monday_delay=monday[,c("month", "DEP_TIME", "total_delay")]
+    monday_delay$DEP_TIME<-apply(monday_delay[,c('DEP_TIME')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
     ##################
     #############################JAN
     Jan_monday_melted=monday_melted[monday_melted$month=='Jan']
@@ -1403,13 +1575,13 @@ output$ArrivalDelays <- renderPlot({
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-
+      
       labs(x="", y="Hour") + theme(legend.position="none")
     Jan_gg2<-ggplot(Jan_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
       geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-
+      
       labs(y="",x="") + theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
@@ -1726,21 +1898,53 @@ output$ArrivalDelays <- renderPlot({
     ########################################
     grid.arrange(Jan_gg,Feb_gg,Mar_gg,Apr_gg,May_gg,June_gg,Jul_gg,Aug_gg,Sep_gg,Oct_gg,Nov_gg,Dec_gg,ncol=6)
   })
-
+  
   output$nas_delay_Plot <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
-    Month_delay = Month_df[,c("month", "WEATHER_DELAY","DEP_TIME")] %>%
-      na.omit()
-    Month_delay=Month_delay[WEATHER_DELAY>0]
-    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
-      geom_point(aes(colour = WEATHER_DELAY,size=WEATHER_DELAY/10+20),shape=1,stroke=3)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
-
-      scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(x="2017 Months", y="Hour")
-
+    day = Month_df[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
+    day=na.omit(day)
+    day$value<-apply(day[,c('DEP_TIME')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
+    if(input$delay=="SECURITY DELAY"){
+      day=day[SECURITY_DELAY>0]
+      ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
+        geom_point(aes(colour = SECURITY_DELAY,size=SECURITY_DELAY/10+20),shape=1,stroke=3)+
+        scale_y_continuous(breaks = seq(0, 24, by = 1))+
+        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        labs(x="2017 Months", y="Hour")}
+    else if(input$delay=="WEATHER DELAY"){
+      day=day[WEATHER_DELAY>0]
+      ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
+        geom_point(aes(colour = WEATHER_DELAY,size=WEATHER_DELAY/10+20),shape=1,stroke=3)+
+        scale_y_continuous(breaks = seq(0, 24, by = 1))+
+        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        labs(x="2017 Months", y="Hour")}
+    else if(input$delay=="NAS DELAY"){
+      day=day[NAS_DELAY>0]
+      ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
+        geom_point(aes(colour = NAS_DELAY,size=NAS_DELAY/10+20),shape=1,stroke=3)+
+        scale_y_continuous(breaks = seq(0, 24, by = 1))+
+        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        labs(x="2017 Months", y="Hour")}
+    else if(input$delay=="CARRIER DELAY"){
+      day=day[CARRIER_DELAY>0]
+      ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
+        geom_point(aes(colour = CARRIER_DELAY,size=CARRIER_DELAY/10+20),shape=1,stroke=3)+
+        scale_y_continuous(breaks = seq(0, 24, by = 1))+
+        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        labs(x="2017 Months", y="Hour")}
+    else if(input$delay=="LATE AIRCRAFT DELAY"){
+      day=day[LATE_AIRCRAFT_DELAY>0]
+      ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
+        geom_point(aes(colour = LATE_AIRCRAFT_DELAY,size=LATE_AIRCRAFT_DELAY/10+20),shape=1,stroke=3)+
+        scale_y_continuous(breaks = seq(0, 24, by = 1))+
+        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        labs(x="2017 Months", y="Hour")}
+    
+    
+    
   })
-
+  
   output$one_day <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     day=Month_df[Month_df$FL_DATE==input$date]
@@ -1749,41 +1953,47 @@ output$ArrivalDelays <- renderPlot({
     day$total_delay=day$SECURITY_DELAY+day$WEATHER_DELAY+day$NAS_DELAY+day$CARRIER_DELAY+day$LATE_AIRCRAFT_DELAY
     day_melted = day[,c("month", "DEP_TIME", "ARR_TIME")]
     day_melted=melt(day_melted,id='month')
+    day_melted$value<-apply(day_melted[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
     day_delay=day[,c("month", "DEP_TIME", "total_delay")]
-
+    day_delay$DEP_TIME<-apply(day_delay[,c('DEP_TIME')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
     gg1<-ggplot(day_melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable), size = 3, shape=1,stroke=3) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-
+      geom_point(aes(colour = variable), size = 3, shape=1,stroke=3)+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      
       labs(x="", y="Hour") + theme(legend.position="none")
     gg2<-ggplot(day_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),  shape=1,stroke=3) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-
-      labs(y="",x="") + theme(legend.position="none") +
+      geom_point(aes(size=total_delay),  shape=1,stroke=3)+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      
+      labs(y="",x="") + theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
     grid.arrange(gg1,gg2,ncol=2,top=input$date,widths=c(2,1))
-
+    
   })
   output$airline_200 <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
-
     Month_delay = Month_df[,c("month","FL_NUM", "ARR_TIME","DEP_TIME")]
-    Month_delay=Month_delay[Month_delay$FL_NUM==input$Flight_No]
+    Month_delay=Month_delay[Month_delay$FL_NUM==input$Flight_No]#
     Month_delay = Month_delay[,c("month", "ARR_TIME","DEP_TIME")]
     Month_delay=melt(Month_delay,id='month')
     Month_delay=na.omit(Month_delay)
-    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
+    #Month_delay$value=(Month_delay$value*0)+getValue(Month_delay$value)
+    Month_delay$value<-apply(Month_delay[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    
+    gg1<-ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
       geom_point(aes(colour = variable,size=1),fill = "white", size = 3, shape=1,stroke=3)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1)) +
-      expand_limits( y=c(0, 24)) +
-
-      labs(x="2017 Months", y="Hour")
-
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      expand_limits( y=c(0, 24))+
+      labs(title = "")
+    labs(x="2017 Months", y="Hour")
+    grid.arrange(gg1,ncol=1)
+    
   })
   ###################PART GRAD BEGINS HERE
   unitChoice <- reactive({
