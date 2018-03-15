@@ -55,9 +55,10 @@ Month=list(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 rm(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 #Add Month dataframe with data for the whole year
 Month_df = rbindlist(Month)
+Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
 
-# Add lookup fields
+ # Add lookup fields
 # Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
 # colnames(airport_lookup) = c("Code", "origin_airport")
 # Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
@@ -1188,15 +1189,17 @@ output$ArrivalDelays <- renderPlot({
   })
 
   output$arrival_departure_2017 <- renderPlot({
-    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
-    Month_freq = data.frame(table(Month_df$month))
-    arrival_departure = data.frame(month = factor(Month_freq$Var1, levels = month.abb),
-                                   arrivals = Month_freq$Freq,
-                                   departures = Month_freq$Freq) %>%
-      melt(.,id="month")
-    ggplot(arrival_departure, aes(x = factor(month, levels = month.abb), y = value)) +
-      geom_bar(stat = "identity",aes(fill=variable), position = "dodge")
+    Month_freq = select(Month_df, month, CARRIER) %>%
+      table() %>%
+      data.frame()
+    ggplot(Month_freq, aes(x = factor(month, levels = month.abb), y = Freq, group = CARRIER)) +
+      aes(colour = CARRIER) +
+      stat_summary(fun.y = "sum", geom = "line") +
+      coord_trans(y = "log10") +
+      scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
+                          labels = trans_format('log10', math_format(10^.x))) +
+      labs(x="2017 Months", y="Number of Flights")
   })
 
   output$top_15_dest_Plot <- renderPlot({
@@ -1211,7 +1214,6 @@ output$ArrivalDelays <- renderPlot({
   })
 
   output$delay_Plot <- renderPlot({
-    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
     Month_delay = Month_df[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY")] %>%
       melt(id = "month") %>% na.omit()
@@ -1247,7 +1249,6 @@ output$ArrivalDelays <- renderPlot({
 
 
   output$Lauderdale_airport<-renderPlot({
-    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
 
     display_data = Month_df[,c("month","DEP_TIME","ARR_TIME","ORIGIN_CITY_NAME","DEST_CITY_NAME")]
@@ -1383,7 +1384,6 @@ output$ArrivalDelays <- renderPlot({
   })
 
   output$one_day_of_week<-renderPlot({
-    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
     monday = Month_df[,c("DAY_OF_WEEK","month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
 
@@ -1728,7 +1728,6 @@ output$ArrivalDelays <- renderPlot({
   })
 
   output$nas_delay_Plot <- renderPlot({
-    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
     Month_delay = Month_df[,c("month", "WEATHER_DELAY","DEP_TIME")] %>%
       na.omit()
@@ -1743,7 +1742,6 @@ output$ArrivalDelays <- renderPlot({
   })
 
   output$one_day <- renderPlot({
-    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
     day=Month_df[Month_df$FL_DATE==input$date]
     day = day[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
@@ -1772,7 +1770,6 @@ output$ArrivalDelays <- renderPlot({
 
   })
   output$airline_200 <- renderPlot({
-    Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
     Month_df$month = format(Month_df$FL_DATE, '%b')
 
     Month_delay = Month_df[,c("month","FL_NUM", "ARR_TIME","DEP_TIME")]
