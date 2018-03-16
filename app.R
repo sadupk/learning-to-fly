@@ -29,10 +29,10 @@ holidays = fread("Data/holidays.csv", header = T)[,.(V2,V3)]
 setnames(holidays,c("holidays","date"))
 holidays = data.frame(holidays)[2:11,]
 holidays$date = as.Date(holidays$date, "%m-%d-%y")
-# carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
-# colnames(carrier_lookup) = c("Code", "carrier_name")
-# airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
-# colnames(airport_lookup) = c("Code", "airport_name")
+carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
+colnames(carrier_lookup) = c("Code", "carrier_name")
+airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
+colnames(airport_lookup) = c("Code", "airport_name")
 
 #Load Flight data
 print("Reading data tables")
@@ -55,15 +55,15 @@ Month=list(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 rm(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 #Add Month dataframe with data for the whole year
 Month_df = rbindlist(Month)
-Month_df$FL_DATE = as.Date(Month_df$FL_DATE)
+Month_df$FL_DATE = as.Date(Month_df$FL_DATE) #diff
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
 
- # Add lookup fields
-# Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
-# colnames(airport_lookup) = c("Code", "origin_airport")
-# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
-# colnames(airport_lookup) = c("Code", "dest_airport")
-# Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+# Add lookup fields
+Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
+colnames(airport_lookup) = c("Code", "origin_airport")
+Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "ORIGIN_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
+colnames(airport_lookup) = c("Code", "dest_airport")
+Month_with_names = lapply(Month_with_names, function(x) merge(x, airport_lookup, by.x = "DEST_AIRPORT_ID", by.y = "Code", incomparables = NA, all.x = TRUE))
 
 #-----------------------
 # Grade A last two points
@@ -109,7 +109,7 @@ arrivalCount[,perc_arrivals := arrival_count/ sum(arrival_count)]
 
 allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_departures = paste(perc_departures*100,"%", sep = ""))], arrivalCount[,.(state = dest_state, arrival_count, perc_arrivals = paste(perc_arrivals*100, "%", sep = ""))], by = "state", all = T)
 
-days=c(1,2,3,4,5,6,7)
+days=c(1,2,3,4,5,6,7) #diff
 names(days)=c("Mon","Tues","Wed","Thur","Fri","Sat","Sun")
 
 #Jan$day=c(rep(days,length(Jan[[1]])/7),days[c(1:(length(Jan[[1]])%%7))])
@@ -127,29 +127,29 @@ names(days)=c("Mon","Tues","Wed","Thur","Fri","Sat","Sun")
 choices_airport=unique(Month_df$ORIGIN_CITY_NAME)
 choices_airport=choices_airport[order(choices_airport)]
 choices_day=names(days)
-choices_delay=c("NAS DELAY","WEATHER DELAY","CARRIER DELAY","SECURITY DELAY","LATE AIRCRAFT DELAY")
+choices_delay=c("NAS_Delay","WEATHER_DELAY","CARRIER_DELAY","SECURITY_DELAY","LATE_AIRCRAFT_DELAY")
 choices_fl_num=unique(Month_df$FL_NUM)
 choices_fl_num=choices_fl_num[order(choices_fl_num)]
+
 ui <- dashboardPage(
-  dashboardHeader(title = "CS 424 Spring 2018 Example Dashboard"),
+  dashboardHeader(title = "CS 424 Sp 18 Project 2"),
   dashboardSidebar(
     sidebarMenu(
-    menuItem("Inputs", tabName = "item1"),
-    menuItem("Overall Flights", tabName = "item2"),
-    menuItem("Arrivals/Departures",tabName = "item3"),
-    menuSubItem("Arrivals",tabName = "item3a"),
-    menuSubItem("Departures",tabName = "item3b"),
-    menuSubItem("Weekly",tabName = "item3c"),
-    menuSubItem("Delays",tabName = "item3d"),
-    menuItem("Top 15 Destinations", tabName = "item4"),
-    menuItem("Landing/TakeOffs",tabName = "item5"),
-    menuItem("Special Dates",tabName = "item6"),
-    menuItem("Flights by distance",tabName = "item7"),
-    menuItem("Outliers",tabName = "item8"),
-    menuItem("Other",tabName = "item9")
-  )
- ),
- dashboardBody(
+      menuItem("Inputs", tabName = "item1"),
+      menuItem("Overall Flights", tabName = "item2"),
+      menuItem("Arrivals/Departures",tabName = "item3"),
+      menuSubItem("Arrivals",tabName = "item3a"),
+      menuSubItem("Departures",tabName = "item3b"),
+      menuSubItem("Weekly",tabName = "item3c"),
+      menuSubItem("Delays",tabName = "item3d"),
+      menuItem("Top 15 Destinations", tabName = "item4"),
+      menuItem("Landing/TakeOffs",tabName = "item5"),
+      menuItem("Special Dates",tabName = "item6"),
+      menuItem("Flights by distance",tabName = "item7"),
+      menuItem("Outliers",tabName = "item8")
+    )
+  ),
+  dashboardBody(
     tabItems(
       tabItem(tabName = "item1",
               fluidRow(
@@ -157,6 +157,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset1", 
+                #Ask the user to give inputs about the Airport, Month, and timeframe
                        tabPanel("Inputs", 
                                 selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                                 selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
@@ -178,6 +179,7 @@ ui <- dashboardPage(
                 )
               )
       ),
+#################################PART B
       tabItem(tabName = "item3",
               fluidRow(
                 tabBox(title = "",
@@ -189,18 +191,21 @@ ui <- dashboardPage(
                 )
               )
       ),
+#################################Part 2-e
       tabItem(tabName = "item3a",
               fluidRow(
                 tabBox(title = "",
-                       width = "100%",
-                       height = "2000px",
-                       id = "tabset3a", 
-                       tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("ArrivalFlightsPlot",width="450px",height="450px")) ),
-                       tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("ArrivalFlightsTable"))  )
-                       
+                      width = "100%",
+                      height = "2000px",
+                      id = "tabset3a", 
+                      tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("ArrivalFlightsPlot",width="450px",height="450px")) ),
+                      tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("ArrivalFlightsTable"))  )
+                 
                 )
               )
       ),
+    
+     #Part 2-e
       tabItem(tabName = "item3b",
               fluidRow(
                 tabBox(title = "",
@@ -209,24 +214,34 @@ ui <- dashboardPage(
                        id = "tabset3b", 
                        tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("DepartFlightsPlot",width="450px",height="450px")) ),
                        tabPanel("Depart Flights Table", box(title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("DepartFlightsTable"))  )
-                       
+                 
                 )
               )
       ),
+      #Part 2-c
       tabItem(tabName = "item3c",
-              fluidRow(
+             fluidRow(
                 tabBox(title = "",
                        width = "100%",
                        height = "2000px",
                        id = "tabset3c", 
                        tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) ),
                        tabPanel("Weekly Flights Table",box( title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("WeeklyFlightsTable",width="750px",height="750px")) )
-                       
+                 
                 )
               )
       ),
+    
+      #Part 2-d
+      fluidRow(
+        tabPanel("Arrival_Delays",box( title = "Arrival_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",width="750px",height="750px")) ),
+        tabPanel("Depart_Delays",box( title = "Depart_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
+        tabPanel("DepartDelayTable",box( title = "DepartDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
+        tabPanel("ArrivalDelayTable",box( title = "ArrivalDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) )
+        
+      ),
       tabItem(tabName = "item3d",
-              fluidRow(
+             fluidRow(
                 tabBox(title = "",
                        width = "100%",
                        height = "2000px",
@@ -235,21 +250,25 @@ ui <- dashboardPage(
                        tabPanel("Arrival Delay Table",box( title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) ),
                        tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
                        tabPanel("Depart Delay Table",box( title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
-                       tabPanel("Delay Causes",box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) ),
-                       tabPanel("Weather Delay Causes",selectInput("delay", "Select Delay", choices_delay),box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+                       tabPanel("Delay Causes",
+                                selectInput("Delay_Causes", "Select Delay", choices_delay),
+                                box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) ),
+                       tabPanel("Weather Delay Causes",box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
                 )
-              )
+            )
       ),
       tabItem(tabName = "item4",
               fluidRow(
                 tabBox(title = "",
-                       width = "100%",
-                       height = "2000px",
-                       id = "tabset4", 
-                       tabPanel("Top 15 Destinations",box( title = "", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
+                      width = "100%",
+                      height = "2000px",
+                      id = "tabset4", 
+                      tabPanel("Top 15 Destinations",box( title = "", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
                 )
               )
       ),
+
+    #################################PART A BEGINS HERE
       tabItem(tabName = "item5",
               fluidRow(
                 tabBox(title = "",
@@ -259,8 +278,8 @@ ui <- dashboardPage(
                        tabPanel("State Info",
                                 selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
                                 box(title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",width="750px",height="75px")))
+                       )
                 )
-              )
       ),
       tabItem(tabName = "item6",
               fluidRow(
@@ -271,58 +290,51 @@ ui <- dashboardPage(
                        tabPanel("Special Dates",
                                 selectInput("dateType", "Which dates would you like to see?", names(specialDays)),
                                 box( title = "", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",width="750px",height="75px"))
+                                )
                        )
                 )
+      ),
+
+#################################PART GRAD BEGINS HERE
+    tabItem(tabName = "item7",
+            fluidRow(
+              tabBox(title = "",
+                     width = "100%",
+                     height = "2000px",
+                     id = "tabset7", 
+                     tabPanel("Flights by distance",
+                              sliderInput("range", "Flight Distance:", min = 0, max = max(Month_df$DISTANCE),value = c(200,500)),
+                     tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px"))),
+                     tabPanel("Number of Flights by Air Time",
+                              sliderInput("time_range", "Flight Time (minutes):", min = 0, max = 600, value = c(200,300)),
+                              box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, plotOutput("time_range_plot",width="750px",height="75px")))
+                              
+                              )
+                     )
               )
       ),
-      tabItem(tabName = "item7",
-              fluidRow(
-                tabBox(title = "",
-                       width = "100%",
-                       height = "2000px",
-                       id = "tabset7", 
-                       tabPanel("Flights by distance",
-                                sliderInput("range", "Range:",min = 0, max = max(Month_df$DISTANCE),value = c(200,500)),
-                                tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px")))
-                       )
-                )
-              )
-      ),
+    #################################Part A begins here
+
       tabItem(tabName = "item8",
               fluidRow(
                 tabBox(title = "",
                        width = "100%",
                        height = "2000px",
                        id = "tabset8", 
-                       tabPanel("Lauderdale airport",selectInput("Select_Airport", "Select Airport", choices_airport),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
-                       tabPanel("Monday",selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
-                       tabPanel("Flight No:200", selectInput("Flight_No", "Select Flight No", choices_fl_num),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
-                       tabPanel("One day",dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
+                       tabPanel("Lauderdale airport",
+                                #selectInput("Select_Airport", "Select Airport", choices_airport),
+                                box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
+                       tabPanel("Monday",
+                                selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day),
+                                box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
+                       tabPanel("Flight No:200",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
+                       dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),
+                       tabPanel("One day",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
                 )
-              )
-      ),
-      tabItem(tabName = "item9",
-              #################################PART GRAD BEGINS HERE
-              fluidRow(
-                selectInput("units", "Units", c("miles","kilometers")),
-                sliderInput("range", "Flight Distance:",
-                            min = 0, max = 7000,
-                            value = c(200,500))
-              ),
-              fluidRow(
-                tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px")))
-              ),
-              fluidRow(
-                sliderInput("time_range", "Flight Time (minutes):",
-                            min = 0, max = 600,
-                            value = c(200,300))
-              ),
-              fluidRow(
-                tabPanel("Number of Flights by Air Time",box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, plotOutput("time_range_plot",width="750px",height="75px")))
               )
       )
     )
- )
+  )
 )
 
 server <- function(input, output) {
@@ -486,6 +498,7 @@ server <- function(input, output) {
     
     return ((new_max - new_min) / (old_max - old_min) * (timeValue - old_min) + new_min)
   }
+  
   getarrivals<- function(Airline)
   {
     
@@ -1342,7 +1355,7 @@ output$ArrivalDelays <- renderPlot({
                                   "0 am"))
   })
 
-  output$arrival_departure_2017 <- renderPlot({
+  output$arrival_departure_2017 <- renderPlot({ #diff
     Month_df$month = format(Month_df$FL_DATE, '%b')
     Month_freq = select(Month_df, month, CARRIER) %>%
       table() %>%
@@ -1356,7 +1369,7 @@ output$ArrivalDelays <- renderPlot({
       labs(x="2017 Months", y="Number of Flights")
   })
 
-  output$top_15_dest_Plot <- renderPlot({
+  output$top_15_dest_Plot <- renderPlot({ 
     dest_count = data.frame(table(Month_df$DEST_CITY_NAME))
     top_15_dest = dest_count[order(-dest_count$Freq),][1:15,]$Var1 %>% factor()
     Month_top_15 = Month_df[Month_df$ORIGIN_CITY_NAME %in% top_15_dest]
@@ -1404,26 +1417,27 @@ output$ArrivalDelays <- renderPlot({
 
   output$Lauderdale_airport<-renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
-    
+
     display_data = Month_df[,c("month","DEP_TIME","ARR_TIME","ORIGIN_CITY_NAME","DEST_CITY_NAME")]
-    display_data_dest=display_data[DEST_CITY_NAME==input$Select_Airport]#
+    display_data_dest=display_data[DEST_CITY_NAME==input$Select_Airport]
     display_data_dest=subset(display_data_dest,select =c(month,ARR_TIME))
-    
-    display_data_org=display_data[ORIGIN_CITY_NAME==input$Select_Airport]#
+
+    display_data_org=display_data[ORIGIN_CITY_NAME=='Fort Lauderdale, FL']
     display_data_org=subset(display_data_org,select =c(month,DEP_TIME))
-    
-    
+
+
     display_data_org=melt(display_data_org,id="month")
     display_data_org=na.omit(display_data_org)
     display_data_org$value<-apply(display_data_org[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
-    
+
+
     display_data_dest=melt(display_data_dest,id="month")
     display_data_dest=na.omit(display_data_dest)
     display_data_dest$value<-apply(display_data_dest[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
     
     binded_data=rbind(display_data_dest,display_data_org)
-    
-    
+
+
     ##################
     #Jan
     Jan__melted=binded_data[binded_data$month=='Jan']
@@ -1544,20 +1558,20 @@ output$ArrivalDelays <- renderPlot({
       expand_limits( y=c(0, 24))+
       labs(title="Dec")+
       labs(x="", y="Hour") + theme(legend.position="none")
-    
-    
-    
+
+
+
     grid.arrange(Jan_gg,Feb_gg,Mar_gg,Apr_gg,May_gg,Jun_gg,Jul_gg,Aug_gg,Sep_gg,Oct_gg,Nov_gg,Dec_gg,ncol=6)
-    
+
   })
-  
+
   output$one_day_of_week<-renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     monday = Month_df[,c("DAY_OF_WEEK","month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
-    
-    monday=monday[DAY_OF_WEEK==days[[input$Select_Day_of_the_Week]]]#
-    
-    
+
+    monday=monday[DAY_OF_WEEK==days[[input$Select_Day_of_the_Week]]]
+
+
     monday=na.omit(monday)
     monday$total_delay=monday$SECURITY_DELAY+monday$WEATHER_DELAY+monday$NAS_DELAY+monday$CARRIER_DELAY+monday$LATE_AIRCRAFT_DELAY
     monday_melted = monday[,c("month", "DEP_TIME", "ARR_TIME")]
@@ -1575,13 +1589,13 @@ output$ArrivalDelays <- renderPlot({
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-      
+
       labs(x="", y="Hour") + theme(legend.position="none")
     Jan_gg2<-ggplot(Jan_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
       geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-      
+
       labs(y="",x="") + theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
@@ -1898,7 +1912,7 @@ output$ArrivalDelays <- renderPlot({
     ########################################
     grid.arrange(Jan_gg,Feb_gg,Mar_gg,Apr_gg,May_gg,June_gg,Jul_gg,Aug_gg,Sep_gg,Oct_gg,Nov_gg,Dec_gg,ncol=6)
   })
-  
+
   output$nas_delay_Plot <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     day = Month_df[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
@@ -1944,7 +1958,7 @@ output$ArrivalDelays <- renderPlot({
     
     
   })
-  
+
   output$one_day <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     day=Month_df[Month_df$FL_DATE==input$date]
@@ -1953,8 +1967,8 @@ output$ArrivalDelays <- renderPlot({
     day$total_delay=day$SECURITY_DELAY+day$WEATHER_DELAY+day$NAS_DELAY+day$CARRIER_DELAY+day$LATE_AIRCRAFT_DELAY
     day_melted = day[,c("month", "DEP_TIME", "ARR_TIME")]
     day_melted=melt(day_melted,id='month')
-    day_melted$value<-apply(day_melted[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
-    
+    day_delay=day[,c("month", "DEP_TIME", "total_delay")]
+
     day_delay=day[,c("month", "DEP_TIME", "total_delay")]
     day_delay$DEP_TIME<-apply(day_delay[,c('DEP_TIME')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
     
@@ -1962,22 +1976,23 @@ output$ArrivalDelays <- renderPlot({
       geom_point(aes(colour = variable), size = 3, shape=1,stroke=3)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-      
+
       labs(x="", y="Hour") + theme(legend.position="none")
     gg2<-ggplot(day_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
       geom_point(aes(size=total_delay),  shape=1,stroke=3)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-      
+
       labs(y="",x="") + theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
     grid.arrange(gg1,gg2,ncol=2,top=input$date,widths=c(2,1))
-    
+
   })
   output$airline_200 <- renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
+
     Month_delay = Month_df[,c("month","FL_NUM", "ARR_TIME","DEP_TIME")]
     Month_delay=Month_delay[Month_delay$FL_NUM==input$Flight_No]#
     Month_delay = Month_delay[,c("month", "ARR_TIME","DEP_TIME")]
@@ -1986,7 +2001,7 @@ output$ArrivalDelays <- renderPlot({
     #Month_delay$value=(Month_delay$value*0)+getValue(Month_delay$value)
     Month_delay$value<-apply(Month_delay[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
     
-    gg1<-ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
+    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
       geom_point(aes(colour = variable,size=1),fill = "white", size = 3, shape=1,stroke=3)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
