@@ -248,7 +248,7 @@ ui <- dashboardPage(
                        tabPanel("Delay Causes",
                                 selectInput("Delay_Causes", "Select Delay", choices_delay),
                                 box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) ),
-                       tabPanel("Delay Information",selectInput("delay", "Select Delay", choices_delay),box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+                       tabPanel("Delay Information",selectInput("delay", "Select Delay", choices_delay),box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
                 )
             )
       ),
@@ -1587,9 +1587,11 @@ output$ArrivalDelays <- renderPlot({
       
       labs(x="", y="Hour") + theme(legend.position="none")
     Jan_gg2<-ggplot(Jan_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      # geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       
       labs(y="",x="") + theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
@@ -1611,9 +1613,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Feb_gg2<-ggplot(Feb_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      # geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1639,9 +1643,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Mar_gg2<-ggplot(Mar_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1667,9 +1673,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Apr_gg2<-ggplot(Apr_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1695,10 +1703,12 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     May_gg2<-ggplot(May_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -1723,9 +1733,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     June_gg2<-ggplot(June_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1744,6 +1756,7 @@ output$ArrivalDelays <- renderPlot({
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+     # scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1751,9 +1764,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="Hour") + theme(legend.position="none")
     Jul_gg2<-ggplot(Jul_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1779,9 +1794,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Aug_gg2<-ggplot(Aug_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1807,9 +1824,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Sep_gg2<-ggplot(Sep_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1835,9 +1854,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Oct_gg2<-ggplot(Oct_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1863,9 +1884,11 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Nov_gg2<-ggplot(Nov_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
@@ -1891,8 +1914,10 @@ output$ArrivalDelays <- renderPlot({
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
       labs(x="", y="") + theme(legend.position="none")
     Dec_gg2<-ggplot(Dec_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
+      geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
       #stat_bin2d(bins = 25, colour = "white")+
@@ -1919,35 +1944,35 @@ output$ArrivalDelays <- renderPlot({
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = SECURITY_DELAY,size=SECURITY_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        scale_colour_gradient(low = "#EF597B", high = "red")+
         labs(x="2017 Months", y="Hour")}
     else if(input$delay=="WEATHER DELAY"){
       day=day[WEATHER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = WEATHER_DELAY,size=WEATHER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
         labs(x="2017 Months", y="Hour")}
     else if(input$delay=="NAS DELAY"){
       day=day[NAS_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = NAS_DELAY,size=NAS_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        scale_colour_gradient(low = "#73B66B", high = "#006400")+
         labs(x="2017 Months", y="Hour")}
     else if(input$delay=="CARRIER DELAY"){
       day=day[CARRIER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = CARRIER_DELAY,size=CARRIER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        scale_colour_gradient(low = "#FFCB18", high = "#666600")+
         labs(x="2017 Months", y="Hour")}
     else if(input$delay=="LATE AIRCRAFT DELAY"){
       day=day[LATE_AIRCRAFT_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = LATE_AIRCRAFT_DELAY,size=LATE_AIRCRAFT_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#4d4dff", high = "#000066")+
+        scale_colour_gradient(low = "#29A2C6", high = "#000066")+
         labs(x="2017 Months", y="Hour")}
     
     
@@ -1974,10 +1999,10 @@ output$ArrivalDelays <- renderPlot({
       
       labs(x="", y="Hour") + theme(legend.position="none")
     gg2<-ggplot(day_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
-      geom_point(aes(size=total_delay),  shape=1,stroke=3)+
+      geom_point(aes(size=total_delay,colour=total_delay),  shape=1,stroke=3)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-      
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       labs(y="",x="") + theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
