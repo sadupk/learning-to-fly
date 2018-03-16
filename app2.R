@@ -50,6 +50,42 @@ Oct=read.csv("Data/Oct.csv")
 Nov=read.csv("Data/Nov.csv")
 Dec=read.csv("Data/Dec.csv")
 
+####This is done because our data does not have a "Month category"
+
+Jan["Month"] <- rep(1,length(Jan[[1]]))
+
+
+Feb["Month"] <- rep(2,length(Feb[[1]]))
+
+
+Mar["Month"] <- rep(3,length(Mar[[1]]))
+
+Apr["Month"] <- rep(4,length(Apr[[1]]))
+
+
+May["Month"] <- rep(5,length(May[[1]]))
+
+
+June["Month"] <- rep(6,length(June[[1]]))
+
+
+July["Month"] <- rep(7,length(July[[1]]))
+
+
+Aug["Month"] <- rep(8,length(Aug[[1]]))
+
+
+Sept["Month"] <- rep(9,length(Sept[[1]]))
+
+
+Oct["Month"] <- rep(10,length(Oct[[1]]))
+
+
+Nov["Month"] <- rep(11,length(Nov[[1]]))
+
+
+Dec["Month"] <- rep(12,length(Dec[[1]]))
+
 #Merge flight data
 Month=list(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 rm(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
@@ -57,6 +93,17 @@ rm(Jan,Feb,Mar,Apr,May,June,July,Aug,Sept,Oct,Nov,Dec)
 Month_df = rbindlist(Month,fill=TRUE)
 Month_df$FL_DATE = as.Date(Month_df$FL_DATE) #diff
 Monthnames=c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")
+daynames=c("MON","TUES","WED","THURS","FRI","SAT","SU")
+
+dep.hours=substr(Month_df$DEP_TIME,1,nchar(Month_df$DEP_TIME)-2);
+dep.hours[nchar(dep.hours)==0]<-'24'
+
+arr.hours=substr(Month_df$ARR_TIME,1,nchar(Month_df$ARR_TIME)-2);
+arr.hours[nchar(arr.hours)==0]<-'24'
+
+####Create a new column which specifies the hour more clearly. Used by heatmap
+Month_df$DEP_TIME2=as.numeric(dep.hours)
+Month_df$ARR_TIME2=as.numeric(arr.hours)
 
 # Add lookup fields
 Month_with_names = lapply(Month, function(x) merge(x, carrier_lookup, by.x = "CARRIER", by.y = "Code", incomparables = NA, all.x = TRUE))
@@ -112,15 +159,7 @@ allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_depa
 days=c(1,2,3,4,5,6,7) #diff
 names(days)=c("Mon","Tues","Wed","Thur","Fri","Sat","Sun")
 
-#Jan$day=c(rep(days,length(Jan[[1]])/7),days[c(1:(length(Jan[[1]])%%7))])
 
-
-
-#departures=Month[Month$ORIGIN_AIRPORT_ID=="13930" | Month$ORIGIN_AIRPORT_ID=="13232",]
-#arrivals=Month[Month$DEST_AIRPORT_ID=="13930" | Month$DEST_AIRPORT_ID=="13232",]
-#airportsdepart=data.frame(table(departures$CARRIER))
-#airportsarrival=data.frame(table(arrivals$CARRIER))
-#airporttimes=data.frame(ID=airportsdepart[[1]],departing=airportsdepart[[2]],arrivals=airportsarrival[[2]])
 
 # assume all of the tsv files in this directory are data of the same kind that I want to visualize
 
@@ -146,7 +185,9 @@ ui <- dashboardPage(
       menuItem("Landing/TakeOffs",tabName = "item5"),
       menuItem("Special Dates",tabName = "item6"),
       menuItem("Flights by distance",tabName = "item7"),
-      menuItem("Outliers",tabName = "item8")
+      menuItem("Outliers",tabName = "item8"),
+      menuItem("Monthly Heat Maps", tabName = "item9"),
+      menuItem("Weekly Heat Maps",tabName = "item10")
     )
   ),
   dashboardBody(
@@ -326,7 +367,31 @@ ui <- dashboardPage(
                        tabPanel("One day",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
                 )
               )
-      )
+      ),
+
+          ######GRADUATE HEAT MAPS
+          tabItem(tabName = "item9",
+                  fluidRow(
+                    tabBox(title = "",
+                           width = "100%",
+                           height = "2000px",
+                           id = "tabset2", 
+                           tabPanel("Monthly Flights",box( title = "Monthly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("MonthlyHeatMap",width="1200px",height="900px")) )
+                    )
+                  )
+          ),
+          
+          tabItem(tabName = "item10",
+                  fluidRow(
+                    tabBox(title = "",
+                           width = "100%",
+                           height = "2000px",
+                           id = "tabset3", 
+                           tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyHeatMap",width="1200px",height="900px")) )
+                    )
+                  )
+          )
+
     )
   )
 )
@@ -569,7 +634,146 @@ server <- function(input, output) {
   
       midwaycolors=c("red","darkred")
       oharecolors=c("blue","dodgerblue")
- 
+      lowcol="White";
+      highcol="Red";
+      border="Black";
+      base_size=12;
+      ####TOTAL FLIGHTS
+      distributedweek=data.frame(table(Month_df$DEP_TIME2,Month_df$DAY_OF_WEEK))
+      names(distributedweek)=c("Hour","Week","Freq");
+      wp1<-ggplot(distributedweek, aes(Week, Hour)) + geom_tile(aes(fill = Freq),    colour = border)+
+        scale_x_discrete(breaks=c(1:7),labels=daynames) + 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        geom_tile(aes(fill = Freq),    colour = border)+
+        scale_fill_gradient(low = lowcol,   high = highcol)+
+        ggtitle("# of flights")
+      
+      distributedmt=data.frame(table(Month_df$DEP_TIME2,Month_df$Month))
+      names(distributedmt)=c("Hour","Month","Freq");
+      mp1<-ggplot(distributedmt, aes(Month, Hour)) + geom_tile(aes(fill = Freq),    colour = border) +  
+        scale_x_discrete(breaks=c(1:12),labels=Monthnames) + 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        geom_tile(aes(fill = Freq),    colour = border)+
+        scale_fill_gradient(low = lowcol,   high = highcol)+
+        ggtitle("# of flights")
+      
+      
+      ##Cancel
+      missingmonth=c();
+      for (i in 1:12)
+      {
+        m=length(Month_df[Month_df$Month==i & Month_df$CANCELLATION_CODE=='B' & is.na(Month_df$DEP_TIME2),][[1]]);
+        
+        Fr=distributedmt[distributedmt$Month==i,]$Freq
+        
+        mtprob=Fr/sum(Fr)
+        r=rep(m,24); 
+        
+        mnext=mtprob*r
+        missingmonth=c(missingmonth,mnext)
+      }
+      
+      missingweek=c();
+      
+      for (i in 1:7)
+      {
+        m=length(Month_df[Month_df$DAY_OF_WEEK==i & Month_df$CANCELLATION_CODE=='B' & is.na(Month_df$DEP_TIME2),][[1]]);
+        
+        Fr=distributedweek[distributedweek$Week==i,]$Freq
+        mtprob=Fr/sum(Fr)
+        
+        r=rep(m,24); 
+        
+        mnext=mtprob*r
+        missingweek=c(missingweek,mnext)
+        print(i)
+      }
+      
+      
+      
+      
+      CANCWK=data.frame(table(Month_df$DEP_TIME2,Month_df$DAY_OF_WEEK,Month_df$CANCELLATION_CODE))
+      names(CANCWK)=c("Hour","Week","Problem","Freq");
+      CANCWK=CANCWK[CANCWK$Problem=='B',]
+      CANCWK$Freq=CANCWK$Freq+missingweek;
+      wp2<-ggplot(CANCWK, aes(Week, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
+        scale_x_discrete(breaks=c(1:7),labels=daynames) + 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        geom_tile(aes(fill = Freq),    colour = border)+
+        scale_fill_gradient(low = lowcol,   high = highcol)+
+        ggtitle("Cancelled flights")
+      
+      
+      CANCMTH=data.frame(table(Month_df$DEP_TIME2,Month_df$Month,Month_df$CANCELLATION_CODE))
+      names(CANCMTH)=c("Hour","Month","Problem","Freq");
+      CANCMTH=CANCMTH[CANCMTH$Problem=='B',]
+      CANCMTH$Freq=CANCMTH$Freq+missingmonth;
+      mp2<-ggplot(CANCMTH, aes(Month, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
+        scale_x_discrete(breaks=c(1:12),labels=Monthnames) + 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        geom_tile(aes(fill = Freq),    colour = border)+
+        scale_fill_gradient(low = lowcol,   high = highcol)+
+        ggtitle("Cancelled Flights")
+      
+      print("Half way")
+      
+      
+      ##Delayed   MAY STILL NEED TO CHECK THIS
+      Month_df$WTF_DELAY=ceiling(as.numeric(Month_df$WEATHER_DELAY)/(as.numeric(Month_df$WEATHER_DELAY)+0.001))
+      
+      DELWK=data.frame(table(Month_df$DEP_TIME2,Month_df$DAY_OF_WEEK,Month_df$WTF_DELAY))
+      names(DELWK)=c("Hour","Week","Problem","Freq");
+      DELWK=DELWK[DELWK$Problem=='1',]
+      wp3<-ggplot(DELWK, aes(Week, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
+        scale_x_discrete(breaks=c(1:7),labels=daynames) + 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        geom_tile(aes(fill = Freq),    colour = border)+
+        scale_fill_gradient(low = lowcol,   high = highcol)+
+        ggtitle("Delayed Flights")
+      
+      
+      DELMTH=data.frame(table(Month_df$DEP_TIME2,Month_df$Month,Month_df$WTF_DELAY))
+      names(DELMTH)=c("Hour","Month","Problem","Freq");
+      DELMTH=DELMTH[DELMTH$Problem=='1',]
+      mp3<-ggplot(DELMTH, aes(Month, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
+        scale_x_discrete(breaks=c(1:12),labels=Monthnames) + 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        geom_tile(aes(fill = Freq),    colour = border)+
+        scale_fill_gradient(low = lowcol,   high = highcol)+
+        ggtitle("Delayed Flights")
+      
+      
+      
+      ##Delayedtime
+      distributedmonth=aggregate(WEATHER_DELAY ~ Month + DEP_TIME2, data = Month_df, sum, na.rm = TRUE)
+      names(distributedmonth)=c("Month","Hour","Minutes");
+      mp4<-ggplot(distributedmonth, aes(Month, Hour)) + geom_tile(aes(fill = Minutes),    colour = border) +
+        scale_fill_gradient(low = lowcol,   high = highcol)+ 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        labs(x = "Month",y = "Hour") +
+        scale_x_discrete(limits=Monthnames,expand = c(0, 0)) +
+        scale_y_discrete(limits=0:24,expand = c(0, 0)) +
+        ggtitle("Delayed Time")
+      
+      
+      distributedweek=aggregate(WEATHER_DELAY ~ DAY_OF_WEEK+ DEP_TIME2, data = Month_df, sum, na.rm = TRUE)
+      names(distributedweek)=c("Week","Hour","Minutes");
+      wp4<-ggplot(distributedweek, aes(Week, Hour)) + geom_tile(aes(fill = Minutes),    colour = border) +  
+        scale_fill_gradient(low = lowcol,   high = highcol)+ 
+        theme_grey(base_size = base_size) + 
+        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        labs(x = "Day",y = "Hour") +
+        scale_x_discrete(limits=daynames,expand = c(0, 0)) +
+        scale_y_discrete(limits=0:24,expand = c(0, 0))+
+        ggtitle("Delayed Time") 
+      print("full")
   
   ############################################Part 2-a
   output$AirlineFlightPlot <- renderPlot({   ###  VX airlines went out of business in 2003  :)  
@@ -1410,7 +1614,7 @@ output$ArrivalDelays <- renderPlot({
 
 
         ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
-        times=rep(timeframe,2)#rep(c(1:24),2)
+        times=timeframe#rep(c(1:24),2)
         t=rep("delays",24)
         d=rep("totals",24)
         coloring=c(d,t)
@@ -1434,7 +1638,7 @@ output$ArrivalDelays <- renderPlot({
         Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         delays=getdeps(delaysdata)
         departs=getdeps(Airline)
-        times=rep(timeframe,2)#rep(c(1:24),2)
+        times=timeframe#rep(c(1:24),2)
         flights=c(delays, delays/departs)
 
         TravelTimes=data.frame(Times=times,Delays=delays,Proportion=100*(delays/departs))
@@ -2248,6 +2452,21 @@ output$ArrivalDelays <- renderPlot({
       coord_flip() +
       ylim(0, dim(Month_df)[1])
   })
+  
+  
+  output$MonthlyHeatMap <- renderPlot({
+    print("full1")
+    grid.arrange(mp1,mp2,mp3,mp4)
+    
+    #grid.arrange(wp1, wp2,wp3,wp4, ncol=2,nrow=2)
+  })  
+  
+  output$WeeklyHeatMap <- renderPlot({
+    print("full2")
+    grid.arrange(wp1,wp2,wp3,wp4)
+    
+    #grid.arrange(wp1, wp2,wp3,wp4, ncol=2,nrow=2)
+  })  
 }
 
 shinyApp(ui = ui, server = server)
