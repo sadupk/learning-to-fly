@@ -233,13 +233,7 @@ ui <- dashboardPage(
       ),
     
       #Part 2-d
-      fluidRow(
-        tabPanel("Arrival_Delays",box( title = "Arrival_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",width="750px",height="750px")) ),
-        tabPanel("Depart_Delays",box( title = "Depart_Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="750px",height="750px")) ),
-        tabPanel("DepartDelayTable",box( title = "DepartDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
-        tabPanel("ArrivalDelayTable",box( title = "ArrivalDelayTable", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) )
-        
-      ),
+     
       tabItem(tabName = "item3d",
              fluidRow(
                 tabBox(title = "",
