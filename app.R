@@ -316,14 +316,14 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset8", 
                        tabPanel("Lauderdale airport",
-                                #selectInput("Select_Airport", "Select Airport", choices_airport),
+                                selectInput("Select_Airport", "Select Airport", choices_airport),
                                 box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
                        tabPanel("Monday",
                                 selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day),
                                 box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
-                       tabPanel("Flight No:200",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
-                       dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),
-                       tabPanel("One day",box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
+                       tabPanel("Flight No:200",selectInput("Flight_No", "Select Flight No", choices_fl_num),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
+                       
+                       tabPanel("One day",dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
                 )
               )
       )
@@ -1995,7 +1995,7 @@ output$ArrivalDelays <- renderPlot({
     #Month_delay$value=(Month_delay$value*0)+getValue(Month_delay$value)
     Month_delay$value<-apply(Month_delay[,c('value')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
     
-    ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
+   gg1<- ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value/100)) +
       geom_point(aes(colour = variable,size=1),fill = "white", size = 3, shape=1,stroke=3)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
