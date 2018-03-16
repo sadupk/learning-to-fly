@@ -127,9 +127,10 @@ names(days)=c("Mon","Tues","Wed","Thur","Fri","Sat","Sun")
 choices_airport=unique(Month_df$ORIGIN_CITY_NAME)
 choices_airport=choices_airport[order(choices_airport)]
 choices_day=names(days)
-choices_delay=c("NAS_Delay","WEATHER_DELAY","CARRIER_DELAY","SECURITY_DELAY","LATE_AIRCRAFT_DELAY")
+choices_delay=c("NAS DELAY","WEATHER DELAY","CARRIER DELAY","SECURITY DELAY","LATE AIRCRAFT DELAY")
 choices_fl_num=unique(Month_df$FL_NUM)
 choices_fl_num=choices_fl_num[order(choices_fl_num)]
+
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Sp 18 Project 2"),
@@ -247,7 +248,7 @@ ui <- dashboardPage(
                        tabPanel("Delay Causes",
                                 selectInput("Delay_Causes", "Select Delay", choices_delay),
                                 box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) ),
-                       tabPanel("Weather Delay Causes",box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
+                       tabPanel("Delay Information",selectInput("delay", "Select Delay", choices_delay),box( title = "Weather Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
                 )
             )
       ),
@@ -315,15 +316,15 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset8", 
-                       tabPanel("Lauderdale airport",
+                       tabPanel("Airport Information",
                                 selectInput("Select_Airport", "Select Airport", choices_airport),
                                 box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
-                       tabPanel("Monday",
+                       tabPanel("A day of the week",
                                 selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day),
                                 box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
-                       tabPanel("Flight No:200",selectInput("Flight_No", "Select Flight No", choices_fl_num),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
+                       tabPanel("Flight Information",selectInput("Flight_No", "Select Flight No", choices_fl_num),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="750px")) ),
                        
-                       tabPanel("One day",dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
+                       tabPanel("One day of the year",dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
                 )
               )
       )
