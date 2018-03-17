@@ -3,7 +3,7 @@
 # www.evl.uic.edu/aej/424
 #test
 # Libraries to include
-library(car)
+#library(car)
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
@@ -13,7 +13,7 @@ library(jpeg)
 library(grid)
 library(leaflet)
 library(plotly)
-library(reshape)
+library(reshape2)
 library(plyr)
 library(data.table)
 library(scales)
