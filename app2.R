@@ -1,5 +1,5 @@
 # Learn to Fly - Group 6 - CS424 Spring 2017
-# Inspired by the sample R + Shiny example for CS 424 Spring 2018 UIC - Andy Johnson
+# Inspired by the sample R +  Shiny example for CS 424 Spring 2018 UIC - Andy Johnson
 # www.evl.uic.edu/aej/424
 #test
 # Libraries to include
