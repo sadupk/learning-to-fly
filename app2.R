@@ -141,7 +141,7 @@ extra_cancellations[,":="(
 heavyCancellations = extra_cancellations[cancellations>0 & perc_cancellations>0.3][order(-cancellations)][]
 
 specialDays = list(
-  "Heavy Cancellations" = heavyCancellations[, .(fl_date, flight_count, cancellations, perc_cancellations)],
+  "Heavy Cancellations" = heavyCancellations[, .(fl_date, flight_count, cancellations, perc_cancellations = paste(round(perc_cancellations*100,2),"%", sep = ""))],
   "Holidays" = data.table(holidays)[, .(date, holidays)],
   "Busy Days" = busy_days
 )
@@ -154,7 +154,8 @@ depCount[,perc_departures := departure_count/sum(departure_count)]
 arrivalCount = data[,.(arrival_count = sum(dummy)), by = "dest_state"]
 arrivalCount[,perc_arrivals := arrival_count/ sum(arrival_count)]
 
-allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, perc_departures = paste(perc_departures*100,"%", sep = ""))], arrivalCount[,.(state = dest_state, arrival_count, perc_arrivals = paste(perc_arrivals*100, "%", sep = ""))], by = "state", all = T)
+allTakeOffs = merge(depCount[,.(state = origin_state, departure_count, 
+                                perc_departures = paste(round(perc_departures*100,2),"%", sep = ""))], arrivalCount[,.(state = dest_state, arrival_count, perc_arrivals = paste(round(perc_arrivals*100,2), "%", sep = ""))], by = "state", all = T)
 
 days=c(1,2,3,4,5,6,7) #diff
 names(days)=c("Mon","Tues","Wed","Thur","Fri","Sat","Sun")
@@ -169,6 +170,9 @@ choices_day=names(days)
 choices_delay=c("NAS DELAY","WEATHER DELAY","CARRIER DELAY","SECURITY DELAY","LATE AIRCRAFT DELAY")
 choices_fl_num=unique(Month_df$FL_NUM)
 choices_fl_num=choices_fl_num[order(choices_fl_num)]
+
+quartzFonts(avenir = c("Avenir Book", "Avenir Black", "Avenir Book Oblique", 
+                       "Avenir Black Oblique"))
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Sp 18 Project 2"),
@@ -212,11 +216,11 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset2", 
-                       tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("AirlineFlightPlot",width="950px",height="800px")) ),
-                       tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("AirlineFlightTable"))  ),
+                       tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
+                       tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
                        #Part 2-b 
-                       tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("HourlyFlights",width="950px",height="800px"))  ),
-                       tabPanel("HourlyTable", box(title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("HourlyTable"))  )
+                       tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("HourlyFlights",height="800px"))  ),
+                       tabPanel("HourlyTable", box(title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("HourlyTable"))  )
                 )
               )
       ),
@@ -227,8 +231,8 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3", 
-                       tabPanel("2017 Overall",box( title = "2017 Overall Arrival Departure by hour", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_times",width="750px",height="750px")) ),
-                       tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 10, plotOutput("arrival_departure_2017",width="750px",height="750px")) )
+                       tabPanel("2017 Overall",box( title = "2017 Overall Arrival Departure by hour", solidHeader = TRUE, status = "primary", width = 12, plotOutput("arrival_departure_times",height="750px")) ),
+                       tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 12, plotOutput("arrival_departure_2017",height="750px")) )
                 )
               )
       ),
@@ -239,7 +243,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3a", 
-                       tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalFlightsPlot",width="950px",height="800px")) ),
+                       tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("ArrivalFlightsPlot",height="800px")) ),
                        tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalFlightsTable"))  )
                        
                 )
@@ -253,7 +257,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3b", 
-                       tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 6, plotOutput("DepartFlightsPlot",width="950px",height="800px")) ),
+                       tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("DepartFlightsPlot", height="800px")) ),
                        tabPanel("Depart Flights Table", box(title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("DepartFlightsTable"))  )
                        
                 )
@@ -266,8 +270,8 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3c", 
-                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) ),
-                       tabPanel("Weekly Flights Table",box( title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("WeeklyFlightsTable",width="750px",height="750px")) )
+                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) ),
+                       tabPanel("Weekly Flights Table",box( title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("WeeklyFlightsTable",height="750px")) )
                        
                 )
               )
@@ -281,13 +285,13 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3d", 
-                       tabPanel("Arrival Delays",box( title = "Arrival Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",width="1200px",height="800px")) ),
-                       tabPanel("Arrival Delay Table",box( title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",width="750px",height="750px")) ),
-                       tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",width="1200px",height="800px")) ),
-                       tabPanel("Depart Delay Table",box( title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",width="750px",height="750px")) ),
+                       tabPanel("Arrival Delays",box( title = "Arrival Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",height="800px")) ),
+                       tabPanel("Arrival Delay Table",box( title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",height="750px")) ),
+                       tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",height="800px")) ),
+                       tabPanel("Depart Delay Table",box( title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",height="750px")) ),
                        tabPanel("Delay Causes",
                                 
-                                box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",width="750px",height="750px")) ),
+                                box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",height="750px")) ),
                        tabPanel("Delay Information",selectInput("delay", "Select Delay", choices_delay),box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
                 )
               )
@@ -298,7 +302,9 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset4", 
-                       tabPanel("Top 15 Destinations",box( title = "", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot",width="750px",height="750px")) )
+                       tabPanel("Top 15 Destinations",
+                                tags$head(tags$style(type = "text/css", "#top_15_dest_Plot {height:95vh !important;}")),
+                                box( title = "", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot")))
                 )
               )
       ),
@@ -312,7 +318,7 @@ ui <- dashboardPage(
                        id = "tabset5", 
                        tabPanel("State Info",
                                 selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
-                                box(title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",width="750px",height="75px")))
+                                box(title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
                 )
               )
       ),
@@ -324,7 +330,7 @@ ui <- dashboardPage(
                        id = "tabset6", 
                        tabPanel("Special Dates",
                                 selectInput("dateType", "Which dates would you like to see?", names(specialDays)),
-                                box( title = "", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",width="750px",height="75px"))
+                                box( title = "", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",height="75px"))
                        )
                 )
               )
@@ -343,12 +349,12 @@ ui <- dashboardPage(
                                 numericInput("binwidth", "Bin Width:", 100, min = 50, max = 500),
                                 tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", 
                                                                               solidHeader = TRUE, status = "primary", width = 10, 
-                                                                              plotOutput("distance_range_plot",width="750px",height="750px"))),
+                                                                              plotOutput("distance_range_plot",height="750px"))),
                                 tabPanel("Number of Flights by Air Time",
                                          sliderInput("time_range", "Flight Time (minutes):", min = 0, max = 600, value = c(0,600)),
                                          numericInput("binwidth2", "Bin Width:", 10, min = 4, max = 200),
                                          box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, 
-                                              plotOutput("time_range_plot",width="750px",height="750px")))
+                                              plotOutput("time_range_plot",height="750px")))
                                 
                        )
                 )
@@ -382,7 +388,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset2", 
-                       tabPanel("Monthly Flights",box( title = "Monthly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("MonthlyHeatMap",width="1200px",height="900px")) )
+                       tabPanel("Monthly Flights",box( title = "Monthly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("MonthlyHeatMap",height="900px")) )
                 )
               )
       ),
@@ -650,7 +656,7 @@ server <- function(input, output) {
   wp1<-ggplot(distributedweek, aes(Week, Hour)) + geom_tile(aes(fill = Freq),    colour = border)+
     scale_x_discrete(breaks=c(1:7),labels=daynames) + 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
     ggtitle("# of flights")
@@ -660,7 +666,7 @@ server <- function(input, output) {
   mp1<-ggplot(distributedmt, aes(Month, Hour)) + geom_tile(aes(fill = Freq),    colour = border) +  
     scale_x_discrete(breaks=c(1:12),labels=Monthnames) + 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
     ggtitle("# of flights")
@@ -707,7 +713,7 @@ server <- function(input, output) {
   wp2<-ggplot(CANCWK, aes(Week, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
     scale_x_discrete(breaks=c(1:7),labels=daynames) + 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
     ggtitle("Cancelled flights")
@@ -720,7 +726,7 @@ server <- function(input, output) {
   mp2<-ggplot(CANCMTH, aes(Month, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
     scale_x_discrete(breaks=c(1:12),labels=Monthnames) + 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
     ggtitle("Cancelled Flights")
@@ -737,7 +743,7 @@ server <- function(input, output) {
   wp3<-ggplot(DELWK, aes(Week, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
     scale_x_discrete(breaks=c(1:7),labels=daynames) + 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
     ggtitle("Delayed Flights")
@@ -749,7 +755,7 @@ server <- function(input, output) {
   mp3<-ggplot(DELMTH, aes(Month, Hour)) + geom_tile(aes(fill =Freq),    colour = border) +  
     scale_x_discrete(breaks=c(1:12),labels=Monthnames) + 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
     ggtitle("Delayed Flights")
@@ -762,7 +768,7 @@ server <- function(input, output) {
   mp4<-ggplot(distributedmonth, aes(Month, Hour)) + geom_tile(aes(fill = Minutes),    colour = border) +
     scale_fill_gradient(low = lowcol,   high = highcol)+ 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     labs(x = "Month",y = "Hour") +
     scale_x_discrete(limits=Monthnames,expand = c(0, 0)) +
     scale_y_discrete(limits=0:24,expand = c(0, 0)) +
@@ -774,7 +780,7 @@ server <- function(input, output) {
   wp4<-ggplot(distributedweek, aes(Week, Hour)) + geom_tile(aes(fill = Minutes),    colour = border) +  
     scale_fill_gradient(low = lowcol,   high = highcol)+ 
     theme_grey(base_size = base_size) + 
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+    theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     labs(x = "Day",y = "Hour") +
     scale_x_discrete(limits=daynames,expand = c(0, 0)) +
     scale_y_discrete(limits=0:24,expand = c(0, 0))+
@@ -893,6 +899,7 @@ server <- function(input, output) {
   )
   
   
+  
   ############################################Part 2-b
   output$HourlyTable <- DT::renderDataTable(
     
@@ -911,14 +918,12 @@ server <- function(input, output) {
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
         departures=getdeps(Airline)
-        Airline=Month[Month$DEST_AIRPORT_ID==ports[1],] ########STATS
         arrivals=getarrivals(Airline)
         times=c(0:23)
         #TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
         departures2=getdeps(Airline)
-        Airline=Month[Month$DEST_AIRPORT_ID==ports[2],] ########STATS
         arrivals2=getarrivals(Airline)
         times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals_Midway=arrivals2,  Departures_Midway=departures2,Arrivals_Ohare=arrivals,  Departures_ohare=departures)
@@ -931,7 +936,6 @@ server <- function(input, output) {
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
         Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         departures=getdeps(Airline)
-        Airline=Month[Month$DEST_AIRPORT_ID==Airportname,] ##########STATS
         arrivals=getarrivals(Airline)
         
         times=c(0:23)
@@ -961,29 +965,30 @@ server <- function(input, output) {
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
         departures=getdeps(Airline)
-        Airline=Month[Month$DEST_AIRPORT_ID==ports[1],] ########STATS
         arrivals=getarrivals(Airline)
         times=c(0:23)
-        TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
+        TravelTimes=data.frame(Times=times,Arrivals_Ohare=arrivals,  Departures_Ohare=departures)
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
         departures=getdeps(Airline)
-        Airline=Month[Month$DEST_AIRPORT_ID==ports[2],] ########STATS
         arrivals=getarrivals(Airline)
         times=c(0:23)
-        TravelTimes2=data.frame(Times=times,Arrivals2=arrivals,  Departures2=departures)
+        TravelTimes2=data.frame(Times=times,Arrivals_Midway=arrivals,  Departures_Midway=departures)
         
         if(input$timeframe=="1-24")
         {
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") + 
-            geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
-            geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1))  +
-            geom_point(aes(y = TravelTimes2[[2]], colour = "Arrivals2",group=1))+
-            geom_point(aes(y = TravelTimes2[[3]], colour = "Departures2",group=1))+
-            geom_line(aes(y = TravelTimes2[[2]], colour = "Arrivals2",group=1))+
-            geom_line(aes(y = TravelTimes2[[3]], colour = "Departures2",group=1))
+            geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals_Ohare",group=1))+
+            geom_point(aes(y = TravelTimes[[3]], colour = "Departures_Ohare",group=1))+
+            geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals_Ohare",group=1))+
+            geom_line(aes(y = TravelTimes[[3]], colour = "Departures_Ohare",group=1))  +
+            geom_point(aes(y = TravelTimes2[[2]], colour = "Departures_Midway",group=1))+
+            geom_point(aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+
+            geom_line(aes(y = TravelTimes2[[2]], colour = "Arrivals_Midway",group=1))+
+            geom_line(aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+ 
+            theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
+            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]))
+          
         }
         
         
@@ -992,28 +997,38 @@ server <- function(input, output) {
           timeframe=c("12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM")
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") +
             scale_x_discrete( name ="hour",limits=timeframe)+
-            geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
-            geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1))  +
-            geom_point(aes(y = TravelTimes2[[2]], colour = "Arrivals2",group=1))+
-            geom_point(aes(y = TravelTimes2[[3]], colour = "Departures2",group=1))+
-            geom_line(aes(y = TravelTimes2[[2]], colour = "Arrivals2",group=1))+
-            geom_line(aes(y = TravelTimes2[[3]], colour = "Departures2",group=1))
+            geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals_Ohare",group=1))+
+            geom_point(aes(y = TravelTimes[[3]], colour = "Departures_Ohare",group=1))+
+            geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals_Ohare",group=1))+
+            geom_line(aes(y = TravelTimes[[3]], colour = "Departures_Ohare",group=1))  +
+            geom_point(aes(y = TravelTimes2[[2]], colour = "Departures_Midway",group=1))+
+            geom_point(aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+
+            geom_line(aes(y = TravelTimes2[[2]], colour = "Arrivals_Midway",group=1))+
+            geom_line(aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+ 
+            theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
+            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]))
+          
         }
         
-        
-
       }  
       else
       {
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
         Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         departures=getdeps(Airline)
-        Airline=Month[Month$DEST_AIRPORT_ID==Airportname,] ########STATS
         arrivals=getarrivals(Airline)
         times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
+        colors=midwaycolors 
+        
+        if(input$Airport=="Chicago O'Hare")
+        {
+          colors=oharecolors 
+        }
+        
+        
+        
+        
         
         if(input$timeframe=="1-24")
         {
@@ -1022,7 +1037,9 @@ server <- function(input, output) {
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
             geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
             geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1)) 
+            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
+            theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
+            scale_color_manual("legend", values = c("Departures" = colors[1], "Arrivals" = colors[2]))
         }
         
         
@@ -1034,7 +1051,10 @@ server <- function(input, output) {
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
             geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
             geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1))
+            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
+            theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
+            scale_color_manual("legend", values = c("Departures" = colors[1], "Arrivals" = colors[2]))
+          
           
         }
         
@@ -1071,9 +1091,9 @@ server <- function(input, output) {
       melted=melt(go_tos, id='ID')
       
       ggplot(data=melted, aes(x=ID, y=value)) + geom_bar(stat = "identity",aes(fill=melted$variable),position = "dodge")+ 
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))+ 
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
         scale_fill_manual("legend", values = c("Midway" = midwaycolors[1], "Ohare" = oharecolors[1]))+
-        labs(x = "Airline",y = "# Flights",caption = "Airline values are not displayed if they don't fall in the top 15 values of an airport. .")
+        labs(x = "Airline",y = "# Flights")
       
     }
     ### Be a bit a wary of this else clause, code  inside it is okay though
@@ -1095,7 +1115,7 @@ server <- function(input, output) {
       {
         colors=oharecolors[1]      
         ggplot(data=go_top, aes(x=Var1, y=Freq)) + geom_bar(stat = "identity",position = "dodge",fill=colors)+ 
-          theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+          theme(axis.text.x=element_text(angle = 90, hjust = 0))+
           labs(x = "Airline",y = "# Flights")
       }
       
@@ -1103,7 +1123,7 @@ server <- function(input, output) {
       {
         colors=midwaycolors[1]      
         ggplot(data=go_top, aes(x=Var1, y=Freq)) + geom_bar(stat = "identity",position = "dodge",fill=colors)+ 
-          theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+          theme(axis.text.x=element_text(angle = 90, hjust = 0))+
           labs(x = "Airline",y = "# Flights")
         
       }
@@ -1141,8 +1161,6 @@ server <- function(input, output) {
         go_tos=merge(go_top,go_top2, by="Var1",all=TRUE)
         go_tos[is.na(go_tos)] = 0
         go_tos=data.frame(ID=go_tos[[1]],Midway=go_tos[[2]],Ohare=go_tos[[3]])
-        go_tos$Midway[go_tos$Midway==0]<-NA
-        go_tos$Ohare[go_tos$Ohare==0]<-NA
         
       }
       ### Be a bit a wary of this else clause, code  inside code is statistically okay though
@@ -1198,9 +1216,9 @@ server <- function(input, output) {
       
       melted=melt(come_froms, id='ID')
       ggplot(data=melted, aes(x=ID, y=value)) + geom_bar(stat = "identity",aes(fill=melted$variable),position = "dodge")+ 
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))+ 
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
         #scale_fill_manual("legend", values = c("Midway" = midwaycolors[1], "Ohare" = "red"))+   ######COLOR PROBLEM HERE
-        labs(x = "Airline",y = "# Flights",caption = "Airline values are not displayed if they don't fall in the top 15 values of an airport.")
+        labs(x = "Airline",y = "# Flights")
       
       
       
@@ -1224,7 +1242,7 @@ server <- function(input, output) {
         colors=oharecolors[1]
         print(colors)     
         ggplot(data=come_top, aes(x=Var1, y=Freq)) + geom_bar(stat = "identity",position = "dodge",fill=oharecolors[1])+ 
-          theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+          theme(axis.text.x=element_text(angle = 90, hjust = 0))+
           labs(x = "Airline",y = "# Flights")
       }
       
@@ -1233,7 +1251,7 @@ server <- function(input, output) {
         colors=midwaycolors[1]  
         print(colors)   
         ggplot(data=come_top, aes(x=Var1, y=Freq)) + geom_bar(stat = "identity",position = "dodge",fill=midwaycolors[1])+ 
-          theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+          theme(axis.text.x=element_text(angle = 90, hjust = 0))+
           labs(x = "Airline",y = "# Flights")
         
       }
@@ -1276,9 +1294,6 @@ server <- function(input, output) {
         come_froms=merge(come_top,come_top2, by="Var1",all=TRUE)
         come_froms[is.na(come_froms)] = 0
         come_froms=data.frame(ID=come_froms[[1]],Midway=come_froms[[2]],ohare=come_froms[[3]])
-        come_froms$Midway[come_froms$Midway==0]<-NA
-        come_froms$ohare[come_froms$ohare==0]<-NA
-        
         
         
       }
@@ -1326,11 +1341,11 @@ server <- function(input, output) {
       arr_day2=data.frame(table(arrivals2$DAY_OF_WEEK))
       dep_day2=data.frame(table(departures2$DAY_OF_WEEK))
       
-      daily_data=data.frame(ID=arr_day1[[1]],Midway_Arrival=arr_day1[[2]],Ohare_arrival=arr_day2[[2]],Midway_dep=dep_day1[[2]],Ohare_dep=dep_day2[[2]])
+      daily_data=data.frame(ID=arr_day1[[1]],Midway_Arrival=arr_day1[[2]],Ohare_arrival=arr_day2[[2]],Midway_dep=dep_day1[[2]],Ohare_dep=arr_day2[[2]])
       melted=melt(daily_data, id='ID')
       ggplot(melted, aes(x=ID, y=value,  color=variable, group=variable))+ geom_line()+
         scale_x_discrete( name="Day",breaks=1:7,labels=names(days))+       
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))+
         scale_color_manual("legend", values = c("Midway_dep" = midwaycolors[1], "Midway_Arrival" = midwaycolors[2], "Ohare_dep" = oharecolors[1], "Ohare_arrival" = oharecolors[2]))
       
     }
@@ -1359,7 +1374,7 @@ server <- function(input, output) {
       ggplot(melted, aes(x=ID, y=value,  color=variable, group=variable))+ geom_line()+
         scale_x_discrete( name="Day",breaks=1:7,labels=names(days))+       
         scale_color_manual("legend", values = c("arrivals" = colors[1], "departures" = colors[2]))+
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))
       
       
     }  
@@ -1389,7 +1404,7 @@ server <- function(input, output) {
         arr_day2=data.frame(table(arrivals2$DAY_OF_WEEK))
         dep_day2=data.frame(table(departures2$DAY_OF_WEEK))
         
-        daily_data=data.frame(ID=daynames,Arrivals_Midway=arr_day1[[2]],Arrivals_Ohare=arr_day2[[2]],Departures_Miday=dep_day1[[2]],Departures_Ohare=dep_day2[[2]])
+        daily_data=data.frame(ID=arr_day1[[1]],Arrivals_Midway=arr_day1[[2]],Arrivals_Ohare=arr_day2[[2]],Departures_Miday=dep_day1[[2]],Departures_Ohare=arr_day2[[2]])
         
       }
       
@@ -1404,7 +1419,7 @@ server <- function(input, output) {
         departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]  ###
         arr_day1=data.frame(table(arrivals$DAY_OF_WEEK))
         dep_day1=data.frame(table(departures$DAY_OF_WEEK))
-        daily_data=data.frame(ID=daynames,Arrivals=arr_day1[[2]],Departures=dep_day1[[2]])
+        daily_data=data.frame(ID=arr_day1[[1]],Arrivals=arr_day1[[2]],Departures=dep_day1[[2]])
         
         
       }
@@ -1438,21 +1453,21 @@ server <- function(input, output) {
         timeframe=c(0:23)
       }
       ports=c("13232", "13930")
-      delaysdata=Month[Month$DEST_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]   ###STAT
-      Airline=Month[Month$DEST_AIRPORT_ID==ports[1],]
+      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]
+      Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
       delays=getarrivals(delaysdata)
       arrivals=getarrivals(Airline)
       flights=c(delays,(arrivals-delays))
       
-      delaysdata=Month[Month$DEST_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,]   ##STAT
-      Airline=Month[Month$DEST_AIRPORT_ID==ports[2],]
+      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,]
+      Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],]
       delays=getarrivals(delaysdata)
       arrivals=getarrivals(Airline)
       flights2=c(delays,(arrivals-delays))
       
       
       ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
-      times=rep(c(0:23),2) ##### HOUR LABELING
+      times=rep(c(0:23),2)
       t=rep("delays",24)
       d=rep("totals",24)
       coloring=c(d,t)
@@ -1460,8 +1475,8 @@ server <- function(input, output) {
       melted=melt(TravelTimes, id="Times")
       melted$Coloring=coloring
       ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+ 
-        scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        scale_x_continuous( name="hour",breaks=0:23,labels=timeframe)+           
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))+
         facet_grid(~ variable)
       
     }
@@ -1478,8 +1493,8 @@ server <- function(input, output) {
         timeframe=c(0:23)
       }
       Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
-      delaysdata=Month[Month$DEST_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]   ###STATS
-      Airline=Month[Month$DEST_AIRPORT_ID==Airportname,]
+      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]
+      Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
       delays=getarrivals(delaysdata)
       arrivals=getarrivals(Airline)
       times=rep(c(0:23),2)
@@ -1491,7 +1506,7 @@ server <- function(input, output) {
       TravelTimes=data.frame(Times=times,Flights=flights,Coloring=coloring)
       ggplot(TravelTimes, aes(x=Times, y=Flights)) + geom_bar(stat="identity",   colour="white",aes(fill=Coloring))+ 
         scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))
     }
   })
   
@@ -1538,7 +1553,7 @@ server <- function(input, output) {
       melted$Coloring=coloring
       ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+
         scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))+
         facet_grid(~ variable)
       
     }
@@ -1568,8 +1583,8 @@ server <- function(input, output) {
       
       TravelTimes=data.frame(Times=times,Flights=flights,Coloring=coloring)
       ggplot(TravelTimes, aes(x=Times, y=Flights)) + geom_bar(stat="identity", colour="white",aes(fill=Coloring))+ 
-        scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
-        theme(axis.text.x=element_text(angle = -90, hjust = 0))
+        scale_x_continuous( name="hour",breaks=0:23,labels=timeframe)+           
+        theme(axis.text.x=element_text(angle = 90, hjust = 0))
     }
     
   })
@@ -1611,12 +1626,17 @@ server <- function(input, output) {
         
         
         ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
-        times=timeframe#rep(c(1:24),2)
+        times=timeframe#rep(c(0:23),2)
         t=rep("delays",24)
         d=rep("totals",24)
         coloring=c(d,t)
-        TravelTimes=data.frame(Times=times,Midway_Delays=delays1,Midway_Proportion=100*delays1/departs1,
-                               OhareDelays=delays2,OhareProportion=100*delays2/departs2)
+        TravelTimes=data.frame(Times=times,Num1=flights,Num2=flights2)
+        melted=melt(TravelTimes, id="Times")
+        melted$Coloring=coloring
+        ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+
+          scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
+          theme(axis.text.x=element_text(angle = -90, hjust = 0))+
+          facet_grid(~ variable)
       }
       
       else
@@ -1635,7 +1655,7 @@ server <- function(input, output) {
         Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         delays=getdeps(delaysdata)
         departs=getdeps(Airline)
-        times=timeframe#rep(c(1:24),2)
+        times=timeframe#rep(c(0:23),2)
         flights=c(delays, delays/departs)
         
         TravelTimes=data.frame(Times=times,Delays=delays,Proportion=100*(delays/departs))
@@ -1674,18 +1694,18 @@ server <- function(input, output) {
           timeframe=c(0:23)
         }
         ports=c("13232", "13930")
-        delaysdata=Month[Month$DEST_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]   ##STATS
-        Airline=Month[Month$DEST_AIRPORT_ID==ports[1],]
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
         delays1=getarrivals(delaysdata)
         arrivals1=getarrivals(Airline)
         
-        delaysdata=Month[Month$DEST_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,]
-        Airline=Month[Month$DEST_AIRPORT_ID==ports[2],]
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,]
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],]
         delays2=getarrivals(delaysdata)
         arrivals2=getarrivals(Airline)
         
         
-        times=timeframe#rep(c(1:24),2)
+        times=timeframe#rep(c(0:23),2)
         TravelTimes=data.frame(Times=times,Midway_Delays=delays1,Midwa_Proportion1=100*delays1/arrivals1,
                                Ohare_Delays=delays2,Ohare_Proportion=100*delays2/arrivals2)
       }
@@ -1703,11 +1723,11 @@ server <- function(input, output) {
           timeframe=c(0:23)
         }
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
-        delaysdata=Month[Month$DEST_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]   ###STATS
-        Airline=Month[Month$DEST_AIRPORT_ID==Airportname,]     ##STATS
+        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]
+        Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         delays=getarrivals(delaysdata)
         arrivals=getarrivals(Airline)
-        times=timeframe#rep(c(1:24),2)
+        times=timeframe#rep(c(0:23),2)
         
         flights=c(delays,(delays/arrivals))
         
@@ -1724,7 +1744,7 @@ server <- function(input, output) {
   ###################PART B BEGINS HERE
   
   output$arrival_departure_times <- renderPlot({
-    times=c(1:24)
+    times=c(0:23)
     travel_times = data.frame(times=times,
                               arrivals = getarrivals(Month_df),
                               departures = getdeps(Month_df)) %>%
@@ -1762,7 +1782,9 @@ server <- function(input, output) {
     Month_top_15$FL_DATE = as.Date(Month_top_15$FL_DATE)
     Month_top_15$month = format(Month_top_15$FL_DATE, '%b')
     ggplot(Month_top_15, aes(factor(month, levels = month.abb))) +
-      geom_bar(aes(fill = factor(ORIGIN_CITY_NAME)))
+      geom_bar(aes(fill = factor(ORIGIN_CITY_NAME))) +
+      labs(x ="") + theme(legend.title = element_blank(),axis.text.x=element_text(angle = 90, hjust = 0))
+      
   })
   
   output$delay_Plot <- renderPlot({
@@ -1780,7 +1802,7 @@ server <- function(input, output) {
   })
   ###################PART A BEGINS HERE
   output$takeOffs <-renderDataTable(
-    allTakeOffs[,.(State = state, `Departure Count` = departure_count, `% Departures` = perc_departures, `Arrival Count` = arrival_count, "% Arrivals" = perc_arrivals)], options = list(pageLength= 5)
+    allTakeOffs[,.(State = state, `Departure Count` = departure_count, `% Departures` =perc_departures, `Arrival Count` = arrival_count, `% Arrivals` = perc_arrivals)], options = list(pageLength= 5)
   )
   
   output$special_days <-DT::renderDataTable(
@@ -1831,6 +1853,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Jan")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1841,6 +1864,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Feb")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1851,6 +1875,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Mar")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1861,6 +1886,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Apr")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1871,6 +1897,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="May")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1881,6 +1908,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Jun")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1891,6 +1919,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Jul")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1901,6 +1930,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Aug")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1911,6 +1941,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Sept")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1921,6 +1952,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Oct")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1931,6 +1963,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Nov")+
       labs(x="", y="Hour") + theme(legend.position="none")
@@ -1941,6 +1974,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("ARR_TIME"="red", "DEP_TIME"="blue")) +
       geom_point(aes(colour = variable))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Dec")+
       labs(x="", y="Hour") + theme(legend.position="none")
