@@ -3,7 +3,7 @@
 # www.evl.uic.edu/aej/424
 #test
 # Libraries to include
-library(car)
+# library(car)
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
@@ -13,7 +13,7 @@ library(jpeg)
 library(grid)
 library(leaflet)
 library(plotly)
-library(reshape)
+library(reshape2)
 library(plyr)
 library(data.table)
 library(scales)
@@ -331,24 +331,30 @@ ui <- dashboardPage(
       ),
 
 #################################PART GRAD BEGINS HERE
-    tabItem(tabName = "item7",
-            fluidRow(
-              tabBox(title = "",
-                     width = "100%",
-                     height = "2000px",
-                     id = "tabset7", 
-                     tabPanel("Flights by distance",
-                              sliderInput("range", "Flight Distance:", min = 0, max = max(Month_df$DISTANCE),value = c(200,500)),
-                     tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", solidHeader = TRUE, status = "primary", width = 10, plotOutput("distance_range_plot",width="750px",height="75px"))),
-                     tabPanel("Number of Flights by Air Time",
-                              sliderInput("time_range", "Flight Time (minutes):", min = 0, max = 600, value = c(200,300)),
-                              box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, plotOutput("time_range_plot",width="750px",height="75px")))
-                              
-                              )
-                     )
-              )
-      ),
-    #################################Part A begins here
+tabItem(tabName = "item7",
+        fluidRow(
+          tabBox(title = "",
+                 width = "100%",
+                 height = "2000px",
+                 id = "tabset7", 
+                 tabPanel("Flights by distance",
+                          sliderInput("range", "Flight Distance:", min = 0, max = 7000,value = c(0,7000)),
+                          selectInput("units", "Units", c("miles","kilometers")),
+                          numericInput("binwidth", "Bin Width:", 100, min = 50, max = 500),
+                          tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", 
+                                                                        solidHeader = TRUE, status = "primary", width = 10, 
+                                                                        plotOutput("distance_range_plot",width="750px",height="750px"))),
+                          tabPanel("Number of Flights by Air Time",
+                                   sliderInput("time_range", "Flight Time (minutes):", min = 0, max = 600, value = c(0,600)),
+                                   numericInput("binwidth2", "Bin Width:", 10, min = 4, max = 200),
+                                   box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, 
+                                        plotOutput("time_range_plot",width="750px",height="750px")))
+                          
+                 )
+          )
+        )
+),
+#################################Part A begins here
 
       tabItem(tabName = "item8",
               fluidRow(
@@ -2403,36 +2409,39 @@ output$ArrivalDelays <- renderPlot({
     input$units
   })
   
+  binWidth <- reactive({
+    input$binwidth
+  })
+  
   sliderValues <- reactive({
     input$range
   })
-
+  
   output$distance_range_plot <- renderPlot({
-    print(unitChoice())
-    
-    if (unitChoice() == "miles") {
     dist_min = sliderValues()[1]
     dist_max = sliderValues()[2]
+    
+    if (unitChoice() == "miles") {
+      dist_values = Month_df[(Month_df$DISTANCE >= dist_min) & (Month_df$DISTANCE <= dist_max)]$DISTANCE
+      y_label = "(miles)"
     }
     else {
-    dist_min = sliderValues()[1] / 1.609
-    dist_max = sliderValues()[2] / 1.609
+      dist_values = Month_df$DISTANCE*1.609
+      dist_values = dist_values[(dist_values >= dist_min) & (dist_values <= dist_max)]
+      y_label = "(kilometer)"
     }
-
-    dist_values = Month_df[(Month_df$DISTANCE >= dist_min) & (Month_df$DISTANCE <= dist_max)]$DISTANCE
-    dist_count = data.frame(label = "number of flights", dist_count = dist_values)
-    options(scipen = 999)
-    ggplot(dist_count, aes(x = label)) +
+    qplot(dist_values, geom="histogram", binwidth=binWidth()) + 
+      theme_bw() +
       ylab("Number of Flights") +
-      theme(axis.title.x=element_blank(),
-            axis.title.y=element_blank()) +
-      geom_bar() +
-      ylim(0, dim(Month_df)[1]) +
-      coord_flip()
+      xlab(paste("Distance", y_label))
   })
   
   sliderValues2 <- reactive({
     input$time_range
+  })
+  
+  binWidth2 <- reactive({
+    input$binwidth2
   })
   
   output$time_range_plot <- renderPlot({
@@ -2441,16 +2450,9 @@ output$ArrivalDelays <- renderPlot({
     time_max = sliderValues2()[2]
     
     time_values = Month_df[(Month_df$AIR_TIME >= time_min) & (Month_df$AIR_TIME <= time_max)]$AIR_TIME
-    time_count = data.frame(label = "Number of flights", time_count = time_values)
-    options(scipen = 999)
-    ggplot(time_count, aes(x = label)) +
+    qplot(time_values, geom="histogram", binwidth=binWidth2()) +
       ylab("Number of Flights") +
-      theme(axis.title.x=element_blank(),
-            axis.title.y=element_blank()) +
-      geom_bar() +
-      scale_y_continuous(labels = function(x){paste0(x/1000, ' K',sep = "")})+
-      coord_flip() +
-      ylim(0, dim(Month_df)[1])
+      xlab("Flight Length (min)")
   })
   
   
