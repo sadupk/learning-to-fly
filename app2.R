@@ -1,4 +1,4 @@
-# Learn to Fly - Group 6 - CS424 Spring 2017
+ # Learn to Fly - Group 6 - CS424 Spring 2017
 # Inspired by the sample R +  Shiny example for CS 424 Spring 2018 UIC - Andy Johnson
 # www.evl.uic.edu/aej/424
 #test
@@ -1087,7 +1087,7 @@ server <- function(input, output) {
       ggplot(data=melted, aes(x=ID, y=value)) + geom_bar(stat = "identity",aes(fill=melted$variable),position = "dodge")+ 
       theme(axis.text.x=element_text(angle = -90, hjust = 0))+ 
       scale_fill_manual("legend", values = c("Midway" = midwaycolors[1], "Ohare" = oharecolors[1]))+
-        labs(x = "Airline",y = "# Flights")
+        labs(x = "Airline",y = "# Flights",caption = "Airline values are not displayed if they don't fall in the top 15 values of an airport. .")
       
     }
     ### Be a bit a wary of this else clause, code  inside it is okay though
@@ -1155,6 +1155,8 @@ server <- function(input, output) {
         go_tos=merge(go_top,go_top2, by="Var1",all=TRUE)
         go_tos[is.na(go_tos)] = 0
         go_tos=data.frame(ID=go_tos[[1]],Midway=go_tos[[2]],Ohare=go_tos[[3]])
+        go_tos$Midway[go_tos$Midway==0]<-NA
+        go_tos$Ohare[go_tos$Ohare==0]<-NA
         
       }
       ### Be a bit a wary of this else clause, code  inside code is statistically okay though
@@ -1212,7 +1214,7 @@ server <- function(input, output) {
       ggplot(data=melted, aes(x=ID, y=value)) + geom_bar(stat = "identity",aes(fill=melted$variable),position = "dodge")+ 
         theme(axis.text.x=element_text(angle = -90, hjust = 0))+ 
         #scale_fill_manual("legend", values = c("Midway" = midwaycolors[1], "Ohare" = "red"))+   ######COLOR PROBLEM HERE
-        labs(x = "Airline",y = "# Flights")
+        labs(x = "Airline",y = "# Flights",caption = "Airline values are not displayed if they don't fall in the top 15 values of an airport.")
      
       
 
@@ -1288,6 +1290,9 @@ server <- function(input, output) {
         come_froms=merge(come_top,come_top2, by="Var1",all=TRUE)
         come_froms[is.na(come_froms)] = 0
         come_froms=data.frame(ID=come_froms[[1]],Midway=come_froms[[2]],ohare=come_froms[[3]])
+        come_froms$Midway[come_froms$Midway==0]<-NA
+        come_froms$ohare[come_froms$ohare==0]<-NA
+        
 
         
       }
@@ -1335,7 +1340,7 @@ server <- function(input, output) {
       arr_day2=data.frame(table(arrivals2$DAY_OF_WEEK))
       dep_day2=data.frame(table(departures2$DAY_OF_WEEK))
       
-      daily_data=data.frame(ID=arr_day1[[1]],Midway_Arrival=arr_day1[[2]],Ohare_arrival=arr_day2[[2]],Midway_dep=dep_day1[[2]],Ohare_dep=arr_day2[[2]])
+      daily_data=data.frame(ID=arr_day1[[1]],Midway_Arrival=arr_day1[[2]],Ohare_arrival=arr_day2[[2]],Midway_dep=dep_day1[[2]],Ohare_dep=dep_day2[[2]])
       melted=melt(daily_data, id='ID')
       ggplot(melted, aes(x=ID, y=value,  color=variable, group=variable))+ geom_line()+
         scale_x_discrete( name="Day",breaks=1:7,labels=names(days))+       
@@ -1398,7 +1403,7 @@ output$WeeklyFlightsTable <- DT::renderDataTable(
       arr_day2=data.frame(table(arrivals2$DAY_OF_WEEK))
       dep_day2=data.frame(table(departures2$DAY_OF_WEEK))
 
-      daily_data=data.frame(ID=arr_day1[[1]],Arrivals_Midway=arr_day1[[2]],Arrivals_Ohare=arr_day2[[2]],Departures_Miday=dep_day1[[2]],Departures_Ohare=arr_day2[[2]])
+      daily_data=data.frame(ID=daynames,Arrivals_Midway=arr_day1[[2]],Arrivals_Ohare=arr_day2[[2]],Departures_Miday=dep_day1[[2]],Departures_Ohare=dep_day2[[2]])
 
     }
 
@@ -1413,7 +1418,7 @@ output$WeeklyFlightsTable <- DT::renderDataTable(
       departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]  ###
       arr_day1=data.frame(table(arrivals$DAY_OF_WEEK))
       dep_day1=data.frame(table(departures$DAY_OF_WEEK))
-      daily_data=data.frame(ID=arr_day1[[1]],Arrivals=arr_day1[[2]],Departures=dep_day1[[2]])
+      daily_data=data.frame(ID=daynames,Arrivals=arr_day1[[2]],Departures=dep_day1[[2]])
 
 
     }
