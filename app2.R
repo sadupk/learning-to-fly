@@ -1,4 +1,4 @@
- # Learn to Fly - Group 6 - CS424 Spring 2017
+# Learn to Fly - Group 6 - CS424 Spring 2017
 # Inspired by the sample R +  Shiny example for CS 424 Spring 2018 UIC - Andy Johnson
 # www.evl.uic.edu/aej/424
 #test
@@ -913,14 +913,14 @@ server <- function(input, output) {
         departures=getdeps(Airline)
         Airline=Month[Month$DEST_AIRPORT_ID==ports[1],] ########STATS
         arrivals=getarrivals(Airline)
-        times=c(1:24)
+        times=c(0:23)
         #TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
         departures2=getdeps(Airline)
         Airline=Month[Month$DEST_AIRPORT_ID==ports[2],] ########STATS
         arrivals2=getarrivals(Airline)
-        times=c(1:24)
+        times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals_Midway=arrivals2,  Departures_Midway=departures2,Arrivals_Ohare=arrivals,  Departures_ohare=departures)
         
         
@@ -934,7 +934,7 @@ server <- function(input, output) {
         Airline=Month[Month$DEST_AIRPORT_ID==Airportname,] ##########STATS
         arrivals=getarrivals(Airline)
         
-        times=c(1:24)
+        times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
         
       } 
@@ -963,14 +963,14 @@ server <- function(input, output) {
         departures=getdeps(Airline)
         Airline=Month[Month$DEST_AIRPORT_ID==ports[1],] ########STATS
         arrivals=getarrivals(Airline)
-        times=c(1:24)
+        times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
         departures=getdeps(Airline)
         Airline=Month[Month$DEST_AIRPORT_ID==ports[2],] ########STATS
         arrivals=getarrivals(Airline)
-        times=c(1:24)
+        times=c(0:23)
         TravelTimes2=data.frame(Times=times,Arrivals2=arrivals,  Departures2=departures)
         
         if(input$timeframe=="1-24")
@@ -1012,7 +1012,7 @@ server <- function(input, output) {
         departures=getdeps(Airline)
         Airline=Month[Month$DEST_AIRPORT_ID==Airportname,] ########STATS
         arrivals=getarrivals(Airline)
-        times=c(1:24)
+        times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
         
         if(input$timeframe=="1-24")
@@ -1452,7 +1452,7 @@ server <- function(input, output) {
       
       
       ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
-      times=rep(c(1:24),2)
+      times=rep(c(0:23),2) ##### HOUR LABELING
       t=rep("delays",24)
       d=rep("totals",24)
       coloring=c(d,t)
@@ -1482,7 +1482,7 @@ server <- function(input, output) {
       Airline=Month[Month$DEST_AIRPORT_ID==Airportname,]
       delays=getarrivals(delaysdata)
       arrivals=getarrivals(Airline)
-      times=rep(c(1:24),2)
+      times=rep(c(0:23),2)
       t=rep("delays",24)
       d=rep("totals",24)
       coloring=c(d,t)
@@ -1529,7 +1529,7 @@ server <- function(input, output) {
       
       
       ####Colors are mislabeled BUT THE CHARTS IS CORRECT!!!!
-      times=rep(c(1:24),2)
+      times=rep(c(0:23),2)
       t=rep("delays",24)
       d=rep("totals",24)
       coloring=c(d,t)
@@ -1560,7 +1560,7 @@ server <- function(input, output) {
       Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
       delays=getdeps(delaysdata)
       departs=getdeps(Airline)
-      times=rep(c(1:24),2)
+      times=rep(c(0:23),2)
       t=rep("delays",24)
       d=rep("totals",24)
       coloring=c(d,t)
