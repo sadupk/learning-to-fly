@@ -172,11 +172,14 @@ choices_delay=c("NAS DELAY","WEATHER DELAY","CARRIER DELAY","SECURITY DELAY","LA
 choices_fl_num=unique(Month_df$FL_NUM)
 choices_fl_num=choices_fl_num[order(choices_fl_num)]
 
+quartzFonts(avenir = c("Avenir Book", "Avenir Black", "Avenir Book Oblique", 
+                       "Avenir Black Oblique"))
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Sp 18 Project 2"),
   dashboardSidebar(
     sidebarMenu(
+      menuItem("Information", tabName = "item0"),
       menuItem("Inputs", tabName = "item1"),
       menuItem("Overall Flights", tabName = "item2"),
       menuItem("Arrivals/Departures",tabName = "item3"),
@@ -196,6 +199,17 @@ ui <- dashboardPage(
   ),
   dashboardBody(
     tabItems(
+      tabItem(tabName = "item0",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset0", 
+                       tabPanel("Information",
+                                htmlOutput("info"))
+                )
+              )
+      ),
       tabItem(tabName = "item1",
               fluidRow(
                 tabBox(title = "",
@@ -216,6 +230,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset2", 
+                       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                        tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
                        tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
                        #Part 2-b 
@@ -231,6 +246,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3", 
+                       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                        tabPanel("2017 Overall",box( title = "2017 Overall Arrival Departure by hour", solidHeader = TRUE, status = "primary", width = 12, plotOutput("arrival_departure_times",height="750px")) ),
                        tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 12, plotOutput("arrival_departure_2017",height="750px")) )
                 )
@@ -243,6 +259,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3a", 
+                       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                        tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("ArrivalFlightsPlot",height="800px")) ),
                        tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalFlightsTable"))  )
                        
@@ -257,6 +274,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3b", 
+                       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                        tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("DepartFlightsPlot", height="800px")) ),
                        tabPanel("Depart Flights Table", box(title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("DepartFlightsTable"))  )
                        
@@ -270,6 +288,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3c", 
+                       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                        tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) ),
                        tabPanel("Weekly Flights Table",box( title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("WeeklyFlightsTable",height="750px")) )
                        
