@@ -428,7 +428,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset4", 
-                       tabPanel("Ohare and Rain",box( title = "Ohare and Rain", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",width="1200px",height="900px")) )
+                       tabPanel("Rain Cancellations",box( title = "O'Hare Rain Cancellations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",width="1200px",height="900px")) )
                 )
               )
       )
