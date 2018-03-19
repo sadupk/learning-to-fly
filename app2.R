@@ -2402,35 +2402,35 @@ server <- function(input, output) {
         geom_point(aes(colour = SECURITY_DELAY,size=SECURITY_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#cc5490", high = "#4c1f36")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays")}
+        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="WEATHER DELAY"){
       day=day[WEATHER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = WEATHER_DELAY,size=WEATHER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays")}
+        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="NAS DELAY"){
       day=day[NAS_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = NAS_DELAY,size=NAS_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#73B66B", high = "#006400")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays")}
+        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="CARRIER DELAY"){
       day=day[CARRIER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = CARRIER_DELAY,size=CARRIER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#FFCB18", high = "#666600")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays")}
+        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="LATE AIRCRAFT DELAY"){
       day=day[LATE_AIRCRAFT_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = LATE_AIRCRAFT_DELAY,size=LATE_AIRCRAFT_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#29A2C6", high = "#000066")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays")}
+        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     
     
     
@@ -2460,11 +2460,11 @@ server <- function(input, output) {
       geom_point(aes(colour=total_delay,size=total_delay+10), shape=1,stroke=2)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       labs(y="",x="") + 
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays") 
+            axis.ticks.y=element_blank())+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)") 
     grid.arrange(gg1,gg2,ncol=2,widths=c(2,1))
     
   })
