@@ -33,6 +33,7 @@ carrier_lookup = read.csv("Data/L_CARRIER_HISTORY.csv_")
 colnames(carrier_lookup) = c("Code", "carrier_name")
 airport_lookup = read.csv("Data/L_AIRPORT_ID.csv")
 colnames(airport_lookup) = c("Code", "airport_name")
+ohare_rain = read.csv("Data/2017-ohare-rain.csv", sep = ",")
 
 #Load Flight data
 print("Reading data tables")
@@ -191,7 +192,8 @@ ui <- dashboardPage(
       menuItem("Flights by distance",tabName = "item7"),
       menuItem("Outliers",tabName = "item8"),
       menuItem("Monthly Heat Maps", tabName = "item9"),
-      menuItem("Weekly Heat Maps",tabName = "item10")
+      menuItem("Weekly Heat Maps",tabName = "item10"),
+      menuItem("Ohare Cancellations and Rain",tabName = "item11")
     )
   ),
   dashboardBody(
@@ -400,6 +402,16 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset3", 
                        tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyHeatMap",width="1200px",height="900px")) )
+                )
+              )
+      ),
+      tabItem(tabName = "item11",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                       id = "tabset4", 
+                       tabPanel("Ohare and Rain",box( title = "Ohare and Rain", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",width="1200px",height="900px")) )
                 )
               )
       )
@@ -2519,6 +2531,23 @@ server <- function(input, output) {
     
     #grid.arrange(wp1, wp2,wp3,wp4, ncol=2,nrow=2)
   })  
+  
+  output$OhareRain <- renderPlot({
+    ohare_rain$Date = as.Date(paste("2017", ohare_rain$Month , ohare_rain$day , sep = "-" ))
+    ohare_rain$precipitation.in.[ohare_rain$precipitation.in. == "T"] = 0
+    ohare_rain$precipitation.in. = as.numeric(levels(ohare_rain$precipitation.in.))[ohare_rain$precipitation.in.]
+    
+    ohare = Month_df[Month_df$ORIGIN_AIRPORT_ID == 13930] %>%
+      select(., CANCELLED, Month, FL_DATE)
+    ohare = aggregate(ohare$CANCELLED, by=list(ohare$FL_DATE), sum)
+    ohare = merge(ohare , ohare_rain, by.x = "Group.1", by.y = "Date", incomparables = NA, all.x = TRUE)
+    
+    ggplot(ohare, aes(Group.1)) + 
+      stat_smooth(aes(y = x, colour = "cancelled"), method = lm, formula = y ~ poly(x, 10), se = FALSE) +
+      geom_point(aes(y = precipitation.in.*60, colour = "precipitation")) + 
+      scale_y_continuous(sec.axis = sec_axis(~./60, name = "Precipitation (in)")) +
+      labs(y = "Cancellations", title = "Cancellations and Rain at Ohare")
+  })
 }
 
 shinyApp(ui = ui, server = server)
