@@ -1852,8 +1852,8 @@ server <- function(input, output) {
     Month_delay = Month_delay[Month_delay$value>0]
     ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value, group =variable)) +
       aes(colour = variable) +
-      stat_summary(fun.y = "sum", geom = "line") +
-      coord_trans(y = "log10") +
+      stat_summary(fun.y = "sum", geom = "line",size=2) +
+      coord_trans(y = "log10") +scale_colour_manual(values = c("SECURITY_DELAY"="#cc5490", "WEATHER_DELAY"="#FF6D31","NAS_DELAY"="#73B66B","CARRIER_DELAY"="#FFCB18","LATE_AIRCRAFT_DELAY"="#29A2C6")) +
       scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
                           labels = trans_format('log10', math_format(10^.x))) +
       labs(x="2017 Months", y="Number of Delays")
