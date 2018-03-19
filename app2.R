@@ -194,7 +194,7 @@ ui <- dashboardPage(
       menuItem("Outliers",tabName = "item8"),
       menuItem("Monthly Heat Maps", tabName = "item9"),
       menuItem("Weekly Heat Maps",tabName = "item10"),
-      menuItem("Ohare Cancellations and Rain",tabName = "item11")
+      menuItem("O'Hare Cancellations and Rain",tabName = "item11")
     )
   ),
   dashboardBody(
