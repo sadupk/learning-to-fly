@@ -428,7 +428,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset4", 
-                       tabPanel("Rain Cancellations",box( title = "O'Hare Rain Cancellations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",width="1200px",height="900px")) )
+                       tabPanel("Rain Cancellations",box( title = "O'Hare Rain Cancellations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",height="900px")) )
                 )
               )
       )
@@ -443,7 +443,7 @@ server <- function(input, output) {
     HTML('<p><b>Authors:</b> Pedro, Shaibo, Namaswi, and Megan</p>
          <p><b>Required libaries</b>: shiny, ggplot2, shinydashboard</p>
          <a href="https://www.youtube.com/watch?v=Qn16DsftSjI"></a>
-         <p> <b>Data Source:</b>www.evl.uic.edu/aej/424/18p1data.zip</p> ')
+         <p> <b>Data Source:</b>TBA</p> ')
   })
   
   theme_set(theme_grey(base_size = 17)) 
