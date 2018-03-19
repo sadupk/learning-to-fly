@@ -2047,7 +2047,7 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
@@ -2075,7 +2075,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ theme(text = element_text(size=28),legend.text=element_text(size=25))+
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2107,7 +2107,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2137,9 +2137,10 @@ server <- function(input, output) {
       #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
+      theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2170,8 +2171,8 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
-      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
+     # scale_colour_gradient(low = "#FF6D31", high = "#9C2A00",limits=c(0,1250))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2203,7 +2204,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2236,7 +2237,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2268,7 +2269,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ theme(text = element_text(size=28),legend.text=element_text(size=25))+
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2300,7 +2301,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2332,7 +2333,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2364,7 +2365,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2396,7 +2397,7 @@ server <- function(input, output) {
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
