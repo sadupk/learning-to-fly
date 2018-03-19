@@ -172,6 +172,8 @@ choices_delay=c("NAS DELAY","WEATHER DELAY","CARRIER DELAY","SECURITY DELAY","LA
 choices_fl_num=unique(Month_df$FL_NUM)
 choices_fl_num=choices_fl_num[order(choices_fl_num)]
 
+quartzFonts(avenir = c("Avenir Book", "Avenir Black", "Avenir Book Oblique", 
+                       "Avenir Black Oblique"))
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Sp 18 Project 2"),
@@ -437,6 +439,12 @@ ui <- dashboardPage(
 
 
 server <- function(input, output) {
+  output$info <- renderUI({
+    HTML('<p><b>Authors:</b> Pedro, Shaibo, Namaswi, and Megan</p>
+         <p><b>Required libaries</b>: shiny, ggplot2, shinydashboard</p>
+         <a href="https://www.youtube.com/watch?v=Qn16DsftSjI"></a>
+         <p> <b>Data Source:</b>www.evl.uic.edu/aej/424/18p1data.zip</p> ')
+  })
   
   theme_set(theme_grey(base_size = 17)) 
   
@@ -1848,6 +1856,9 @@ server <- function(input, output) {
     ))
   ####################C Part Begins here
   
+  
+  
+  
   output$Lauderdale_airport<-renderPlot({
     Month_df$month = format(Month_df$FL_DATE, '%b')
     
@@ -2041,11 +2052,11 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
-      labs(y="",x="")+ theme(legend.position="none")+
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Jan_gg<-grid.arrange(Jan_gg1,Jan_gg2,ncol=2,top="JAN",widths=c(2,1))
     ##################################
     ################################Feb
@@ -2069,15 +2080,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="")+ theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Feb_gg<-grid.arrange(Feb_gg1,Feb_gg2,ncol=2,top="Feb",widths=c(2,1))
     ###################################
     ################################ MAR
@@ -2101,15 +2112,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Mar_gg<-grid.arrange(Mar_gg1,Mar_gg2,ncol=2,top="MAR",widths=c(2,1))
     ########################################
     #####################################Apr
@@ -2133,15 +2144,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Apr_gg<-grid.arrange(Apr_gg1,Apr_gg2,ncol=2,top="Apr",widths=c(2,1))
     #######################################
     ####################################May
@@ -2164,16 +2175,16 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
-      #scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     May_gg<-grid.arrange(May_gg1,May_gg2,ncol=2,top="May",widths=c(2,1))
     #######################################
     #####################################June
@@ -2197,15 +2208,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     June_gg<-grid.arrange(June_gg1,June_gg2,ncol=2,top="June",widths=c(2,1))
     ################################################
     #########################################July
@@ -2230,15 +2241,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="")+ theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Jul_gg<-grid.arrange(Jul_gg1,Jul_gg2,ncol=2,top="July",widths=c(2,1))
     #################################################
     #############################################Aug
@@ -2262,15 +2273,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Aug_gg<-grid.arrange(Aug_gg1,Aug_gg2,ncol=2,top="Aug",widths=c(2,1))
     ########################################
     #############################################Sept
@@ -2294,15 +2305,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Sep_gg<-grid.arrange(Sep_gg1,Sep_gg2,ncol=2,top="Sep",widths=c(2,1))
     #######################################
     #####################################Oct
@@ -2326,15 +2337,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Oct_gg<-grid.arrange(Oct_gg1,Oct_gg2,ncol=2,top="Oct",widths=c(2,1))
     ####################################
     ################################Nov
@@ -2358,15 +2369,15 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Nov_gg<-grid.arrange(Nov_gg1,Nov_gg2,ncol=2,top="Nov",widths=c(2,1))
     ##################################
     ######################################Dec
@@ -2390,15 +2401,15 @@ server <- function(input, output) {
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000", limits=c(0, 1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") + theme(legend.position="none")+
+      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+labs(colour = "")
+            axis.ticks.y=element_blank())
     Dec_gg<-grid.arrange(Dec_gg1,Dec_gg2,ncol=2,top="Dec",widths=c(2,1))
     ########################################
     grid.arrange(Jan_gg,Feb_gg,Mar_gg,Apr_gg,May_gg,June_gg,Jul_gg,Aug_gg,Sep_gg,Oct_gg,Nov_gg,Dec_gg,ncol=6)
@@ -2408,43 +2419,43 @@ server <- function(input, output) {
     Month_df$month = format(Month_df$FL_DATE, '%b')
     day = Month_df[,c("month", "SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY", "CARRIER_DELAY", "LATE_AIRCRAFT_DELAY","DEP_TIME","ARR_TIME")]
     day=na.omit(day)
-    day$DEP_TIME<-apply(day[,c('DEP_TIME')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
+    day$value<-apply(day[,c('DEP_TIME')],MARGIN = 1 ,FUN=function(x2) {ifelse(x2==2400, 2400, getValue(x2))})
     
     if(input$delay=="SECURITY DELAY"){
       day=day[SECURITY_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = SECURITY_DELAY,size=SECURITY_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#cc5490", high = "#4c1f36")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
+        scale_colour_gradient(low = "#EF597B", high = "red")+
+        labs(x="2017 Months", y="Hour")+ scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Take-Offs","Landings"))}
     else if(input$delay=="WEATHER DELAY"){
       day=day[WEATHER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = WEATHER_DELAY,size=WEATHER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
+        labs(x="2017 Months", y="Hour")+ scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Take Offs","Landings"))}
     else if(input$delay=="NAS DELAY"){
       day=day[NAS_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = NAS_DELAY,size=NAS_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#73B66B", high = "#006400")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
+        labs(x="2017 Months", y="Hour")+ scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Take Offs","Landings"))}
     else if(input$delay=="CARRIER DELAY"){
       day=day[CARRIER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = CARRIER_DELAY,size=CARRIER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#FFCB18", high = "#666600")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
+        labs(x="2017 Months", y="Hour")+ scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Take Offs","Landings"))}
     else if(input$delay=="LATE AIRCRAFT DELAY"){
       day=day[LATE_AIRCRAFT_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = LATE_AIRCRAFT_DELAY,size=LATE_AIRCRAFT_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
         scale_colour_gradient(low = "#29A2C6", high = "#000066")+
-        labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
+        labs(x="2017 Months", y="Hour")+ scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Take Offs","Landings"))}
     
     
     
@@ -2474,11 +2485,11 @@ server <- function(input, output) {
       geom_point(aes(colour=total_delay,size=total_delay+10), shape=1,stroke=2)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
-      scale_colour_gradient(low = "#FF5733", high = "#400000",limits=c(0,1250))+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       labs(y="",x="") + 
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)") 
+            axis.ticks.y=element_blank())+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays") 
     grid.arrange(gg1,gg2,ncol=2,widths=c(2,1))
     
   })
@@ -2504,7 +2515,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      # theme(axis.text.x=element_text(angle = 90, hjust = 0))+
+     # theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       labs(title="Jan")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
@@ -2614,7 +2625,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      # theme(axis.text.x=element_text(angle = 90, hjust = 0))+
+     # theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Nov")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
@@ -2715,7 +2726,7 @@ server <- function(input, output) {
       stat_smooth(aes(y = x, colour = "cancelled"), method = lm, formula = y ~ poly(x, 10), se = FALSE) +
       geom_point(aes(y = precipitation.in.*60, colour = "precipitation")) + 
       scale_y_continuous(sec.axis = sec_axis(~./60, name = "Precipitation (in)")) +
-      labs(y = "Cancellations", title = "Cancellations and Rain at Ohare")
+      labs(y = "Cancellations", title = "Cancellations and Rain at O'Hare")
   })
 }
 
