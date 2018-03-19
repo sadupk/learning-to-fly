@@ -674,8 +674,8 @@ server <- function(input, output) {
     return(departures)
   }
   
-  midwaycolors=c("red","darkred")
-  oharecolors=c("blue","dodgerblue")
+  midwaycolors=c("coral","coral4")
+  oharecolors=c("cyan","cyan4")
   lowcol="White";
   highcol="Red";
   border="Black";
