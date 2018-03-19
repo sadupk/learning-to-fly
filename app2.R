@@ -2401,7 +2401,7 @@ server <- function(input, output) {
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = SECURITY_DELAY,size=SECURITY_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#EF597B", high = "red")+
+        scale_colour_gradient(low = "#cc5490", high = "#4c1f36")+
         labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays")}
     else if(input$delay=="WEATHER DELAY"){
       day=day[WEATHER_DELAY>0]
