@@ -1962,7 +1962,7 @@ server <- function(input, output) {
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      3theme(axis.text.x=element_text(angle = 90, hjust = 0))+
+      #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Oct")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
