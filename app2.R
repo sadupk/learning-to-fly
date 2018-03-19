@@ -674,8 +674,8 @@ server <- function(input, output) {
     return(departures)
   }
   
-  midwaycolors=c("coral2","coral4")
-  oharecolors=c("cyan2","cyan4")
+  midwaycolors=c("coral","coral4")
+  oharecolors=c("cyan","cyan4")
   lowcol="White";
   highcol="Red";
   border="Black";
@@ -2485,7 +2485,7 @@ server <- function(input, output) {
       labs(y="",x="") + theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
-            axis.ticks.y=element_blank())+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays") 
+            axis.ticks.y=element_blank())+scale_size_continuous(guide=FALSE)+labs(colour = "Delay(Min)") 
     grid.arrange(gg1,gg2,ncol=2,widths=c(2,1))
     
   })
