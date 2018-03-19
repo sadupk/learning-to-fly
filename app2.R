@@ -289,7 +289,7 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset3c", 
                        selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
-                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("WeeklyFlightsPlot",width="750px",height="750px")) ),
+                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("WeeklyFlightsPlot",height="750px")) ),
                        tabPanel("Weekly Flights Table",box( title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("WeeklyFlightsTable",height="750px")) )
                        
                 )
