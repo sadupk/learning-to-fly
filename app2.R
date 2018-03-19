@@ -2672,7 +2672,7 @@ server <- function(input, output) {
     }
     qplot(dist_values, geom="histogram", binwidth=binWidth(), fill=I("grey"), 
           col=I("black")) + 
-      theme_bw() +
+      
       ylab("Number of Flights") +
       xlab(paste("Distance", y_label))
   })
