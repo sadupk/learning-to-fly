@@ -1885,7 +1885,7 @@ server <- function(input, output) {
     Jan_gg<-ggplot(Jan__melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       labs(title="Jan")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -1898,7 +1898,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Feb")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1909,7 +1909,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Mar")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1920,7 +1920,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Apr")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1931,7 +1931,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="May")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1942,7 +1942,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Jun")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1953,7 +1953,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Jul")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1964,7 +1964,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Aug")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1975,7 +1975,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Sept")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1986,7 +1986,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Oct")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -1997,7 +1997,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Nov")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("Departures", "ARR_TIME"),labels = c("Departures","Arrivals"))
     ##################
@@ -2008,7 +2008,7 @@ server <- function(input, output) {
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       labs(title="Dec")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")#+ scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Departures","Arrivals"))
     
@@ -2040,7 +2040,7 @@ server <- function(input, output) {
     Jan_monday_delay=monday_delay[monday_delay$month=='Jan']
     Jan_gg1<-ggplot(Jan_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
       labs(x="", y="Hour") + theme(legend.position="none")+ scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Departures","Arrivals"))
@@ -2051,7 +2051,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2065,7 +2065,7 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       #ylim(0,25)+
-      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
+      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2078,12 +2078,12 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2094,7 +2094,7 @@ server <- function(input, output) {
     Mar_monday_delay=monday_delay[monday_delay$month=='Mar']
     Mar_gg1<-ggplot(Mar_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
@@ -2108,14 +2108,14 @@ server <- function(input, output) {
       #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
       scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2127,7 +2127,7 @@ server <- function(input, output) {
     Apr_gg1<-ggplot(Apr_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
       #stat_bin2d(bins = 25, colour = "white")+
@@ -2140,14 +2140,14 @@ server <- function(input, output) {
       #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
+      scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
       scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2159,7 +2159,7 @@ server <- function(input, output) {
     May_gg1<-ggplot(May_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
       #stat_bin2d(bins = 25, colour = "white")+
@@ -2179,7 +2179,7 @@ server <- function(input, output) {
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2191,7 +2191,7 @@ server <- function(input, output) {
     June_gg1<-ggplot(June_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
       #stat_bin2d(bins = 25, colour = "white")+
@@ -2211,7 +2211,7 @@ server <- function(input, output) {
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2226,7 +2226,7 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+
       # scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
+      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2244,7 +2244,7 @@ server <- function(input, output) {
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2258,7 +2258,7 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
-      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
+      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2271,12 +2271,12 @@ server <- function(input, output) {
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
-      scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
+      scale_colour_gradient(low = "#FF5733", high = "#400000")+ theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2287,7 +2287,7 @@ server <- function(input, output) {
     Sep_monday_delay=monday_delay[monday_delay$month=='Sep']
     Sep_gg1<-ggplot(Sep_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       #ylim(0,25)+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
@@ -2308,7 +2308,7 @@ server <- function(input, output) {
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2322,7 +2322,7 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       #ylim(0,25)+
-      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
+      scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #stat_bin2d(bins = 25, colour = "white")+
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
@@ -2331,7 +2331,7 @@ server <- function(input, output) {
     Oct_gg2<-ggplot(Oct_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
       #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
@@ -2340,7 +2340,7 @@ server <- function(input, output) {
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2352,7 +2352,7 @@ server <- function(input, output) {
     Nov_gg1<-ggplot(Nov_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #ylim(0,25)+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
       #stat_bin2d(bins = 25, colour = "white")+
@@ -2363,7 +2363,7 @@ server <- function(input, output) {
     Nov_gg2<-ggplot(Nov_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
       #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       #ylim(0,25)+
@@ -2372,7 +2372,7 @@ server <- function(input, output) {
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2383,7 +2383,7 @@ server <- function(input, output) {
     Dec_monday_delay=monday_delay[monday_delay$month=='Dec']
     Dec_gg1<-ggplot(Dec_monday_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       expand_limits( y=c(0, 24))+
       #ylim(0,25)+
       scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
@@ -2395,7 +2395,7 @@ server <- function(input, output) {
     Dec_gg2<-ggplot(Dec_monday_delay, aes(x = "Total Delay", y = DEP_TIME/100)) +
       #geom_point(aes(size=total_delay),shape=1,stroke=1.5)+
       geom_point(aes(size=total_delay,colour=total_delay),shape=1,stroke=1.5)+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       #ylim(0,25)+
@@ -2404,7 +2404,7 @@ server <- function(input, output) {
       #stat_summary(fun.y = "sum", geom = "line") +
       #coord_trans(y = "log10") +
       #scale_colour_gradient(low = "#4d4dff", high = "#000066")+
-      labs(y="",x="") +scale_size_continuous(guide=FALSE)+
+      labs(y="",x="") +theme(legend.position="none")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())
@@ -2424,35 +2424,35 @@ server <- function(input, output) {
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = SECURITY_DELAY,size=SECURITY_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#cc5490", high = "#4c1f36")+
+        scale_colour_gradient(low = "#cc5490", high = "#4c1f36")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
         labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="WEATHER DELAY"){
       day=day[WEATHER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = WEATHER_DELAY,size=WEATHER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+
+        scale_colour_gradient(low = "#FF6D31", high = "#9C2A00")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
         labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="NAS DELAY"){
       day=day[NAS_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = NAS_DELAY,size=NAS_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#73B66B", high = "#006400")+
+        scale_colour_gradient(low = "#73B66B", high = "#006400")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
         labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="CARRIER DELAY"){
       day=day[CARRIER_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = CARRIER_DELAY,size=CARRIER_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#FFCB18", high = "#666600")+
+        scale_colour_gradient(low = "#FFCB18", high = "#666600")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
         labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     else if(input$delay=="LATE AIRCRAFT DELAY"){
       day=day[LATE_AIRCRAFT_DELAY>0]
       ggplot(day, aes(x = factor(month, levels = month.abb), y = DEP_TIME/100)) +
         geom_point(aes(colour = LATE_AIRCRAFT_DELAY,size=LATE_AIRCRAFT_DELAY/10+20),shape=1,stroke=3)+
         scale_y_continuous(breaks = seq(0, 24, by = 1))+
-        scale_colour_gradient(low = "#29A2C6", high = "#000066")+
+        scale_colour_gradient(low = "#29A2C6", high = "#000066")+theme(text = element_text(size=28),legend.text=element_text(size=25))+
         labs(x="2017 Months", y="Hour")+scale_size_continuous(guide=FALSE)+labs(colour = "Delays Time(Min)")}
     
     
@@ -2475,7 +2475,7 @@ server <- function(input, output) {
     gg1<-ggplot(day_melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable), size = 3, shape=1,stroke=1.5)+scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) +
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
-      expand_limits( y=c(0, 24))+
+      expand_limits( y=c(0, 24))+ theme(text = element_text(size=28),legend.text=element_text(size=25))+
       
       labs(x="", y="Hour") + theme(legend.position="none")+ 
       scale_x_discrete(limit = c("DEP_TIME", "ARR_TIME"),labels = c("Take Offs","Landings"))+scale_colour_manual(values = c("ARR_TIME"="#472151", "DEP_TIME"="#ffa345")) 
@@ -2484,7 +2484,7 @@ server <- function(input, output) {
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       expand_limits( y=c(0, 24))+
       scale_colour_gradient(low = "#FF5733", high = "#400000")+ 
-      labs(y="",x="") + 
+      labs(y="",x="") + theme(text = element_text(size=28),legend.text=element_text(size=25))+
       theme(axis.title.y=element_blank(),
             axis.text.y=element_blank(),
             axis.ticks.y=element_blank())+scale_size_continuous(guide=FALSE)+labs(colour = "No of Delays") 
@@ -2512,7 +2512,7 @@ server <- function(input, output) {
     Jan_gg<-ggplot(Jan__melted, aes(x = variable, y = value/100)) +
       geom_point(aes(colour = variable))+
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
      # theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       labs(title="Jan")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2523,7 +2523,7 @@ server <- function(input, output) {
     Feb_gg<-ggplot(Feb__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Feb")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2534,7 +2534,7 @@ server <- function(input, output) {
     Mar_gg<-ggplot(Mar__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Mar")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2545,7 +2545,7 @@ server <- function(input, output) {
     Apr_gg<-ggplot(Apr__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Apr")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2556,7 +2556,7 @@ server <- function(input, output) {
     May_gg<-ggplot(May__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="May")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2567,7 +2567,7 @@ server <- function(input, output) {
     Jun_gg<-ggplot(Jun__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Jun")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2589,7 +2589,7 @@ server <- function(input, output) {
     Aug_gg<-ggplot(Aug__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Aug")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2600,7 +2600,7 @@ server <- function(input, output) {
     Sep_gg<-ggplot(Sep__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Sept")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2611,7 +2611,7 @@ server <- function(input, output) {
     Oct_gg<-ggplot(Oct__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Oct")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2622,7 +2622,7 @@ server <- function(input, output) {
     Nov_gg<-ggplot(Nov__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
      # theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Nov")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
@@ -2633,7 +2633,7 @@ server <- function(input, output) {
     Dec_gg<-ggplot(Dec__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
-      scale_y_continuous(breaks = seq(0, 24, by = 1))+
+      scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+
       labs(title="Dec")+scale_colour_manual(values = c("Arrivals"="#472151", "Departures"="#ffa345")) +
