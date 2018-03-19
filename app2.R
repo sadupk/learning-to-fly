@@ -179,7 +179,8 @@ ui <- dashboardPage(
     sidebarMenu(
       menuItem("Information", tabName = "item0"),
       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
-      menuItem("Inputs", tabName = "item1"),
+      #selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
+      #selectInput("timeframe", "timeframe", c("1-24","AM-PM")))menuItem("Inputs", tabName = "item1"),
       menuItem("Overall Flights", tabName = "item2"),
       menuItem("Arrivals/Departures",tabName = "item3"),
       menuSubItem("Arrivals",tabName = "item3a"),
@@ -217,7 +218,7 @@ ui <- dashboardPage(
                        id = "tabset1", 
                        #Ask the user to give inputs about the Airport, Month, and timeframe
                        tabPanel("Inputs", 
-                                selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
+                                #selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                                 selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
                                 selectInput("timeframe", "timeframe", c("1-24","AM-PM")))
                 )
@@ -229,7 +230,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset2", 
-                       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
+                       #selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                        tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
                        tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
                        #Part 2-b 
@@ -437,7 +438,7 @@ server <- function(input, output) {
   output$info <- renderUI({
     HTML('<p><b>Authors:</b> Pedro, Shaibo, Namaswi, and Megan</p>
          <p><b>Required libaries</b>: shiny, ggplot2, shinydashboard</p>
-         <a href="https://www.youtube.com/watch?v=Qn16DsftSjI"></a>
+         <a href=,"https://www.youtube.com/watch?v=Qn16DsftSjI",">link</a>
          <p> <b>Data Source:</b>TBA</p> ')
   })
   
@@ -675,7 +676,7 @@ server <- function(input, output) {
   }
   
   midwaycolors=c("coral","coral4")
-  oharecolors=c("cyan","cyan4")
+  oharecolors=c("cyan4","cyan")
   lowcol="White";
   highcol="Red";
   border="Black";
