@@ -172,8 +172,6 @@ choices_delay=c("NAS DELAY","WEATHER DELAY","CARRIER DELAY","SECURITY DELAY","LA
 choices_fl_num=unique(Month_df$FL_NUM)
 choices_fl_num=choices_fl_num[order(choices_fl_num)]
 
-quartzFonts(avenir = c("Avenir Book", "Avenir Black", "Avenir Book Oblique", 
-                       "Avenir Black Oblique"))
 
 ui <- dashboardPage(
   dashboardHeader(title = "CS 424 Sp 18 Project 2"),
@@ -2672,7 +2670,8 @@ server <- function(input, output) {
       dist_values = dist_values[(dist_values >= dist_min) & (dist_values <= dist_max)]
       y_label = "(kilometer)"
     }
-    qplot(dist_values, geom="histogram", binwidth=binWidth()) + 
+    qplot(dist_values, geom="histogram", binwidth=binWidth(), fill=I("grey"), 
+          col=I("black")) + 
       theme_bw() +
       ylab("Number of Flights") +
       xlab(paste("Distance", y_label))
@@ -2692,7 +2691,8 @@ server <- function(input, output) {
     time_max = sliderValues2()[2]
     
     time_values = Month_df[(Month_df$AIR_TIME >= time_min) & (Month_df$AIR_TIME <= time_max)]$AIR_TIME
-    qplot(time_values, geom="histogram", binwidth=binWidth2()) +
+    qplot(time_values, geom="histogram", binwidth=binWidth2(), fill=I("grey"), 
+          col=I("black")) +
       ylab("Number of Flights") +
       xlab("Flight Length (min)")
   })
