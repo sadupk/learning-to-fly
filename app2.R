@@ -337,7 +337,7 @@ ui <- dashboardPage(
                        id = "tabset5", 
                        tabPanel("State Info",
                                 selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
-                                box(title = "Flight Landing and Take off info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
+                                box(title = "Flight Landing and Take-0ff Info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
                 )
               )
       ),
@@ -418,7 +418,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3", 
-                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyHeatMap",width="1200px",height="900px")) )
+                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyHeatMap",height="900px")) )
                 )
               )
       ),
