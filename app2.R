@@ -1086,10 +1086,10 @@ server <- function(input, output) {
           
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") + 
             scale_x_discrete( name ="hour",breaks=c(0:23),limits=times)+ ###lastchange
-            geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
-            geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
-            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
+            geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1),size=2)+
+            geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1),size=2)+
+            geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1),size=2)+
+            geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1),size=2)+
             theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
             scale_color_manual("legend", values = c("Departures" = colors[1], "Arrivals" = colors[2]))
         }
@@ -1809,7 +1809,7 @@ server <- function(input, output) {
       melt(., id = "times")
     
     ggplot(travel_times, aes(x=times, y = value, colour = variable)) +
-      geom_line() +
+      geom_line(size=2) +
       scale_x_continuous(limits=c(0,24),
                          breaks=0:12*2,
                          labels=c(paste(0:5*2,"am"),
@@ -1825,7 +1825,7 @@ server <- function(input, output) {
       data.frame()
     ggplot(Month_freq, aes(x = factor(month, levels = month.abb), y = Freq, group = CARRIER)) +
       aes(colour = CARRIER) +
-      stat_summary(fun.y = "sum", geom = "line") +
+      stat_summary(fun.y = "sum", geom = "line",size=2) +
       coord_trans(y = "log10") +
       scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
                           labels = trans_format('log10', math_format(10^.x))) +
@@ -1853,7 +1853,9 @@ server <- function(input, output) {
     ggplot(Month_delay, aes(x = factor(month, levels = month.abb), y = value, group =variable)) +
       aes(colour = variable) +
       stat_summary(fun.y = "sum", geom = "line",size=2) +
-      coord_trans(y = "log10") +scale_colour_manual(values = c("SECURITY_DELAY"="#cc5490", "WEATHER_DELAY"="#FF6D31","NAS_DELAY"="#73B66B","CARRIER_DELAY"="#FFCB18","LATE_AIRCRAFT_DELAY"="#29A2C6")) +
+      coord_trans(y = "log10") +scale_colour_manual(name="Delays",values = c("SECURITY_DELAY"="#cc5490", "WEATHER_DELAY"="#FF6D31","NAS_DELAY"="#73B66B","CARRIER_DELAY"="#FFCB18","LATE_AIRCRAFT_DELAY"="#29A2C6"), 
+                                                    breaks=c("SECURITY_DELAY", "WEATHER_DELAY", "NAS_DELAY","CARRIER_DELAY","LATE_AIRCRAFT_DELAY"),
+                                                    labels=c("SECURITY DELAY", "WEATHER DELAY", "NAS DELAY","CARRIER DELAY","LATE AIRCRAFT DELAY")) +
       scale_y_continuous( breaks = trans_breaks('log10', function(x) 10^x),
                           labels = trans_format('log10', math_format(10^.x))) +
       labs(x="2017 Months", y="Number of Delays")
