@@ -190,7 +190,7 @@ ui <- dashboardPage(
       menuItem("Top 15 Destinations", tabName = "item4"),
       menuItem("Landing/TakeOffs",tabName = "item5"),
       menuItem("Special Dates",tabName = "item6"),
-      menuItem("Flights by distance",tabName = "item7"),
+      menuItem("Filter Flights",tabName = "item7"),
       menuItem("Outliers",tabName = "item8"),
       menuItem("Monthly Heat Maps", tabName = "item9"),
       menuItem("Weekly Heat Maps",tabName = "item10"),
@@ -358,20 +358,22 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset7", 
-                       tabPanel("Flights by distance",
+                       tabPanel("Number of Flights by Distance",
                                 sliderInput("range", "Flight Distance:", min = 0, max = 7000,value = c(0,7000)),
                                 selectInput("units", "Units", c("miles","kilometers")),
+                                
                                 numericInput("binwidth", "Bin Width:", 100, min = 50, max = 500),
                                 tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", 
                                                                               solidHeader = TRUE, status = "primary", width = 10, 
-                                                                              plotOutput("distance_range_plot",height="750px"))),
+                                                                              plotOutput("distance_range_plot",height="750px")))),
                                 tabPanel("Number of Flights by Air Time",
                                          sliderInput("time_range", "Flight Time (minutes):", min = 0, max = 600, value = c(0,600)),
+                                         
                                          numericInput("binwidth2", "Bin Width:", 10, min = 4, max = 200),
                                          box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, 
                                               plotOutput("time_range_plot",height="750px")))
                                 
-                       )
+                       
                 )
               )
       ),
@@ -439,7 +441,6 @@ server <- function(input, output) {
     HTML('<p><b>Authors:</b> Pedro, Shaibo, Namaswi, and Megan</p>
          <p><b>Required libaries</b>: shiny, ggplot2, shinydashboard</p>
          <a href=,"https://www.youtube.com/watch?v=Qn16DsftSjI",">link</a>
-         <p> <b>Data Source:</b>https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time</p> ')
   })
   
   theme_set(theme_grey(base_size = 37)) 
