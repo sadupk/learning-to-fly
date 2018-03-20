@@ -178,23 +178,27 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Information", tabName = "item0"),
+      menuItem("Chicago Flights"),
       selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
-      #selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
-      #selectInput("timeframe", "timeframe", c("1-24","AM-PM")))menuItem("Inputs", tabName = "item1"),
-      menuItem("Overall Flights", tabName = "item2"),
-      menuItem("Arrivals/Departures",tabName = "item3"),
+      selectInput("month", "Month", c("JAN","FEB","MAR","APR","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC")),
+      selectInput("timeframe", "Timeframe", c("1-24","AM-PM")),#menuItem("Inputs", tabName = "item1"),
+      menuSubItem("Overall Flights", tabName = "item2"),
       menuSubItem("Arrivals",tabName = "item3a"),
       menuSubItem("Departures",tabName = "item3b"),
       menuSubItem("Weekly",tabName = "item3c"),
       menuSubItem("Delays",tabName = "item3d"),
-      menuItem("Top 15 Destinations", tabName = "item4"),
-      menuItem("Landing/TakeOffs",tabName = "item5"),
-      menuItem("Special Dates",tabName = "item6"),
-      menuItem("Filter Flights",tabName = "item7"),
-      menuItem("Outliers",tabName = "item8"),
-      menuItem("Monthly Heat Maps", tabName = "item9"),
-      menuItem("Weekly Heat Maps",tabName = "item10"),
-      menuItem("O'Hare Cancellations and Rain",tabName = "item11")
+      menuSubItem("O'Hare Cancellations and Rain",tabName = "item11"),
+      menuItem("USA Domestic Flights"),
+      menuSubItem("Arrivals/Departures",tabName = "item3"),
+      menuSubItem("Top 15 Destinations", tabName = "item4"),
+      menuSubItem("Landing/TakeOffs",tabName = "item5"),
+      menuSubItem("Special Dates",tabName = "item6"),
+      menuSubItem("Delays",tabName = "delayss"),
+      menuSubItem("Filter Flights",tabName = "item7"),
+      menuSubItem("Outliers",tabName = "item8"),
+      menuSubItem("Monthly Heat Maps", tabName = "item9"),
+      menuSubItem("Weekly Heat Maps",tabName = "item10")
+      
     )
   ),
   dashboardBody(
@@ -303,12 +307,8 @@ ui <- dashboardPage(
                        tabPanel("Arrival Delays",box( title = "Arrival Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",height="800px")) ),
                        tabPanel("Arrival Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",height="750px")) ),
                        tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",height="800px")) ),
-                       tabPanel("Depart Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",height="750px")) ),
-                       tabPanel("Delay Causes",
-                                
-                                box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",height="750px")) ),
-                       tabPanel("Delay Information",selectInput("delay", "Select Delay", choices_delay),box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
-                )
+                       tabPanel("Depart Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",height="750px")) )
+                       )
               )
       ),
       tabItem(tabName = "item4",
@@ -427,6 +427,19 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset4", 
                        tabPanel("Rain Cancellations",box( title = "O'Hare Rain Cancellations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",height="900px")) )
+                )
+              )
+      ),
+      tabItem(tabName = "delayss",
+              fluidRow(
+                tabBox(title = "",
+                       width = "100%",
+                       height = "2000px",
+                      id="delaysss",
+                       tabPanel("Delay Causes",
+                                
+                                box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",height="750px")) ),
+                       tabPanel("Delay Information",selectInput("delay", "Select Delay", choices_delay),box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 12, plotOutput("nas_delay_Plot",height="750px")) )
                 )
               )
       )
