@@ -388,7 +388,7 @@ ui <- dashboardPage(
                                 box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("Lauderdale_airport",height="1000px")) ),
                        tabPanel("A day of the week",
                                 selectInput("Select_Day_of_the_Week", "Select Day of the Week", choices_day),
-                                box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
+                                box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",footer="In the total delay plot the range is from 0-1250 minutes delay. The darker the shade the more is the delay. The size of the plot also increase with the increase in the delay",title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day_of_week",height="1000px")) ),
                        tabPanel("Flight Information",selectInput("Flight_No", "Select Flight No", choices_fl_num,selected="40"),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("airline_200",height="1000px")) ),
                        
                        tabPanel("One day of the year",dateInput("date", "Date:", min="2017-01-01",max="2017-12-31", format = "yyyy-mm-dd",value="2017-01-01"),box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("one_day",height="750px")) )
