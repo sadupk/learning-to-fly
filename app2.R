@@ -1029,6 +1029,7 @@ server <- function(input, output) {
         
         if(input$timeframe=="1-24")
         {
+          timeframe=c(0:23)
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") + 
             scale_x_discrete( name ="hour",breaks=(0:23),limits=timeframe)+
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals_Ohare",group=1))+
