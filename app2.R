@@ -232,10 +232,10 @@ ui <- dashboardPage(
                        id = "tabset2", 
                        #selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
                        tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
-                       tabPanel("AirlineFlightTable", box(title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
+                       tabPanel("AirlineFlightTable", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
                        #Part 2-b 
                        tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("HourlyFlights",height="800px"))  ),
-                       tabPanel("HourlyTable", box(title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("HourlyTable"))  )
+                       tabPanel("HourlyTable", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("HourlyTable"))  )
                 )
               )
       ),
@@ -259,7 +259,7 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset3a", 
                        tabPanel("Arrival Flights",box( title = "Arrival Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("ArrivalFlightsPlot",height="800px")) ),
-                       tabPanel("Arrival Flights Table", box(title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalFlightsTable"))  )
+                       tabPanel("Arrival Flights Table", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Arrival Flights Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalFlightsTable"))  )
                        
                 )
               )
@@ -273,7 +273,7 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset3b", 
                        tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("DepartFlightsPlot", height="800px")) ),
-                       tabPanel("Depart Flights Table", box(title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("DepartFlightsTable"))  )
+                       tabPanel("Depart Flights Table", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("DepartFlightsTable"))  )
                        
                 )
               )
@@ -286,7 +286,7 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset3c", 
                        tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("WeeklyFlightsPlot",height="750px")) ),
-                       tabPanel("Weekly Flights Table",box( title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("WeeklyFlightsTable",height="750px")) )
+                       tabPanel("Weekly Flights Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Weekly Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("WeeklyFlightsTable",height="750px")) )
                        
                 )
               )
@@ -301,9 +301,9 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset3d", 
                        tabPanel("Arrival Delays",box( title = "Arrival Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",height="800px")) ),
-                       tabPanel("Arrival Delay Table",box( title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",height="750px")) ),
+                       tabPanel("Arrival Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",height="750px")) ),
                        tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",height="800px")) ),
-                       tabPanel("Depart Delay Table",box( title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",height="750px")) ),
+                       tabPanel("Depart Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",height="750px")) ),
                        tabPanel("Delay Causes",
                                 
                                 box( title = "Delay Causes", solidHeader = TRUE, status = "primary", width = 10, plotOutput("delay_Plot",height="750px")) ),
