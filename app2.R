@@ -441,6 +441,7 @@ server <- function(input, output) {
     HTML('<p><b>Authors:</b> Pedro, Shaibo, Namaswi, and Megan</p>
          <p><b>Required libaries</b>: shiny, ggplot2, shinydashboard</p>
          <a href=,"https://www.youtube.com/watch?v=Qn16DsftSjI",">link</a>
+         <p> <b>Data Source:</b>TBA</p> ')
   })
   
   theme_set(theme_grey(base_size = 37)) 
@@ -1809,9 +1810,11 @@ server <- function(input, output) {
                               departures = getdeps(Month_df)) %>%
       melt(., id = "times")
     
-    ggplot(travel_times, aes(x=times, y = value, colour = variable)) +
-      geom_line(size=2) +
-      scale_x_continuous(limits=c(0,24),
+    ggplot(travel_times, aes(x=times, y = value, colour = variable)) +scale_colour_manual(values=c("#472151", "#ffa345"), 
+                                                                                        name="",
+                                                                                        breaks=c("arrivals", "departures"))+
+                                                                                        
+      geom_line(size=2) +scale_x_continuous(limits=c(0,24),
                          breaks=0:12*2,
                          labels=c(paste(0:5*2,"am"),
                                   "12 pm",
