@@ -1910,7 +1910,7 @@ server <- function(input, output) {
     #Jan
     Jan__melted=binded_data[binded_data$month=='Jan']
     Jan_gg<-ggplot(Jan__melted, aes(x = variable, y = value/100)) +
-      geom_point(aes(colour = variable))+
+      geom_point(aes(colour = variable),size = 3)+
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
       scale_y_continuous(breaks = seq(0, 24, by = 1))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
@@ -1922,7 +1922,7 @@ server <- function(input, output) {
     Feb__melted=binded_data[binded_data$month=='Feb']
     Feb_gg<-ggplot(Feb__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -1933,7 +1933,7 @@ server <- function(input, output) {
     Mar__melted=binded_data[binded_data$month=='Mar']
     Mar_gg<-ggplot(Mar__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -1944,7 +1944,7 @@ server <- function(input, output) {
     Apr__melted=binded_data[binded_data$month=='Apr']
     Apr_gg<-ggplot(Apr__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -1955,7 +1955,7 @@ server <- function(input, output) {
     May__melted=binded_data[binded_data$month=='May']
     May_gg<-ggplot(May__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -1966,7 +1966,7 @@ server <- function(input, output) {
     Jun__melted=binded_data[binded_data$month=='Jun']
     Jun_gg<-ggplot(Jun__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -1977,7 +1977,7 @@ server <- function(input, output) {
     Jul__melted=binded_data[binded_data$month=='Jul']
     Jul_gg<-ggplot(Jul__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -1988,7 +1988,7 @@ server <- function(input, output) {
     Aug__melted=binded_data[binded_data$month=='Aug']
     Aug_gg<-ggplot(Aug__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -1999,7 +1999,7 @@ server <- function(input, output) {
     Sep__melted=binded_data[binded_data$month=='Sep']
     Sep_gg<-ggplot(Sep__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -2010,7 +2010,7 @@ server <- function(input, output) {
     Oct__melted=binded_data[binded_data$month=='Oct']
     Oct_gg<-ggplot(Oct__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -2021,7 +2021,7 @@ server <- function(input, output) {
     Nov__melted=binded_data[binded_data$month=='Nov']
     Nov_gg<-ggplot(Nov__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
@@ -2032,7 +2032,7 @@ server <- function(input, output) {
     Dec__melted=binded_data[binded_data$month=='Dec']
     Dec_gg<-ggplot(Dec__melted, aes(x = variable, y = value/100)) +
       scale_colour_manual(values = c("Arrivals"="red", "Departures"="blue")) +
-      geom_point(aes(colour = variable))+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      geom_point(aes(colour = variable),size = 3)+theme(axis.text.x = element_text(angle = 45, hjust = 1))+
       scale_y_continuous(breaks = seq(0, 24, by = 1))+
       #theme(axis.text.x=element_text(angle = 90, hjust = 0))+
       expand_limits( y=c(0, 24))+theme(text = element_text(size=28),legend.text=element_text(size=25))+
