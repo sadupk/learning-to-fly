@@ -332,7 +332,7 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset5", 
                        tabPanel("State Info",
-                                selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
+                                #selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
                                 box(title = "Flight Landing and Take-0ff Info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
                 )
               )
