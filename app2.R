@@ -333,7 +333,7 @@ ui <- dashboardPage(
                        id = "tabset5", 
                        tabPanel("State Info",
                                 #selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
-                                box(title = "Flight Landing and Take-0ff Info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
+                                box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Flight Landing and Take-0ff Info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
                 )
               )
       ),
@@ -345,7 +345,7 @@ ui <- dashboardPage(
                        id = "tabset6", 
                        tabPanel("Special Dates",
                                 selectInput("dateType", "Which dates would you like to see?", names(specialDays)),
-                                box( title = "", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",height="75px"))
+                                box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",height="75px"))
                        )
                 )
               )
