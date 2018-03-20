@@ -1054,7 +1054,10 @@ server <- function(input, output) {
             geom_line(size=2,aes(y = TravelTimes2[[2]], colour = "Arrivals_Midway",group=1))+
             geom_line(size=2,aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+ 
             theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
-            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]))
+            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]),
+                               breaks=c("Departures_Midway", "Arrivals_Midway", "Departures_Ohare","Arrivals_Ohare"),
+                               labels=c("Departures Midway", "Arrivals Midway", "Departures Ohare","Arrivals Ohare")
+            )
           
         }
         
@@ -1073,8 +1076,9 @@ server <- function(input, output) {
             geom_line(size=2,aes(y = TravelTimes2[[2]], colour = "Arrivals_Midway",group=1))+
             geom_line(size=2,aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+ 
             theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
-            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]))
-          
+            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]),
+                               breaks=c("Departures_Midway", "Arrivals_Midway", "Departures_Ohare","Arrivals_Ohare"),
+                               labels=c("Departures Midway", "Arrivals Midway", "Departures Ohare","Arrivals Ohare"))
         }
         
       }  
