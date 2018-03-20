@@ -1076,9 +1076,8 @@ server <- function(input, output) {
             geom_line(size=2,aes(y = TravelTimes2[[2]], colour = "Arrivals_Midway",group=1))+
             geom_line(size=2,aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+ 
             theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
-            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]),
-                               breaks=c("Departures_Midway", "Arrivals_Midway", "Departures_Ohare","Arrivals_Ohare"),
-                               labels=c("Departures Midway", "Arrivals Midway", "Departures Ohare","Arrivals Ohare"))
+            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]))
+          
         }
         
       }  
@@ -1291,7 +1290,11 @@ server <- function(input, output) {
       ggplot(data=melted, aes(x=ID, y=value)) + geom_bar(stat = "identity",aes(fill=melted$variable),position = "dodge")+ 
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
         #scale_fill_manual("legend", values = c("Midway" = midwaycolors[1], "Ohare" = "red"))+   ######COLOR PROBLEM HERE
-        labs(x = "Airline",y = "# Flights")
+        labs(x = "Airline",y = "# Flights")+scale_fill_manual(values=c(midwaycolors[1], oharecolors[1]), 
+                                                              name="",
+                                                              breaks=c("Midway", "ohare"),
+                                                              labels=c("Midway", "Ohare"))
+      
       
       
       
@@ -1551,7 +1554,7 @@ server <- function(input, output) {
       ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+ 
         scale_x_continuous( name="hour",breaks=0:23,labels=timeframe)+           
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-        facet_grid(~ variable)
+        facet_grid(~ variable)+ scale_fill_discrete(name = "")
       
     }
     
@@ -1628,7 +1631,7 @@ server <- function(input, output) {
       ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+
         scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-        facet_grid(~ variable)
+        facet_grid(~ variable)+ scale_fill_discrete(name = "")
       
     }
     
@@ -2774,7 +2777,7 @@ server <- function(input, output) {
     
     ggplot(ohare, aes(Group.1)) + 
       stat_smooth(aes(y = x, colour = "cancelled"), method = lm, formula = y ~ poly(x, 10), se = FALSE) +
-      geom_point(aes(y = precipitation.in.*60, colour = "precipitation")) + 
+      geom_point(aes(y = precipitation.in.*60, colour = "precipitation"),size=3) + 
       scale_y_continuous(sec.axis = sec_axis(~./60, name = "Precipitation (in)")) +
       labs(y = "Cancellations",x="2017 Months", title = "Cancellations and Rain at O'Hare")
   })
