@@ -235,11 +235,11 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset2", 
                        #selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
-                       tabPanel("AirlineFlightPlot",box( title = "Flights By Airline", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
-                       tabPanel("AirlineFlightTable", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
+                       tabPanel("Flight Plot",box( title = "Flights By Airline", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
+                       tabPanel("Flight Table", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
                        #Part 2-b 
-                       tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("HourlyFlights",height="800px"))  ),
-                       tabPanel("HourlyTable", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("HourlyTable"))  )
+                       tabPanel("Hourly Flights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("HourlyFlights",height="800px"))  ),
+                       tabPanel("Hourly Table", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Airline Hourly Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("HourlyTable"))  )
                 )
               )
       ),
@@ -888,7 +888,7 @@ server <- function(input, output) {
       
       
       ggplot(data=melted, aes(x=ID, y=value)) + geom_bar(stat = "identity",aes(fill=melted$variable), position = "dodge") +labs(x = "Airline",y = "# Flights")+ 
-        scale_fill_manual("legend", values = c("departing" = colors[1], "arrivals" = colors[2]))
+        scale_fill_manual("", values = c("departing" = colors[1], "arrivals" = colors[2]))
       
     }
   })
@@ -1076,7 +1076,7 @@ server <- function(input, output) {
             geom_line(size=2,aes(y = TravelTimes2[[2]], colour = "Arrivals_Midway",group=1))+
             geom_line(size=2,aes(y = TravelTimes2[[3]], colour = "Departures_Midway",group=1))+ 
             theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
-            scale_color_manual("legend", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]))
+            scale_color_manual("", values = c("Departures_Midway" =  midwaycolors[1], "Arrivals_Midway" = midwaycolors[2], "Departures_Ohare" = oharecolors[1], "Arrivals_Ohare" = oharecolors[2]))
           
         }
         
@@ -1110,7 +1110,7 @@ server <- function(input, output) {
             geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1),size=2)+
             geom_line(aes(y = TravelTimes[[3]], colour = "Departures",group=1),size=2)+
             theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
-            scale_color_manual("legend", values = c("Departures" = colors[1], "Arrivals" = colors[2]))
+            scale_color_manual("", values = c("Departures" = colors[1], "Arrivals" = colors[2]))
         }
         
         
@@ -1125,7 +1125,7 @@ server <- function(input, output) {
             geom_line(size=2,aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
             geom_line(size=2,aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
             theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
-            scale_color_manual("legend", values = c("Departures" = colors[1], "Arrivals" = colors[2]))
+            scale_color_manual("", values = c("Departures" = colors[1], "Arrivals" = colors[2]))
           
           
         }
@@ -1164,7 +1164,7 @@ server <- function(input, output) {
       
       ggplot(data=melted, aes(x=ID, y=value)) + geom_bar(stat = "identity",aes(fill=melted$variable),position = "dodge")+ 
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+ 
-        scale_fill_manual("legend", values = c("Midway" = midwaycolors[1], "Ohare" = oharecolors[1]))+
+        scale_fill_manual("", values = c("Midway" = midwaycolors[1], "Ohare" = oharecolors[1]))+
         labs(x = "Airline",y = "# Flights")
       
     }
@@ -1422,7 +1422,7 @@ server <- function(input, output) {
       ggplot(melted, aes(x=ID, y=value,  color=variable, group=variable))+ geom_line(size=2)+
         scale_x_discrete( name="Day",breaks=1:7,labels=names(days))+       
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
-        scale_color_manual("legend", values = c("Midway_dep" = midwaycolors[1], "Midway_Arrival" = midwaycolors[2], "Ohare_dep" = oharecolors[1], "Ohare_arrival" = oharecolors[2]))
+        scale_color_manual("", values = c("Midway_dep" = midwaycolors[1], "Midway_Arrival" = midwaycolors[2], "Ohare_dep" = oharecolors[1], "Ohare_arrival" = oharecolors[2]))
       
     }
     
@@ -1449,7 +1449,7 @@ server <- function(input, output) {
       melted=melt(daily_data, id='ID')
       ggplot(melted, aes(x=ID, y=value,  color=variable, group=variable))+ geom_line(size=2)+
         scale_x_discrete( name="Day",breaks=1:7,labels=names(days))+       
-        scale_color_manual("legend", values = c("arrivals" = colors[1], "departures" = colors[2]))+
+        scale_color_manual("", values = c("arrivals" = colors[1], "departures" = colors[2]))+
         theme(axis.text.x=element_text(angle = 90, hjust = 0))
       
       
