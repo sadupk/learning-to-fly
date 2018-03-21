@@ -363,7 +363,7 @@ ui <- dashboardPage(
                                 selectInput("units", "Units", c("miles","kilometers")),
                                 
                                 numericInput("binwidth", "Bin Width:", 100, min = 50, max = 500),
-                                tabPanel("Flights by Distance",box( title = "Number of Flights by Distance", 
+                                tabPanel("Flights by Distance",box( title = "Flights by Distance", 
                                                                               solidHeader = TRUE, status = "primary", width = 10, 
                                                                               plotOutput("distance_range_plot",height="750px")))),
                                 tabPanel("Time Metrics",
@@ -2780,7 +2780,7 @@ server <- function(input, output) {
       stat_smooth(aes(y = x, colour = "cancelled"), method = lm, formula = y ~ poly(x, 10), se = FALSE) +
       geom_point(aes(y = precipitation.in.*60, colour = "precipitation"),size=3) + 
       scale_y_continuous(sec.axis = sec_axis(~./60, name = "Precipitation (in)")) +
-      labs(y = "# Flights Cancelled",x="2017 Months", title = "Canellations at O'Hare")
+      labs(y = "# Flights Cancelled",x="2017 Months", title = "Cancellations at O'Hare")
   })
   }
 
