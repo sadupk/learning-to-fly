@@ -358,19 +358,19 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset7", 
-                       tabPanel("Number of Flights by Distance",
+                       tabPanel("Distance Metrics",
                                 sliderInput("range", "Flight Distance:", min = 0, max = 7000,value = c(0,7000)),
                                 selectInput("units", "Units", c("miles","kilometers")),
                                 
                                 numericInput("binwidth", "Bin Width:", 100, min = 50, max = 500),
-                                tabPanel("Number of Flights by Distance",box( title = "Number of Flights by Distance", 
+                                tabPanel("Flights by Distance",box( title = "Number of Flights by Distance", 
                                                                               solidHeader = TRUE, status = "primary", width = 10, 
                                                                               plotOutput("distance_range_plot",height="750px")))),
-                                tabPanel("Number of Flights by Air Time",
+                                tabPanel("Time Metrics",
                                          sliderInput("time_range", "Flight Time (minutes):", min = 0, max = 600, value = c(0,600)),
                                          
                                          numericInput("binwidth2", "Bin Width:", 10, min = 4, max = 200),
-                                         box( title = "Number of Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, 
+                                         box( title = "Flights by Air Time", solidHeader = TRUE, status = "primary", width = 10, 
                                               plotOutput("time_range_plot",height="750px")))
                                 
                        
@@ -426,7 +426,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset4", 
-                       tabPanel("Rain Cancellations",box( title = "O'Hare Rain Cancellations", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",height="900px")) )
+                       tabPanel("Rain Cancellations",box( title = "", solidHeader = TRUE, status = "primary", width = 10, plotOutput("OhareRain",height="900px")) )
                 )
               )
       ),
@@ -2727,7 +2727,7 @@ server <- function(input, output) {
     qplot(dist_values, geom="histogram", binwidth=binWidth(), fill=I("grey"), 
           col=I("black")) + 
       
-      ylab("Number of Flights") +
+      ylab("# Flights") +
       xlab(paste("Distance", y_label))
   })
   
@@ -2747,7 +2747,7 @@ server <- function(input, output) {
     time_values = Month_df[(Month_df$AIR_TIME >= time_min) & (Month_df$AIR_TIME <= time_max)]$AIR_TIME
     qplot(time_values, geom="histogram", binwidth=binWidth2(), fill=I("grey"), 
           col=I("black")) +
-      ylab("Number of Flights") +
+      ylab("# Flights") +
       xlab("Flight Length (min)")
   })
   
@@ -2780,7 +2780,7 @@ server <- function(input, output) {
       stat_smooth(aes(y = x, colour = "cancelled"), method = lm, formula = y ~ poly(x, 10), se = FALSE) +
       geom_point(aes(y = precipitation.in.*60, colour = "precipitation"),size=3) + 
       scale_y_continuous(sec.axis = sec_axis(~./60, name = "Precipitation (in)")) +
-      labs(y = "# Flights, Cancelled",x="2017 Months", title = "Rain at O'Hare")
+      labs(y = "# Flights Cancelled",x="2017 Months", title = "Canellations at O'Hare")
   })
   }
 
