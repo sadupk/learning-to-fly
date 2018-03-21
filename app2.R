@@ -304,10 +304,10 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3d", 
-                       tabPanel("Arrival Delays",box( title = "Arrival Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("ArrivalDelays",height="800px")) ),
-                       tabPanel("Arrival Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("ArrivalDelayTable",height="750px")) ),
-                       tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 10, plotOutput("DepartDelays",height="800px")) ),
-                       tabPanel("Depart Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 10, dataTableOutput("DepartDelayTable",height="750px")) )
+                       tabPanel("Arrival Delays",box( title = "Arrival Delays", solidHeader = TRUE, status = "primary", width = 12, plotOutput("ArrivalDelays",height="800px")) ),
+                       tabPanel("Arrival Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Arrival Delay Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("ArrivalDelayTable",height="750px")) ),
+                       tabPanel("Depart Delays",box( title = "Depart Delays", solidHeader = TRUE, status = "primary", width = 12, plotOutput("DepartDelays",height="800px")) ),
+                       tabPanel("Depart Delay Table",box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Delay Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("DepartDelayTable",height="750px")) )
                        )
               )
       ),
