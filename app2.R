@@ -250,7 +250,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3", 
-                       tabPanel("2017 Overall",box( title = "2017 Overall Arrival Departure by hour", solidHeader = TRUE, status = "primary", width = 12, plotOutput("arrival_departure_times",height="750px")) ),
+                       tabPanel("2017 Overall",box( title = "2017 Overall Arrivals and Departures By Hour", solidHeader = TRUE, status = "primary", width = 12, plotOutput("arrival_departure_times",height="750px")) ),
                        tabPanel("2017 Overall Arrivals",box( title = "2017 Overall Arrivals", solidHeader = TRUE, status = "primary", width = 12, plotOutput("arrival_departure_2017",height="750px")) )
                 )
               )
@@ -277,7 +277,7 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset3b", 
                        tabPanel("Depart Flights",box( title = "Depart Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("DepartFlightsPlot", height="800px")) ),
-                       tabPanel("Depart Flights Table", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 6, dataTableOutput("DepartFlightsTable"))  )
+                       tabPanel("Depart Flights Table", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Depart Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("DepartFlightsTable"))  )
                        
                 )
               )
@@ -319,7 +319,7 @@ ui <- dashboardPage(
                        id = "tabset4", 
                        tabPanel("Top 15 Destinations",
                                 tags$head(tags$style(type = "text/css", "#top_15_dest_Plot {height:95vh !important;}")),
-                                box( title = "", solidHeader = TRUE, status = "primary", width = 10, plotOutput("top_15_dest_Plot")))
+                                box( title = "", solidHeader = TRUE, status = "primary", width = 12, plotOutput("top_15_dest_Plot")))
                 )
               )
       ),
@@ -333,7 +333,7 @@ ui <- dashboardPage(
                        id = "tabset5", 
                        tabPanel("State Info",
                                 #selectInput("State", "State", c("AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY")),
-                                box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Flight Landing and Take-0ff Info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
+                                box(style = "font-family:Arial, Helvetica, sans-serif;font-size:24px",title = "Flight Landing and Take-0ff Info", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("takeOffs",height="75px")))
                 )
               )
       ),
@@ -345,7 +345,7 @@ ui <- dashboardPage(
                        id = "tabset6", 
                        tabPanel("Special Dates",
                                 selectInput("dateType", "Which dates would you like to see?", names(specialDays)),
-                                box( style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "", solidHeader = TRUE, status = "primary", width = 10,dataTableOutput("special_days",height="75px"))
+                                box( style = "font-family:Arial, Helvetica, sans-serif;font-size:24px",title = "", solidHeader = TRUE, status = "primary", width = 12,dataTableOutput("special_days",height="75px"))
                        )
                 )
               )
