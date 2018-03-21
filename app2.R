@@ -235,7 +235,7 @@ ui <- dashboardPage(
                        height = "2000px",
                        id = "tabset2", 
                        #selectInput("Airport", "Airport", c("Chicago O'Hare", "Chicago Midway","Both")),
-                       tabPanel("AirlineFlightPlot",box( title = "AirLine flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
+                       tabPanel("AirlineFlightPlot",box( title = "Flights By Airline", solidHeader = TRUE, status = "primary", width = 12, plotOutput("AirlineFlightPlot",height="800px")) ),
                        tabPanel("AirlineFlightTable", box(style = "font-family:Arial, Helvetica, sans-serif;font-size:30px",title = "Airline Flights Table", solidHeader = TRUE, status = "primary", width = 12, dataTableOutput("AirlineFlightTable"))  ),
                        #Part 2-b 
                        tabPanel("HourlyFlights", box(title = "Airline Hourly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("HourlyFlights",height="800px"))  ),
