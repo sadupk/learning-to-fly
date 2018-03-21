@@ -454,7 +454,7 @@ server <- function(input, output) {
     HTML('<p><b>Authors:</b> Pedro, Shaibo, Namaswi, and Megan</p>
          <p><b>Required libaries</b>: shiny, ggplot2, shinydashboard</p>
          <a href=,"https://www.youtube.com/watch?v=QOsSvCdj2_w",">Video</a>
-         <p> <b>Data Source:</b>TBA</p> ')
+         <p> <b>Data Source:</b>TBAhttps://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time</p> ')
   })
   
   theme_set(theme_grey(base_size = 37)) 
