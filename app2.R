@@ -1840,7 +1840,8 @@ server <- function(input, output) {
                          labels=c(paste(0:5*2,"am"),
                                   "12 pm",
                                   paste(7:11*2-12,"pm"),
-                                  "0 am"))
+                                  "0 am")) +
+      labs(x="", y="Flights in Millions")
   })
   
   output$arrival_departure_2017 <- renderPlot({ #diff
