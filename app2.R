@@ -453,7 +453,7 @@ server <- function(input, output) {
   output$info <- renderUI({
     HTML('<p><b>Authors:</b> Pedro, Shaibo, Namaswi, and Megan</p>
          <p><b>Required libaries</b>: shiny, ggplot2, shinydashboard</p>
-         <a href=,"https://www.youtube.com/watch?v=Qn16DsftSjI",">link</a>
+         <a href=,"https://www.youtube.com/watch?v=QOsSvCdj2_w",">Video</a>
          <p> <b>Data Source:</b>TBA</p> ')
   })
   
