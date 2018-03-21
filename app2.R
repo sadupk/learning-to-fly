@@ -405,7 +405,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset2", 
-                       tabPanel("Monthly Flights",box( title = "Monthly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("MonthlyHeatMap",height="900px")) )
+                       tabPanel("Monthly Heat Maps",box( title = "Monthly Flights", solidHeader = TRUE, status = "primary", width = 12, plotOutput("MonthlyHeatMap",height="900px")) )
                 )
               )
       ),
@@ -416,7 +416,7 @@ ui <- dashboardPage(
                        width = "100%",
                        height = "2000px",
                        id = "tabset3", 
-                       tabPanel("Weekly Flights",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyHeatMap",height="900px")) )
+                       tabPanel("Weekly Heat Maps",box( title = "Weekly Flights", solidHeader = TRUE, status = "primary", width = 10, plotOutput("WeeklyHeatMap",height="900px")) )
                 )
               )
       ),
@@ -705,7 +705,7 @@ server <- function(input, output) {
     theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
-    ggtitle("# of flights")
+    ggtitle("# Flights")
   
   distributedmt=data.frame(table(Month_df$DEP_TIME2,Month_df$Month))
   names(distributedmt)=c("Hour","Month","Freq");
@@ -715,7 +715,7 @@ server <- function(input, output) {
     theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
-    ggtitle("# of flights")
+    ggtitle("# Flights")
   
   
   ##Cancel
@@ -762,7 +762,7 @@ server <- function(input, output) {
     theme(axis.text.x=element_text(angle = 90, hjust = 0))+
     geom_tile(aes(fill = Freq),    colour = border)+
     scale_fill_gradient(low = lowcol,   high = highcol)+
-    ggtitle("Cancelled flights")
+    ggtitle("Cancelled Flights")
   
   
   CANCMTH=data.frame(table(Month_df$DEP_TIME2,Month_df$Month,Month_df$CANCELLATION_CODE))
@@ -1841,7 +1841,7 @@ server <- function(input, output) {
                                   "12 pm",
                                   paste(7:11*2-12,"pm"),
                                   "0 am")) +
-      labs(x="Time", y="Flights, 10K")
+      labs(x="Time", y="# Flights")
   })
   
   output$arrival_departure_2017 <- renderPlot({ #diff
@@ -1867,7 +1867,7 @@ server <- function(input, output) {
     Month_top_15$month = format(Month_top_15$FL_DATE, '%b')
     ggplot(Month_top_15, aes(factor(month, levels = month.abb))) +
       geom_bar(aes(fill = factor(ORIGIN_CITY_NAME))) +
-      labs(x ="") + theme(legend.title = element_blank(),axis.text.x=element_text(angle = 90, hjust = 0))
+      labs(x ="", y = "# Flights") + theme(legend.title = element_blank(),axis.text.x=element_text(angle = 90, hjust = 0))
     
   })
   
@@ -2780,7 +2780,7 @@ server <- function(input, output) {
       stat_smooth(aes(y = x, colour = "cancelled"), method = lm, formula = y ~ poly(x, 10), se = FALSE) +
       geom_point(aes(y = precipitation.in.*60, colour = "precipitation"),size=3) + 
       scale_y_continuous(sec.axis = sec_axis(~./60, name = "Precipitation (in)")) +
-      labs(y = "Cancellations",x="2017 Months", title = "Rain Cancellations at O'Hare")
+      labs(y = "# Flights, Cancelled",x="2017 Months", title = "Rain at O'Hare")
   })
   }
 
