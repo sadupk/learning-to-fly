@@ -187,7 +187,7 @@ ui <- dashboardPage(
       menuSubItem("Departures",tabName = "item3b"),
       menuSubItem("Weekly",tabName = "item3c"),
       menuSubItem("Delays",tabName = "item3d"),
-      menuSubItem("O'Hare Cancellations and Rain",tabName = "item11"),
+      menuSubItem("Rain Cancellations",tabName = "item11"),
       menuItem("USA Domestic Flights"),
       menuSubItem("Arrivals/Departures",tabName = "item3"),
       menuSubItem("Top 15 Destinations", tabName = "item4"),
@@ -2779,7 +2779,7 @@ server <- function(input, output) {
       stat_smooth(aes(y = x, colour = "cancelled"), method = lm, formula = y ~ poly(x, 10), se = FALSE) +
       geom_point(aes(y = precipitation.in.*60, colour = "precipitation"),size=3) + 
       scale_y_continuous(sec.axis = sec_axis(~./60, name = "Precipitation (in)")) +
-      labs(y = "Cancellations",x="2017 Months", title = "Cancellations and Rain at O'Hare")
+      labs(y = "Cancellations",x="2017 Months", title = "Rain Cancellations at O'Hare")
   })
   }
 
