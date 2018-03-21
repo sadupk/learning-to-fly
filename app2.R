@@ -1104,7 +1104,7 @@ server <- function(input, output) {
         {
           
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") + 
-            scale_x_discrete( name ="hour",breaks=c(0:23),limits=times)+ ###lastchange
+            scale_x_discrete( name ="Hour",breaks=c(0:23),limits=times)+ ###lastchange
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1),size=2)+
             geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1),size=2)+
             geom_line(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1),size=2)+
@@ -1119,7 +1119,7 @@ server <- function(input, output) {
         {
           timeframe=c("12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM")
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") +
-            scale_x_discrete( name ="hour",limits=timeframe)+
+            scale_x_discrete( name ="Hour",limits=timeframe)+
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
             geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
             geom_line(size=2,aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
@@ -1552,7 +1552,7 @@ server <- function(input, output) {
       melted=melt(TravelTimes, id="Times")
       melted$Coloring=coloring
       ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+ 
-        scale_x_continuous( name="hour",breaks=0:23,labels=timeframe)+           
+        scale_x_continuous( name="Hour",breaks=0:23,labels=timeframe)+           
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
         facet_grid(~ variable)+ scale_fill_discrete(name = "")
       
@@ -1582,7 +1582,7 @@ server <- function(input, output) {
       
       TravelTimes=data.frame(Times=times,Flights=flights,Coloring=coloring)
       ggplot(TravelTimes, aes(x=Times, y=Flights)) + geom_bar(stat="identity",   colour="white",aes(fill=Coloring))+ 
-        scale_x_continuous( name="hour",breaks=0:23,labels=timeframe)+           
+        scale_x_continuous( name="Hour",breaks=0:23,labels=timeframe)+           
         theme(axis.text.x=element_text(angle = 90, hjust = 0))
     }
   })
@@ -1629,7 +1629,7 @@ server <- function(input, output) {
       melted=melt(TravelTimes, id="Times")
       melted$Coloring=coloring
       ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+
-        scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
+        scale_x_continuous( name="Hour",breaks=1:24,labels=timeframe)+           
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
         facet_grid(~ variable)+ scale_fill_discrete(name = "")
       
@@ -1660,7 +1660,7 @@ server <- function(input, output) {
       
       TravelTimes=data.frame(Times=times,Flights=flights,Coloring=coloring)
       ggplot(TravelTimes, aes(x=Times, y=Flights)) + geom_bar(stat="identity", colour="white",aes(fill=Coloring))+ 
-        scale_x_continuous( name="hour",breaks=0:23,labels=timeframe)+           
+        scale_x_continuous( name="Hour",breaks=0:23,labels=timeframe)+           
         theme(axis.text.x=element_text(angle = 90, hjust = 0))
     }
     
@@ -1715,7 +1715,7 @@ server <- function(input, output) {
         melted=melt(TravelTimes, id="Times")
         melted$Coloring=coloring
         ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+
-          scale_x_continuous( name="hour",breaks=1:24,labels=timeframe)+           
+          scale_x_continuous( name="Hour",breaks=1:24,labels=timeframe)+           
           theme(axis.text.x=element_text(angle = -90, hjust = 0))+
           facet_grid(~ variable)
       }
