@@ -194,7 +194,7 @@ ui <- dashboardPage(
       menuSubItem("Landing/TakeOffs",tabName = "item5"),
       menuSubItem("Special Dates",tabName = "item6"),
       menuSubItem("Delays",tabName = "delayss"),
-      menuSubItem("Filter Flights",tabName = "item7"),
+      menuSubItem("Flight Metrics",tabName = "item7"),
       menuSubItem("Outliers",tabName = "item8"),
       menuSubItem("Monthly Heat Maps", tabName = "item9"),
       menuSubItem("Weekly Heat Maps",tabName = "item10")
