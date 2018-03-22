@@ -842,6 +842,7 @@ server <- function(input, output) {
       ports=c("13232", "13930")   #####May want to reconsider this
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       
       
       departures=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
@@ -871,6 +872,7 @@ server <- function(input, output) {
       Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
       arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,]
       airportsdepart=data.frame(table(departures$CARRIER))
@@ -906,6 +908,7 @@ server <- function(input, output) {
         ports=c("13232", "13930")
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
         
         departures=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
         arrivals=Month[Month$DEST_AIRPORT_ID==ports[1],]
@@ -932,6 +935,7 @@ server <- function(input, output) {
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
         departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,]
         airportsdepart=data.frame(table(departures$CARRIER))
@@ -956,7 +960,7 @@ server <- function(input, output) {
       
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
-      
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       
       if (input$Airport=="Both")
       {
@@ -964,12 +968,14 @@ server <- function(input, output) {
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
         departures=getdeps(Airline)
+        Airline=Month[Month$DEST_AIRPORT_ID==ports[1],] ###POSTCHANGE
         arrivals=getarrivals(Airline)
         times=c(0:23)
         #TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
         departures2=getdeps(Airline)
+        Airline=Month[Month$DEST_AIRPORT_ID==ports[2],]  ###POSTCHANGE
         arrivals2=getarrivals(Airline)
         times=c(0:23)
         if(input$timeframe=="AM-PM")
@@ -991,6 +997,7 @@ server <- function(input, output) {
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
         Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         departures=getdeps(Airline)
+        Airline=Month[Month$DEST_AIRPORT_ID==Airportname,]    ###POSTCHANGE
         arrivals=getarrivals(Airline)
         
         times=c(0:23)
@@ -1022,6 +1029,7 @@ server <- function(input, output) {
       Month=Month[Monthnames ==input$month]
       
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       
       
       if (input$Airport=="Both")
@@ -1030,12 +1038,14 @@ server <- function(input, output) {
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],] 
         departures=getdeps(Airline)
+        Airline=Month[Month$DEST_AIRPORT_ID==ports[1],]    ##POST CHANGE
         arrivals=getarrivals(Airline)
         times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals_Ohare=arrivals,  Departures_Ohare=departures)
         
         Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],] 
         departures=getdeps(Airline)
+        Airline=Month[Month$DEST_AIRPORT_ID==ports[2],]    ###POSTCHANGE
         arrivals=getarrivals(Airline)
         times=c(0:23)
         TravelTimes2=data.frame(Times=times,Arrivals_Midway=arrivals,  Departures_Midway=departures)
@@ -1087,6 +1097,7 @@ server <- function(input, output) {
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
         Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
         departures=getdeps(Airline)
+        Airline=Month[Month$DEST_AIRPORT_ID==Airportname,] ###POSTCHANGE
         arrivals=getarrivals(Airline)
         times=c(0:23)
         TravelTimes=data.frame(Times=times,Arrivals=arrivals,  Departures=departures)
@@ -1121,7 +1132,7 @@ server <- function(input, output) {
           timeframe=c("12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM")
           TravelTimes$Times <- factor(times, levels = times)  ###POSTCHANGE
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") +
-          scale_x_discrete( name ="Hour",labels=timeframe)+###POSTCHANGE
+            scale_x_discrete( name ="Hour",labels=timeframe)+###POSTCHANGE
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
             geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
             geom_line(size=2,aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
@@ -1146,6 +1157,7 @@ server <- function(input, output) {
       
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       ports=c("13232", "13930")
       departures=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
       go_to=data.frame(table(departures$DEST_AIRPORT_ID))
@@ -1175,6 +1187,7 @@ server <- function(input, output) {
       Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
       go_to=data.frame(table(departures$DEST_AIRPORT_ID))
       ind=order(go_to[[2]],decreasing = T)
@@ -1217,6 +1230,8 @@ server <- function(input, output) {
         
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
+        
         ports=c("13232", "13930")
         departures=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
         go_to=data.frame(table(departures$DEST_AIRPORT_ID))
@@ -1244,6 +1259,8 @@ server <- function(input, output) {
         
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
+        
         ports=c("13232", "13930")
         departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,] #####
         go_to=data.frame(table(departures$DEST_AIRPORT_ID))
@@ -1269,6 +1286,7 @@ server <- function(input, output) {
       ports=c("13232", "13930")
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       
       arrivals=Month[Month$DEST_AIRPORT_ID==ports[1],]
       come_from=data.frame(table(arrivals$ORIGIN_AIRPORT_ID))
@@ -1307,6 +1325,8 @@ server <- function(input, output) {
       Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
+      
       arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,] 
       come_from=data.frame(table(arrivals$ORIGIN_AIRPORT_ID))
       ind=order(come_from[[2]],decreasing = T)
@@ -1354,6 +1374,7 @@ server <- function(input, output) {
         ports=c("13232", "13930")
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
         
         arrivals=Month[Month$DEST_AIRPORT_ID==ports[1],]
         come_from=data.frame(table(arrivals$ORIGIN_AIRPORT_ID))
@@ -1381,6 +1402,8 @@ server <- function(input, output) {
         
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
+        
         arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,] ###
         come_from=data.frame(table(arrivals$ORIGIN_AIRPORT_ID))
         ind=order(come_from[[2]],decreasing = T)
@@ -1406,6 +1429,7 @@ server <- function(input, output) {
       ports=c("13232", "13930")
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       arrivals=Month[Month$DEST_AIRPORT_ID==ports[1],]
       departures=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
       
@@ -1419,9 +1443,10 @@ server <- function(input, output) {
       arr_day2=data.frame(table(arrivals2$DAY_OF_WEEK))
       dep_day2=data.frame(table(departures2$DAY_OF_WEEK))
       
-      daily_data=data.frame(ID=daynames,Midway_Arrival=arr_day1[[2]],Ohare_arrival=arr_day2[[2]],Midway_dep=dep_day1[[2]],Ohare_dep=arr_day2[[2]])
+      daily_data=data.frame(ID=daynames,Midway_Arrival=arr_day1[[2]],Ohare_arrival=arr_day2[[2]],Midway_dep=dep_day1[[2]],Ohare_dep=dep_day2[[2]])
       melted=melt(daily_data, id='ID')
-       melted$ID <- factor(c(1:7), levels = c(1:7))###POSTCHANGE
+      melted$ID <- factor(c(1:7), levels = c(1:7))###POSTCHANGE
+      
       ggplot(melted, aes(x=ID, y=value,  color=variable, group=variable))+ geom_line(size=2)+
         scale_x_discrete( name="Day",breaks=1:7,labels=names(days))+       
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
@@ -1442,6 +1467,8 @@ server <- function(input, output) {
       Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
       Month=Month[Monthnames ==input$month]
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
+      
       arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,]   ####
       departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]  ###
       
@@ -1471,6 +1498,8 @@ server <- function(input, output) {
         ports=c("13232", "13930")
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
+        
         arrivals=Month[Month$DEST_AIRPORT_ID==ports[1],]
         departures=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
         
@@ -1484,7 +1513,7 @@ server <- function(input, output) {
         arr_day2=data.frame(table(arrivals2$DAY_OF_WEEK))
         dep_day2=data.frame(table(departures2$DAY_OF_WEEK))
         
-        daily_data=data.frame(ID=daynames,Arrivals_Midway=arr_day1[[2]],Arrivals_Ohare=arr_day2[[2]],Departures_Miday=dep_day1[[2]],Departures_Ohare=arr_day2[[2]])
+        daily_data=data.frame(ID=daynames,Arrivals_Midway=arr_day1[[2]],Arrivals_Ohare=arr_day2[[2]],Departures_Miday=dep_day1[[2]],Departures_Ohare=dep_day2[[2]])
         
       }
       
@@ -1495,6 +1524,8 @@ server <- function(input, output) {
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
         Month=Month[Monthnames ==input$month]
         Month=Month[[1]]
+        Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
+        
         arrivals=Month[Month$DEST_AIRPORT_ID==Airportname,]   ####
         departures=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]  ###
         arr_day1=data.frame(table(arrivals$DAY_OF_WEEK))
@@ -1517,6 +1548,7 @@ server <- function(input, output) {
   output$ArrivalDelays <- renderPlot({
     Month=Month[Monthnames ==input$month]
     Month=Month[[1]]
+    Month=Month[Month$CANCELLED==0,]
     
     
     
@@ -1533,14 +1565,14 @@ server <- function(input, output) {
         timeframe=c(0:23)
       }
       ports=c("13232", "13930")
-      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]
-      Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
+      delaysdata=Month[Month$DEST_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]###Postchange
+      Airline=Month[Month$DEST_AIRPORT_ID==ports[1],]###Postchange
       delays=getarrivals(delaysdata)
       arrivals=getarrivals(Airline)
       flights=c(delays,(arrivals-delays))
       
-      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,]
-      Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],]
+      delaysdata=Month[Month$DEST_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,] ###Postchange
+      Airline=Month[Month$DEST_AIRPORT_ID==ports[2],]###Postchange
       delays=getarrivals(delaysdata)
       arrivals=getarrivals(Airline)
       flights2=c(delays,(arrivals-delays))
@@ -1573,8 +1605,8 @@ server <- function(input, output) {
         timeframe=c(0:23)
       }
       Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
-      delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]
-      Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
+      delaysdata=Month[Month$DEST_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]###Postchange
+      Airline=Month[Month$DEST_AIRPORT_ID==Airportname,]###Postchange
       delays=getarrivals(delaysdata)
       arrivals=getarrivals(Airline)
       times=rep(c(0:23),2)
@@ -1596,6 +1628,7 @@ server <- function(input, output) {
     Month=Month[Monthnames ==input$month]
     #Month=read.csv("Feb.csv")
     Month=Month[[1]]
+    Month=Month[Month$CANCELLED==0,]
     
     
     if (input$Airport=="Both")
@@ -1678,6 +1711,7 @@ server <- function(input, output) {
       Month=Month[Monthnames ==input$month]
       #Month=read.csv("Feb.csv")
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       
       
       if (input$Airport=="Both")
@@ -1763,6 +1797,7 @@ server <- function(input, output) {
       Month=Month[Monthnames ==input$month]
       #Month=read.csv("Feb.csv")
       Month=Month[[1]]
+      Month=Month[Month$CANCELLED==0,] ###POSTCHANGE
       
       
       if (input$Airport=="Both")
