@@ -1065,8 +1065,9 @@ server <- function(input, output) {
         else
         {
           timeframe=c("12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM")
+          TravelTimes$Times <- factor(times, levels = times)  ###POSTCHANGE
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") +
-            scale_x_discrete( name ="hour",limits=timeframe)+
+            scale_x_discrete( name ="hour",labels=timeframe)+  ####POSTCHANGE
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals_Ohare",group=1))+
             geom_point(aes(y = TravelTimes[[3]], colour = "Departures_Ohare",group=1))+
             geom_line(size=2,aes(y = TravelTimes[[2]], colour = "Arrivals_Ohare",group=1))+
@@ -1118,8 +1119,9 @@ server <- function(input, output) {
         else
         {
           timeframe=c("12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM","1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM")
+          TravelTimes$Times <- factor(times, levels = times)  ###POSTCHANGE
           ggplot(TravelTimes, aes(x=Times))+labs(y="# Flights",x = "Times") +
-            scale_x_discrete( name ="Hour",limits=timeframe)+
+          scale_x_discrete( name ="Hour",labels=timeframe)+###POSTCHANGE
             geom_point(aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
             geom_point(aes(y = TravelTimes[[3]], colour = "Departures",group=1))+
             geom_line(size=2,aes(y = TravelTimes[[2]], colour = "Arrivals",group=1))+
@@ -1419,6 +1421,7 @@ server <- function(input, output) {
       
       daily_data=data.frame(ID=daynames,Midway_Arrival=arr_day1[[2]],Ohare_arrival=arr_day2[[2]],Midway_dep=dep_day1[[2]],Ohare_dep=arr_day2[[2]])
       melted=melt(daily_data, id='ID')
+       melted$ID <- factor(c(1:7), levels = c(1:7))###POSTCHANGE
       ggplot(melted, aes(x=ID, y=value,  color=variable, group=variable))+ geom_line(size=2)+
         scale_x_discrete( name="Day",breaks=1:7,labels=names(days))+       
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
