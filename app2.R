@@ -1665,7 +1665,7 @@ server <- function(input, output) {
       melted=melt(TravelTimes, id="Times")
       melted$Coloring=coloring
       ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+
-        scale_x_continuous( name="Hour",breaks=1:24,labels=timeframe)+           
+        scale_x_continuous( name="Hour",breaks=0:23,labels=timeframe)+           
         theme(axis.text.x=element_text(angle = 90, hjust = 0))+
         facet_grid(~ variable)+ scale_fill_discrete(name = "")
       
@@ -1748,7 +1748,9 @@ server <- function(input, output) {
         t=rep("delays",24)
         d=rep("totals",24)
         coloring=c(d,t)
-        TravelTimes=data.frame(Times=times,Midway=flights,Ohare=flights2)
+        TravelTimes=data.frame(Times=times,Midway_delays=delays1,Ohare_delays=delays2,Midway_Proportion1=signif(100*delays1/departs1,digits=4),Ohare_Proportion=signif(100*delays2/departs2,digits=4))   ###POSTCHANGE2
+
+        
         melted=melt(TravelTimes, id="Times")
         melted$Coloring=coloring
         ggplot(melted, aes(x=Times, y=value)) + geom_bar(stat="identity",colour="white",aes(fill=melted$Coloring))+
@@ -1776,7 +1778,7 @@ server <- function(input, output) {
         times=timeframe#rep(c(0:23),2)
         flights=c(delays, delays/departs)
         
-        TravelTimes=data.frame(Times=times,Delays=delays,Proportion=100*(delays/departs))
+        TravelTimes=data.frame(Times=times,Delays=delays,Proportion=signif(100*(delays/departs),digits=4))
         
       }
       
@@ -1813,20 +1815,20 @@ server <- function(input, output) {
           timeframe=c(0:23)
         }
         ports=c("13232", "13930")
-        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]
-        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[1],]
+        delaysdata=Month[Month$DEST_AIRPORT_ID==ports[1] & Month$ARR_DEL15==1 ,]   ##POST CHANGE
+        Airline=Month[Month$DEST_AIRPORT_ID==ports[1],]   ###POST CHANGE
         delays1=getarrivals(delaysdata)
         arrivals1=getarrivals(Airline)
         
-        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,]
-        Airline=Month[Month$ORIGIN_AIRPORT_ID==ports[2],]
+        delaysdata=Month[Month$DEST_AIRPORT_ID==ports[2] & Month$ARR_DEL15==1 ,]##POST CHANGE
+        Airline=Month[Month$DEST_AIRPORT_ID==ports[2],]##POST CHANGE
         delays2=getarrivals(delaysdata)
         arrivals2=getarrivals(Airline)
         
         
         times=timeframe#rep(c(0:23),2)
-        TravelTimes=data.frame(Times=times,Midway_Delays=delays1,Midwa_Proportion1=100*delays1/arrivals1,
-                               Ohare_Delays=delays2,Ohare_Proportion=100*delays2/arrivals2)
+        TravelTimes=data.frame(Times=times,Midway_Delays=delays1,Midwa_Proportion1=signif(100*delays1/arrivals1,digits=4),
+                               Ohare_Delays=delays2,Ohare_Proportion=signif(100*delays2/arrivals2,digits=4))
       }
       
       else
@@ -1842,15 +1844,15 @@ server <- function(input, output) {
           timeframe=c(0:23)
         }
         Airportname=  portdir[grepl(input$Airport,portdir[,2]),1]
-        delaysdata=Month[Month$ORIGIN_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]
-        Airline=Month[Month$ORIGIN_AIRPORT_ID==Airportname,]
+        delaysdata=Month[Month$DEST_AIRPORT_ID==Airportname & Month$ARR_DEL15==1 ,]##POST CHANGE
+        Airline=Month[Month$DEST_AIRPORT_ID==Airportname,]##POST CHANGE
         delays=getarrivals(delaysdata)
         arrivals=getarrivals(Airline)
         times=timeframe#rep(c(0:23),2)
         
         flights=c(delays,(delays/arrivals))
         
-        TravelTimes=data.frame(Times=times,Delays=delays,Proportion=100*(delays/arrivals))
+        TravelTimes=data.frame(Times=times,Delays=delays,Proportion=signif(100*(delays/arrivals),digits=4))
         
       }
       TravelTimes
